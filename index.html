@@ -1,0 +1,150 @@
+<!DOCTYPE html>
+<html lang="en">
+	<head>
+		<meta charset="UTF-8" />
+		<meta
+			name="viewport"
+			content="width=device-width, initial-scale=1.0"
+		/>
+		<link
+			rel="stylesheet"
+			href="styles/theme.css"
+		/>
+		<link
+			rel="stylesheet"
+			href="styles/general.css"
+		/>
+		<link
+			rel="stylesheet"
+			href="styles/menu.css"
+		/>
+		<link
+			rel="stylesheet"
+			href="styles/tab-bar.css"
+		/>
+		<link
+			rel="stylesheet"
+			href="styles/main-frame.css"
+		/>
+		<title>Document</title>
+	</head>
+	<body>
+		<nav id="menu">
+			<button class="menu-button"><div class="menu-icon search"></div></button>
+			<button class="menu-button"><div class="menu-icon upload"></div></button>
+			<button class="menu-button"><div class="menu-icon favourites"></div></button>
+			<button class="menu-button"><div class="menu-icon history"></div></button>
+
+			<button class="menu-button last"><div class="menu-icon config"></div></button>
+		</nav>
+		<nav id="tab-bar">
+			<div class="tab">
+				<div class="tab-body open">
+					<div class="tab-title">Open tab 123456789012345678901 234567890123456 78901234567890</div>
+					<button class="close-tab"><div class="close-tab-icon"></div></button>
+				</div>
+				<div class="tab-tooltip">Open tab 123456789012345678901 234567890123456 78901234567890</div>
+			</div>
+			<div class="tab">
+				<div class="tab-body closed">
+					<div class="tab-title">Closed tab 1</div>
+					<button class="close-tab"><div class="close-tab-icon"></div></button>
+				</div>
+				<div class="tab-tooltip">Closed tab 1</div>
+			</div>
+			<div class="tab">
+				<div class="tab-body closed">
+					<div class="tab-title">Closed tab 2</div>
+					<button class="close-tab"><div class="close-tab-icon"></div></button>
+				</div>
+				<div class="tab-tooltip">Closed tab 2</div>
+			</div>
+		</nav>
+		<main>
+			<div class="search-view">
+				<header>
+					<div class="searchbar">
+						<div class="searchbar-body">
+							<button class="search-tag">animal</button>
+							<button class="wrong search-tag">amal</button>
+							<button class="new search-tag">cat</button>
+							<button class="search-tag">animal</button>
+							<button class="search-tag">animal</button>
+							<button class="search-tag">animal</button>
+							<button class="search-tag">animal</button>
+							<button class="search-tag">animal</button>
+							<button class="search-tag">animal</button>
+							<button class="search-tag">animal</button>
+							<button class="search-tag">animal</button>
+							<button class="search-tag">animal</button>
+							<button class="search-tag">animal</button>
+							<button class="search-tag">animal</button>
+							<button class="search-tag">animal</button>
+
+							<div
+								class="searchbar-input"
+								contenteditable=""
+							></div>
+						</div>
+						<button class="clear-searchbar-button"></button>
+					</div>
+				</header>
+
+				<!-- <header>
+					<label class="fav-button">
+						<input type="checkbox" />
+					</label>
+					<label class="select-button">
+						Select
+						<input type="checkbox" />
+					</label>
+				</header> -->
+
+				<ul class="image-grid">
+					<li>
+						<a class="image">
+							<img src="images/cabra1.jpg" />
+						</a>
+						<button class="delete-image-button"><div class="delete-image-icon"></div></button>
+					</li>
+					<li>
+						<a class="image">
+							<img src="images/cabra2.jpg" />
+						</a>
+						<button class="delete-image-button"><div class="delete-image-icon"></div></button>
+					</li>
+					<li>
+						<a class="image">
+							<img src="images/gato1.avif" />
+						</a>
+						<button class="delete-image-button"><div class="delete-image-icon"></div></button>
+					</li>
+					<li>
+						<a class="image">
+							<img src="images/gato2.jpg" />
+						</a>
+						<button class="delete-image-button"><div class="delete-image-icon"></div></button>
+					</li>
+					<li>
+						<a class="image">
+							<img src="images/jabali1.webp" />
+						</a>
+						<button class="delete-image-button"><div class="delete-image-icon"></div></button>
+					</li>
+					<li>
+						<a class="image">
+							<img src="images/jabali2.jpg" />
+						</a>
+						<button class="delete-image-button"><div class="delete-image-icon"></div></button>
+					</li>
+					<li>
+						<a class="image">
+							<img src="images/liebre1.JPG" />
+						</a>
+						<button class="delete-image-button"><div class="delete-image-icon"></div></button>
+					</li>
+				</ul>
+			</div>
+		</main>
+	</body>
+</html>
