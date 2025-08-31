@@ -1,0 +1,87 @@
+main header {
+	align-self: stretch;
+
+	min-width: 10px;
+
+	justify-content: center;
+
+	display: flex;
+
+	column-gap: 10px;
+}
+
+.searchbar {
+	flex: 1;
+	min-width: 140px;
+	max-width: 1400px;
+
+	height: 45px;
+
+	padding: 0 15px;
+
+	margin: 0 45px;
+
+	display: flex;
+	align-items: center;
+	column-gap: 15px;
+
+	border-style: solid;
+	border-width: 1px;
+	border-radius: 56px;
+	border-color: rgb(211, 211, 211);
+
+	background-color: white;
+
+	box-shadow: 0 1px 10px rgba(0, 0, 0, 0.062);
+}
+
+.clear-searchbar-button {
+	cursor: pointer;
+
+	aspect-ratio: 1;
+	width: 20px;
+
+	background-color: rgb(255, 0, 76);
+
+	mask-image: url('../icon/close-bold-svgrepo-com.svg');
+	mask-repeat: no-repeat;
+	mask-position: center;
+	mask-size: contain;
+}
+
+.clear-searchbar-button:hover {
+	background-color: rgba(255, 0, 76, 0.61);
+}
+
+.searchbar-body {
+	contain: inline-size;
+
+	overflow: scroll;
+	flex-wrap: nowrap;
+
+	height: 45px;
+
+	flex: 1;
+	min-width: 100px;
+
+	display: flex;
+	align-items: center;
+	column-gap: 3px;
+}
+
+.searchbar:has(.searchbar-input:focus) {
+	outline: solid 1px rgb(16, 219, 255);
+}
+
+.searchbar-input {
+	flex: 1;
+	font-size: 14px;
+
+	min-width: 150px;
+
+	border: none;
+}
+
+.searchbar-input:focus {
+	outline: none;
+}

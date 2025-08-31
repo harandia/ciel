@@ -19,14 +19,14 @@
 
 	border-right: solid;
 	border-width: 1px;
-	border-color: var(--menu-border-color);
+	border-color: rgb(218, 218, 218);
 }
 
 .menu-button {
 	cursor: pointer;
 
+	aspect-ratio: 1;
 	width: 35px;
-	height: 35px;
 
 	padding: 1px;
 
@@ -39,7 +39,7 @@
 }
 
 .menu-button:hover {
-	background-color: var(--menu-button-hover-color);
+	background-color: rgb(221, 242, 252);
 
 	border-radius: 5px;
 }
@@ -49,9 +49,10 @@
 }
 
 .menu-icon {
-	width: 35px;
-	height: 35px;
-	background-color: var(--menu-icon-color);
+	aspect-ratio: inherit;
+	width: inherit;
+
+	background-color: rgb(74, 166, 209);
 
 	mask-repeat: no-repeat;
 	mask-position: center;

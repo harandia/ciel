@@ -1,0 +1,27 @@
+.search-tag {
+	cursor: pointer;
+
+	font-size: 13px;
+	color: rgb(72, 97, 107);
+
+	padding: 4px 8px;
+
+	border: none;
+	border-radius: 20px;
+	background-color: rgb(207, 241, 250);
+}
+
+.search-tag:hover {
+	text-decoration: line-through;
+}
+
+.wrong {
+	color: rgb(255, 0, 76);
+	background-color: rgb(255, 202, 218);
+}
+
+.new {
+	font-weight: bold;
+	color: rgb(219, 250, 255);
+	background-color: rgb(73, 72, 129);
+}

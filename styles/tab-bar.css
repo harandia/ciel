@@ -30,6 +30,7 @@
 	--alpha: 1;
 
 	cursor: pointer;
+
 	height: 35px;
 
 	display: flex;
@@ -64,7 +65,7 @@
 .close-tab {
 	cursor: pointer;
 
-	aspect-ratio: 1/1;
+	aspect-ratio: 1;
 	width: 15px;
 
 	padding: 0;
@@ -91,7 +92,7 @@
 }
 
 .close-tab-icon {
-	aspect-ratio: 1/1;
+	aspect-ratio: inherit;
 	width: inherit;
 
 	background-color: rgb(255, 0, 76);
