@@ -1,25 +1,18 @@
 main header {
 	align-self: stretch;
 
-	min-width: 10px;
-
-	justify-content: center;
+	margin: 0 45px;
 
 	display: flex;
-
-	column-gap: 10px;
+	flex-direction: column;
 }
 
 .searchbar {
 	flex: 1;
-	min-width: 140px;
-	max-width: 1400px;
 
 	height: 45px;
 
 	padding: 0 15px;
-
-	margin: 0 45px;
 
 	display: flex;
 	align-items: center;
@@ -33,24 +26,6 @@ main header {
 	background-color: white;
 
 	box-shadow: 0 1px 10px rgba(0, 0, 0, 0.062);
-}
-
-.clear-searchbar-button {
-	cursor: pointer;
-
-	aspect-ratio: 1;
-	width: 20px;
-
-	background-color: rgb(255, 0, 76);
-
-	mask-image: url('../icon/close-bold-svgrepo-com.svg');
-	mask-repeat: no-repeat;
-	mask-position: center;
-	mask-size: contain;
-}
-
-.clear-searchbar-button:hover {
-	background-color: rgba(255, 0, 76, 0.61);
 }
 
 .searchbar-body {
@@ -86,4 +61,49 @@ main header {
 
 .searchbar-input:focus {
 	outline: none;
+}
+
+.clear-searchbar-button {
+	cursor: pointer;
+
+	aspect-ratio: 1;
+	width: 20px;
+
+	background-color: rgb(255, 0, 76);
+
+	mask-image: url('../icon/close-bold-svgrepo-com.svg');
+	mask-repeat: no-repeat;
+	mask-position: center;
+	mask-size: contain;
+}
+
+.clear-searchbar-button:hover {
+	background-color: rgba(255, 0, 76, 0.61);
+}
+
+.searchbar-warning {
+	cursor: default;
+
+	overflow: hidden;
+
+	position: relative;
+
+	margin: 0;
+
+	padding: 10px 15px 0 15px;
+
+	max-height: 25px;
+
+	font-size: 12.5px;
+	color: rgb(255, 0, 76);
+
+	transition: transform 600ms, max-height 600ms linear;
+}
+
+.searchbar-warning:empty {
+	padding: 0;
+
+	max-height: 0;
+
+	transform: translateY(-10px);
 }

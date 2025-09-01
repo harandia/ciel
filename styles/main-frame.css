@@ -1,7 +1,11 @@
 main {
-	margin: 35px 0 0 45px;
+	margin: 41px 0 0 45px;
 
 	display: flex;
+
+	align-items: stretch;
+
+	min-height: calc(100vh - 41px);
 
 	background-color: rgb(251, 250, 253);
 }
@@ -13,9 +17,6 @@ main {
 
 	display: flex;
 	flex-direction: column;
-
-	justify-content: center;
-	align-items: center;
 
 	row-gap: 10px;
 }

@@ -34,6 +34,10 @@
 			rel="stylesheet"
 			href="styles/image.css"
 		/>
+		<link
+			rel="stylesheet"
+			href="styles/edit-view.css"
+		/>
 		<title>Document</title>
 	</head>
 	<body>
@@ -73,19 +77,19 @@
 			</div>
 		</nav>
 		<main>
-			<div class="search-view">
+			<section class="search-view">
 				<header>
-					<div class="searchbar">
+					<search class="searchbar">
 						<div class="searchbar-body">
-							<button class="search-tag">animal</button>
-							<button class="wrong search-tag">amal</button>
-							<button class="search-tag">wild</button>
-							<button class="search-tag">domestic</button>
-							<button class="search-tag">cat</button>
-							<button class="search-tag">dog</button>
-							<button class="search-tag">rabbit</button>
-							<button class="search-tag">goat</button>
-							<button class="search-tag">front-view</button>
+							<div class="search-tag">animal</div>
+							<div class="wrong search-tag">amal</div>
+							<div class="search-tag">wild</div>
+							<div class="search-tag">domestic</div>
+							<div class="search-tag">cat</div>
+							<div class="search-tag">dog</div>
+							<div class="search-tag">rabbit</div>
+							<div class="search-tag">goat</div>
+							<div class="search-tag">front-view</div>
 
 							<div
 								class="searchbar-input"
@@ -93,64 +97,64 @@
 							></div>
 						</div>
 						<button class="clear-searchbar-button"></button>
-					</div>
+					</search>
+					<p class="searchbar-warning"><strong>amal</strong> tag doesn't exist.</p>
 				</header>
-
-				<!-- <header>
-					<label class="fav-button">
-						<input type="checkbox" />
-					</label>
-					<label class="select-button">
-						Select
-						<input type="checkbox" />
-					</label>
-				</header> -->
 
 				<ul class="image-grid">
 					<li>
-						<a class="image">
-							<img src="images/cabra1.jpg" />
-						</a>
+						<img
+							class="image"
+							src="images/cabra1.jpg"
+						/>
 						<button class="delete-image-button"><div class="delete-image-icon"></div></button>
 					</li>
 					<li>
-						<a class="image">
-							<img src="images/cabra2.jpg" />
-						</a>
+						<img
+							class="image"
+							src="images/cabra2.jpg"
+						/>
 						<button class="delete-image-button"><div class="delete-image-icon"></div></button>
 					</li>
 					<li>
-						<a class="image">
-							<img src="images/gato1.avif" />
-						</a>
+						<img
+							class="image"
+							src="images/gato1.avif"
+						/>
 						<button class="delete-image-button"><div class="delete-image-icon"></div></button>
 					</li>
 					<li>
-						<a class="image">
-							<img src="images/gato2.jpg" />
-						</a>
+						<img
+							class="image"
+							src="images/gato2.jpg"
+						/>
 						<button class="delete-image-button"><div class="delete-image-icon"></div></button>
 					</li>
 					<li>
-						<a class="image">
-							<img src="images/jabali1.webp" />
-						</a>
+						<img
+							class="image"
+							src="images/jabali1.webp"
+						/>
 						<button class="delete-image-button"><div class="delete-image-icon"></div></button>
 					</li>
 					<li>
-						<a class="image">
-							<img src="images/jabali2.jpg" />
-						</a>
+						<img
+							class="image"
+							src="images/jabali2.jpg"
+						/>
 						<button class="delete-image-button"><div class="delete-image-icon"></div></button>
 					</li>
 					<li>
-						<a class="image">
-							<img src="images/liebre1.JPG" />
-						</a>
+						<img
+							class="image"
+							src="images/liebre1.JPG"
+						/>
 						<button class="delete-image-button"><div class="delete-image-icon"></div></button>
 					</li>
 				</ul>
-			</div>
+			</section>
+
+			<div class="edit-view"></div>
 		</main>
 	</body>
 </html>
