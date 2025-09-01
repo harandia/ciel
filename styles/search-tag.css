@@ -1,6 +1,8 @@
 .search-tag {
 	cursor: pointer;
 
+	white-space: nowrap;
+
 	font-size: 13px;
 	color: rgb(72, 97, 107);
 
