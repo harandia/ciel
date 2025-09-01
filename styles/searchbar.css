@@ -74,6 +74,8 @@ main header {
 }
 
 .searchbar-input {
+	white-space: nowrap;
+
 	flex: 1;
 	font-size: 14px;
 
