@@ -17,13 +17,28 @@
 	text-decoration: line-through;
 }
 
-.wrong {
+.wrong-tag {
 	color: rgb(255, 0, 76);
 	background-color: rgb(255, 202, 218);
 }
 
-.new {
+.non-existent-tag {
 	font-weight: bold;
 	color: rgb(219, 250, 255);
 	background-color: rgb(73, 72, 129);
+}
+
+.new-tag {
+	color: white;
+	background-color: rgb(149, 208, 248);
+}
+
+.deleted-tag {
+	text-decoration: line-through;
+
+	background-color: rgb(202, 202, 202);
+}
+
+.deleted-tag:hover {
+	text-decoration: none;
 }

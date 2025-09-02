@@ -2,7 +2,7 @@
 	position: relative;
 }
 
-.image {
+.image-grid-image {
 	cursor: pointer;
 
 	width: 250px;
@@ -14,13 +14,13 @@
 	transition: all 200ms;
 }
 
-.image-grid li:hover img {
+.image-grid li:hover .image-grid-image {
 	transform: translateY(-5px);
 
 	box-shadow: 5px 5px 15px rgba(0, 0, 0, 0.329);
 }
 
-.delete-image-button {
+.image-delete-button {
 	cursor: pointer;
 
 	visibility: hidden;
@@ -44,7 +44,7 @@
 	transition: opacity 200ms;
 }
 
-.image-grid li:hover .delete-image-button {
+.image-grid li:hover .image-delete-button {
 	visibility: visible;
 
 	transform: translateY(-5px);
@@ -52,11 +52,11 @@
 	opacity: 1;
 }
 
-.delete-image-button:hover {
+.image-delete-button:hover {
 	background-color: rgb(255, 0, 76);
 }
 
-.delete-image-icon {
+.image-delete-icon {
 	background-color: white;
 
 	aspect-ratio: 1;

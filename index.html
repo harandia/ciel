@@ -32,7 +32,7 @@
 		/>
 		<link
 			rel="stylesheet"
-			href="styles/image.css"
+			href="styles/image-grid-image.css"
 		/>
 		<link
 			rel="stylesheet"
@@ -82,7 +82,7 @@
 					<search class="searchbar">
 						<div class="searchbar-body">
 							<div class="search-tag">animal</div>
-							<div class="wrong search-tag">amal</div>
+							<div class="wrong-tag search-tag">amal</div>
 							<div class="search-tag">wild</div>
 							<div class="search-tag">domestic</div>
 							<div class="search-tag">cat</div>
@@ -96,7 +96,7 @@
 								contenteditable=""
 							></div>
 						</div>
-						<button class="clear-searchbar-button"></button>
+						<button class="searchbar-clear-button"></button>
 					</search>
 					<p class="searchbar-warning"><strong>amal</strong> tag doesn't exist.</p>
 				</header>
@@ -104,57 +104,90 @@
 				<ul class="image-grid">
 					<li>
 						<img
-							class="image"
+							class="image-grid-image"
 							src="images/cabra1.jpg"
 						/>
-						<button class="delete-image-button"><div class="delete-image-icon"></div></button>
+						<button class="image-delete-button"><div class="image-delete-icon"></div></button>
 					</li>
 					<li>
 						<img
-							class="image"
+							class="image-grid-image"
 							src="images/cabra2.jpg"
 						/>
-						<button class="delete-image-button"><div class="delete-image-icon"></div></button>
+						<button class="image-delete-button"><div class="image-delete-icon"></div></button>
 					</li>
 					<li>
 						<img
-							class="image"
+							class="image-grid-image"
 							src="images/gato1.avif"
 						/>
-						<button class="delete-image-button"><div class="delete-image-icon"></div></button>
+						<button class="image-delete-button"><div class="image-delete-icon"></div></button>
 					</li>
 					<li>
 						<img
-							class="image"
+							class="image-grid-image"
 							src="images/gato2.jpg"
 						/>
-						<button class="delete-image-button"><div class="delete-image-icon"></div></button>
+						<button class="image-delete-button"><div class="image-delete-icon"></div></button>
 					</li>
 					<li>
 						<img
-							class="image"
+							class="image-grid-image"
 							src="images/jabali1.webp"
 						/>
-						<button class="delete-image-button"><div class="delete-image-icon"></div></button>
+						<button class="image-delete-button"><div class="image-delete-icon"></div></button>
 					</li>
 					<li>
 						<img
-							class="image"
+							class="image-grid-image"
 							src="images/jabali2.jpg"
 						/>
-						<button class="delete-image-button"><div class="delete-image-icon"></div></button>
+						<button class="image-delete-button"><div class="image-delete-icon"></div></button>
 					</li>
 					<li>
 						<img
-							class="image"
+							class="image-grid-image"
 							src="images/liebre1.JPG"
 						/>
-						<button class="delete-image-button"><div class="delete-image-icon"></div></button>
+						<button class="image-delete-button"><div class="image-delete-icon"></div></button>
 					</li>
 				</ul>
 			</section>
 
-			<div class="edit-view"></div>
+			<section class="editor">
+				<img
+					class="editor-image-preview"
+					src="images/gato2.jpg"
+				/>
+
+				<div class="editor-body">
+					<div class="tag-editor">
+						<div class="search-tag">wild</div>
+						<div class="search-tag">domestic</div>
+						<div class="search-tag">cat</div>
+						<div class="deleted-tag search-tag">dog</div>
+						<div class="search-tag">rabbit</div>
+						<div class="new-tag search-tag">goat</div>
+						<div class="non-existent-tag search-tag">front-view</div>
+						<span
+							class="tag-editor-input"
+							contenteditable=""
+						></span>
+					</div>
+
+					<p class="editor-warning"><strong>front-view</strong> tag doesn't exist yet.</p>
+				</div>
+
+				<div class="editor-confirm-container">
+					<button class="editor-discard-button">Discard</button>
+					<button class="editor-apply-button">Apply</button>
+				</div>
+
+				<div class="editor-open-delete-container">
+					<button class="editor-delete-button"><div class="image-delete-icon"></div></button>
+					<button class="editor-open-button">Open</button>
+				</div>
+			</section>
 		</main>
 	</body>
 </html>
