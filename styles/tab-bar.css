@@ -127,3 +127,33 @@
 	opacity: 1;
 	transition-delay: 0.75s;
 }
+
+.tab-add-button {
+	cursor: pointer;
+
+	aspect-ratio: 1;
+
+	margin: 4px 0 5px 2px;
+
+	border: none;
+	border-radius: 7px;
+
+	background-color: rgba(206, 247, 247, 0.5);
+}
+
+.tab-add-button:hover {
+	background-color: rgb(206, 247, 247);
+}
+
+.tab-add-icon {
+	aspect-ratio: 1;
+
+	width: inherit;
+
+	background-color: rgb(74, 178, 209);
+
+	mask-image: url('../icon/add-svgrepo-com.svg');
+	mask-repeat: no-repeat;
+	mask-position: center;
+	mask-size: 110%;
+}

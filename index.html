@@ -6,6 +6,14 @@
 			name="viewport"
 			content="width=device-width, initial-scale=1.0"
 		/>
+
+		<title>ciel</title>
+		<link
+			rel="icon"
+			type="image/x-icon"
+			href="icon/ciel-logo.svg"
+		/>
+
 		<link
 			rel="stylesheet"
 			href="styles/general.css"
@@ -75,6 +83,7 @@
 				</div>
 				<div class="tab-tooltip">Closed tab 2</div>
 			</div>
+			<button class="tab-add-button"><div class="tab-add-icon"></div></button>
 		</nav>
 		<main>
 			<section class="search-view">
@@ -100,7 +109,11 @@
 					</search>
 					<p class="searchbar-warning"><strong>amal</strong> tag doesn't exist.</p>
 				</header>
-
+				<button
+					onclick="document.querySelector('.image-grid-image').classList.toggle('selected-image')"
+				>
+					Select
+				</button>
 				<ul class="image-grid">
 					<li>
 						<img
@@ -155,12 +168,25 @@
 			</section>
 
 			<section class="editor">
-				<img
+				<div class="editor-open-delete-container">
+					<button class="editor-delete-button"><div class="image-delete-icon"></div></button>
+					<button class="editor-open-button">Open</button>
+				</div>
+
+				<div class="editor-multi-preview">
+					<img
+						class="editor-image-preview"
+						src="images/gato2.jpg"
+					/>
+				</div>
+
+				<!-- <img
 					class="editor-image-preview"
 					src="images/gato2.jpg"
-				/>
+				/> -->
 
 				<div class="editor-body">
+					<p class="editor-selection-counter"><strong>2</strong> imágenes seleccionadas</p>
 					<div class="tag-editor">
 						<div class="search-tag">wild</div>
 						<div class="search-tag">domestic</div>
@@ -168,24 +194,19 @@
 						<div class="deleted-tag search-tag">dog</div>
 						<div class="search-tag">rabbit</div>
 						<div class="new-tag search-tag">goat</div>
-						<div class="non-existent-tag search-tag">front-view</div>
+						<div class="first-time-tag new-tag search-tag">front-view</div>
 						<span
 							class="tag-editor-input"
 							contenteditable=""
 						></span>
 					</div>
 
-					<p class="editor-warning"><strong>front-view</strong> tag doesn't exist yet.</p>
+					<p class="editor-warning"><strong>front-view</strong> hasn't been used yet.</p>
 				</div>
 
 				<div class="editor-confirm-container">
 					<button class="editor-discard-button">Discard</button>
 					<button class="editor-apply-button">Apply</button>
-				</div>
-
-				<div class="editor-open-delete-container">
-					<button class="editor-delete-button"><div class="image-delete-icon"></div></button>
-					<button class="editor-open-button">Open</button>
 				</div>
 			</section>
 		</main>

@@ -1,5 +1,7 @@
 .editor {
-	overflow: scroll;
+	max-width: 0;
+
+	overflow-y: scroll;
 
 	overscroll-behavior: contain;
 
@@ -24,16 +26,70 @@
 	background-color: rgb(251, 250, 253);
 
 	box-shadow: -3px 10px 10px rgba(0, 0, 0, 0.03);
+
+	transition: max-width 500ms;
 }
 
+.search-view:has(.selected-image) + .editor {
+	max-width: 340px;
+}
+
+/*Open-Delete Container*/
+.editor-open-delete-container {
+	width: 280px;
+
+	display: flex;
+	column-gap: 10px;
+}
+
+.editor-open-delete-container button {
+	cursor: pointer;
+
+	border-style: none;
+	border-radius: 40px;
+
+	height: 35px;
+}
+
+.editor-delete-button {
+	width: 35px;
+
+	display: flex;
+	align-items: center;
+
+	background-color: rgb(255, 87, 137);
+}
+
+.editor-open-button {
+	flex: 1;
+
+	color: rgb(72, 97, 107);
+
+	background-color: rgb(207, 241, 250);
+}
+
+/*Image preview*/
 .editor-image-preview {
 	width: 280px;
 
 	border-radius: 10px;
+}
+
+.editor-multi-preview {
+	position: relative;
+
+	border-radius: 15px;
+
+	padding-right: 4px;
+	padding-bottom: 1px;
+
+	border-right: 7px solid rgb(192, 234, 240);
+	border-bottom: 7px solid rgb(192, 234, 240);
 
 	box-shadow: 5px 5px 10px rgba(0, 0, 0, 0.192);
 }
 
+/*Editor body*/
 .editor-body {
 	display: flex;
 	flex-direction: column;
@@ -41,6 +97,25 @@
 	row-gap: 7px;
 
 	width: 280px;
+}
+
+.editor-selection-counter {
+	max-height: 20.6667px;
+	overflow: hidden;
+
+	margin: 0;
+
+	color: rgb(21, 101, 126);
+
+	transition: max-height 400ms;
+}
+
+.editor-selection-counter:empty {
+	max-height: 0;
+}
+
+.editor-selection-counter strong {
+	font-size: large;
 }
 
 .tag-editor {
@@ -92,20 +167,43 @@
 }
 
 .editor-warning {
+	max-height: 14px;
+	overflow: hidden;
+
 	margin: 0;
 
 	padding-left: 5px;
 
-	font-size: 11px;
+	font-size: 12px;
 	color: rgb(70, 69, 146);
+
+	transition: max-height 400ms;
 }
 
+.editor-warning:empty {
+	max-height: 0;
+}
+
+/*Apply-Discard container*/
 .editor-confirm-container {
+	max-height: 0;
+	min-height: 0;
+	overflow: hidden;
+
+	height: 35px;
+
 	display: flex;
 
 	width: 280px;
 
 	column-gap: 10px;
+
+	transition: max-height 400ms, min-height 400ms;
+}
+
+.editor-body:has(.new-tag, .deleted-tag) + .editor-confirm-container {
+	max-height: 35px;
+	min-height: 35px;
 }
 
 .editor-confirm-container button {
@@ -128,43 +226,6 @@
 }
 
 .editor-apply-button {
-	color: rgb(72, 97, 107);
-
-	background-color: rgb(207, 241, 250);
-}
-
-.editor-open-delete-container {
-	margin-top: auto;
-
-	padding-top: 20px;
-
-	width: 280px;
-
-	display: flex;
-	column-gap: 10px;
-}
-
-.editor-open-delete-container button {
-	cursor: pointer;
-
-	border-style: none;
-	border-radius: 40px;
-
-	height: 35px;
-}
-
-.editor-delete-button {
-	width: 35px;
-
-	display: flex;
-	align-items: center;
-
-	background-color: rgb(255, 87, 137);
-}
-
-.editor-open-button {
-	flex: 1;
-
 	color: rgb(72, 97, 107);
 
 	background-color: rgb(207, 241, 250);
