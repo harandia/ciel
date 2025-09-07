@@ -1,0 +1,95 @@
+.upload-view {
+	overflow-y: scroll;
+	overscroll-behavior: contain;
+
+	flex: 1;
+
+	display: flex;
+	flex-direction: column;
+
+	row-gap: 10px;
+}
+
+.upload-add-button {
+	cursor: pointer;
+
+	padding: 0;
+
+	aspect-ratio: 1;
+	width: 250px;
+
+	border: none;
+	border-radius: 20px;
+
+	background-color: rgba(207, 247, 250, 0.425);
+}
+
+.upload-add-button:hover {
+	background-color: rgba(207, 247, 250, 0.733);
+}
+
+.upload-add-icon {
+	aspect-ratio: inherit;
+	width: inherit;
+
+	background-color: rgb(74, 178, 209);
+
+	mask-image: url('../icon/add-svgrepo-com.svg');
+	mask-position: center;
+	mask-repeat: no-repeat;
+	mask-size: 50%;
+}
+
+.upload-view footer {
+	position: sticky;
+	bottom: 0;
+
+	margin-top: auto;
+
+	padding: 0 20px;
+
+	display: flex;
+
+	column-gap: 30px;
+
+	background-color: rgb(251, 250, 253);
+
+	box-shadow: 0 -10px 10px rgba(0, 0, 0, 0.03);
+}
+
+.upload-view footer button {
+	cursor: pointer;
+
+	flex: 1;
+
+	height: 35px;
+
+	margin: 5px 0;
+
+	font-size: 15px;
+	font-weight: bold;
+
+	border: none;
+
+	border-radius: 50px;
+}
+
+.upload-cancel-button {
+	color: white;
+
+	background-color: rgb(255, 110, 154);
+}
+
+.upload-upload-button {
+	color: white;
+
+	background-color: rgb(158, 234, 255);
+}
+
+.upload-cancel-button:hover {
+	background-color: rgb(255, 16, 96);
+}
+
+.upload-upload-button:hover {
+	background-color: rgb(102, 222, 255);
+}

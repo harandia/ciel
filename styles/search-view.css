@@ -1,5 +1,5 @@
 .search-view {
-	overflow: scroll;
+	overflow-y: scroll;
 	overscroll-behavior: contain;
 
 	flex: 1;

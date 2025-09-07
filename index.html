@@ -48,16 +48,20 @@
 		/>
 		<link
 			rel="stylesheet"
-			href="styles/edit-view.css"
+			href="styles/editor.css"
 		/>
 		<link
 			rel="stylesheet"
 			href="styles/autocompleter.css"
 		/>
+		<link
+			rel="stylesheet"
+			href="styles/upload-view.css"
+		/>
 		<title>Document</title>
 	</head>
 	<body>
-		<ol class="autocompleter-hidden autocompleter">
+		<ol class="scrollable autocompleter-hidden autocompleter">
 			<li>animal</li>
 			<li>wild</li>
 			<li>domestic</li>
@@ -91,7 +95,26 @@
 			<button class="menu-button"><div class="menu-icon menu-upload-icon"></div></button>
 			<button class="menu-button"><div class="menu-icon menu-favourites-icon"></div></button>
 			<button class="menu-button"><div class="menu-icon menu-history-icon"></div></button>
+			<button onclick="document.querySelector('.editor').classList.toggle('editor-hidden')">
+				Show/Hide editor
+			</button>
 
+			<button
+				onclick="document.querySelector('.editor-preview').classList.toggle('editor-multi-preview')"
+			>
+				Show/Hide editor-multi-preview
+			</button>
+			<button
+				onclick="document.querySelector('.tag-editor-warning').classList.toggle('tag-editor-warning-hidden')"
+			>
+				Show/Hide editor warning
+			</button>
+
+			<button
+				onclick="document.querySelector('.searchbar-warning').classList.toggle('searchbar-warning-hidden')"
+			>
+				Show/Hide search warning
+			</button>
 			<button class="menu-button menu-last"><div class="menu-icon menu-config-icon"></div></button>
 		</nav>
 		<nav id="tab-bar">
@@ -125,55 +148,7 @@
 		</nav>
 
 		<main>
-			<section class="scrollable search-view">
-				<header>
-					<search class="searchbar">
-						<div class="searchbar-body">
-							<div class="search-tag">animal</div>
-							<div class="wrong-tag search-tag">amal</div>
-							<div class="search-tag">wild</div>
-							<div class="search-tag">domestic</div>
-							<div class="search-tag">cat</div>
-							<div class="search-tag">dog</div>
-							<div class="search-tag">rabbit</div>
-							<div class="search-tag">goat</div>
-							<div class="search-tag">front-view</div>
-							<div class="excluded-tag search-tag">bull</div>
-
-							<div
-								class="tag-input searchbar-input"
-								contenteditable=""
-							></div>
-						</div>
-						<button class="searchbar-clear-button"></button>
-					</search>
-					<p class="searchbar-warning-hidden searchbar-warning">
-						<strong>amal</strong> tag doesn't exist.
-					</p>
-				</header>
-
-				<button onclick="document.querySelector('.editor').classList.toggle('editor-hidden')">
-					Show/Hide editor
-				</button>
-
-				<button
-					onclick="document.querySelector('.editor-preview').classList.toggle('editor-multi-preview')"
-				>
-					Show/Hide editor-multi-preview
-				</button>
-
-				<!-- <button
-					onclick="document.querySelector('.tag-editor-warning').classList.toggle('tag-editor-warning-hidden')"
-				>
-					Show/Hide editor warning
-				</button>
-
-				<button
-					onclick="document.querySelector('.searchbar-warning').classList.toggle('searchbar-warning-hidden')"
-				>
-					Show/Hide search warning
-				</button> -->
-
+			<section class="scrollable upload-view">
 				<ul class="image-grid">
 					<li>
 						<img
@@ -224,10 +199,18 @@
 						/>
 						<button class="image-delete-button"><div class="image-delete-icon"></div></button>
 					</li>
+					<li>
+						<button class="upload-add-button"><div class="upload-add-icon"></div></button>
+					</li>
 				</ul>
+
+				<footer>
+					<button class="upload-cancel-button">Cancel</button>
+					<button class="upload-upload-button">Upload</button>
+				</footer>
 			</section>
 
-			<section class="scrollable editor-hidden editor">
+			<section class="scrollable editor">
 				<div class="editor-open-delete-container">
 					<button class="editor-delete-button"><div class="image-delete-icon"></div></button>
 					<button class="editor-open-button">Open</button>
@@ -260,12 +243,129 @@
 						<strong>front-view</strong> hasn't been used yet.
 					</p>
 				</div>
-
-				<div class="editor-confirm-container">
-					<button class="editor-discard-button">Discard</button>
-					<button class="editor-apply-button">Apply</button>
-				</div>
 			</section>
+
+			<template id="search-page"
+				><section class="scrollable search-view">
+					<header>
+						<search class="searchbar">
+							<div class="searchbar-body">
+								<div class="search-tag">animal</div>
+								<div class="wrong-tag search-tag">amal</div>
+								<div class="search-tag">wild</div>
+								<div class="search-tag">domestic</div>
+								<div class="search-tag">cat</div>
+								<div class="search-tag">dog</div>
+								<div class="search-tag">rabbit</div>
+								<div class="search-tag">goat</div>
+								<div class="search-tag">front-view</div>
+								<div class="excluded-tag search-tag">bull</div>
+
+								<div
+									class="tag-input searchbar-input"
+									contenteditable=""
+								></div>
+							</div>
+							<button class="searchbar-clear-button"></button>
+						</search>
+						<p class="searchbar-warning-hidden searchbar-warning">
+							<strong>amal</strong> tag doesn't exist.
+						</p>
+					</header>
+
+					<ul class="image-grid">
+						<li>
+							<img
+								class="image-grid-image"
+								src="images/cabra1.jpg"
+							/>
+							<button class="image-delete-button"><div class="image-delete-icon"></div></button>
+						</li>
+						<li>
+							<img
+								class="image-grid-image"
+								src="images/cabra2.jpg"
+							/>
+							<button class="image-delete-button"><div class="image-delete-icon"></div></button>
+						</li>
+						<li>
+							<img
+								class="image-grid-image"
+								src="images/gato1.avif"
+							/>
+							<button class="image-delete-button"><div class="image-delete-icon"></div></button>
+						</li>
+						<li>
+							<img
+								class="image-grid-image"
+								src="images/gato2.jpg"
+							/>
+							<button class="image-delete-button"><div class="image-delete-icon"></div></button>
+						</li>
+						<li>
+							<img
+								class="image-grid-image"
+								src="images/jabali1.webp"
+							/>
+							<button class="image-delete-button"><div class="image-delete-icon"></div></button>
+						</li>
+						<li>
+							<img
+								class="image-grid-image"
+								src="images/jabali2.jpg"
+							/>
+							<button class="image-delete-button"><div class="image-delete-icon"></div></button>
+						</li>
+						<li>
+							<img
+								class="image-grid-image"
+								src="images/liebre1.JPG"
+							/>
+							<button class="image-delete-button"><div class="image-delete-icon"></div></button>
+						</li>
+					</ul>
+				</section>
+
+				<section class="scrollable editor-hidden editor">
+					<div class="editor-open-delete-container">
+						<button class="editor-delete-button"><div class="image-delete-icon"></div></button>
+						<button class="editor-open-button">Open</button>
+					</div>
+
+					<div class="editor-preview editor-multi-preview">
+						<img
+							class="editor-preview-image"
+							src="images/gato2.jpg"
+						/>
+					</div>
+
+					<div class="editor-body">
+						<p class="editor-selection-counter"><strong>2</strong> images selected</p>
+						<div class="tag-editor">
+							<div class="search-tag">wild</div>
+							<div class="search-tag">domestic</div>
+							<div class="search-tag">cat</div>
+							<div class="deleted-tag search-tag">dog</div>
+							<div class="search-tag">rabbit</div>
+							<div class="new-tag search-tag">goat</div>
+							<div class="first-time-tag new-tag search-tag">front-view</div>
+							<span
+								class="tag-input tag-editor-input"
+								contenteditable=""
+							></span>
+						</div>
+
+						<p class="tag-editor-warning-hidden tag-editor-warning">
+							<strong>front-view</strong> hasn't been used yet.
+						</p>
+					</div>
+
+					<div class="editor-confirm-container">
+						<button class="editor-discard-button">Discard</button>
+						<button class="editor-apply-button">Apply</button>
+					</div>
+				</section>
+			</template>
 		</main>
 	</body>
 </html>
