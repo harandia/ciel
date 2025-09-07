@@ -42,7 +42,7 @@
 	border-radius: 5px;
 }
 
-.last {
+.menu-last {
 	margin-top: auto;
 }
 
@@ -57,22 +57,22 @@
 	mask-size: 80%;
 }
 
-.upload {
+.menu-upload-icon {
 	mask-image: url('../icon/upload-svgrepo-com.svg');
 }
 
-.favourites {
+.menu-favourites-icon {
 	mask-image: url('../icon/star-fill-svgrepo-com.svg');
 }
 
-.history {
+.menu-history-icon {
 	mask-image: url('../icon/history-svgrepo-com.svg');
 }
 
-.config {
+.menu-config-icon {
 	mask-image: url('../icon/configuration-gears-svgrepo-com.svg');
 }
 
-.search {
+.menu-search-icon {
 	mask-image: url('../icon/search-svgrepo-com.svg');
 }

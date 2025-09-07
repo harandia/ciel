@@ -1,3 +1,22 @@
+.image-grid {
+	list-style: none;
+
+	margin: 20px 20px;
+	padding: 0;
+
+	display: grid;
+	grid-template-columns: repeat(auto-fill, 250px);
+
+	justify-content: center;
+
+	align-items: center;
+
+	align-self: stretch;
+
+	column-gap: 25px;
+	row-gap: 10px;
+}
+
 .image-grid li {
 	position: relative;
 }
@@ -66,4 +85,8 @@
 	mask-position: center;
 	mask-repeat: no-repeat;
 	mask-size: 80%;
+}
+
+.image-grid-unselected-image {
+	opacity: 0.5;
 }

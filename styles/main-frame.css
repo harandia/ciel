@@ -1,3 +1,15 @@
+@media (max-width: 700px) {
+	main {
+		flex-direction: column;
+	}
+}
+
+@media (min-width: 700px) {
+	main {
+		flex-direction: row;
+	}
+}
+
 main {
 	margin: 41px 0 0 45px;
 
@@ -5,37 +17,7 @@ main {
 
 	align-items: stretch;
 
-	min-height: calc(100vh - 41px);
+	max-height: calc(100vh - 41px);
 
 	background-color: rgb(251, 250, 253);
-}
-
-.search-view {
-	margin: 30px 0 0 0;
-
-	flex: 1;
-
-	display: flex;
-	flex-direction: column;
-
-	row-gap: 10px;
-}
-
-.image-grid {
-	list-style: none;
-
-	margin: 20px 20px;
-	padding: 0;
-
-	display: grid;
-	grid-template-columns: repeat(auto-fill, 250px);
-
-	justify-content: center;
-
-	align-items: center;
-
-	align-self: stretch;
-
-	column-gap: 25px;
-	row-gap: 10px;
 }

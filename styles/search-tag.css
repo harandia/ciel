@@ -41,3 +41,7 @@
 .deleted-tag:hover {
 	text-decoration: none;
 }
+
+.excluded-tag {
+	background-color: rgb(255, 218, 149);
+}

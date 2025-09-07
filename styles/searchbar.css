@@ -1,7 +1,7 @@
 main header {
 	align-self: stretch;
 
-	margin: 0 45px;
+	margin: 30px 45px 0 45px;
 
 	display: flex;
 	flex-direction: column;
@@ -34,6 +34,8 @@ main header {
 	overflow: scroll;
 	flex-wrap: nowrap;
 
+	overscroll-behavior: contain;
+
 	height: 45px;
 
 	flex: 1;
@@ -53,6 +55,8 @@ main header {
 
 	flex: 1;
 	font-size: 14px;
+
+	margin-left: 4px;
 
 	min-width: 150px;
 
@@ -100,6 +104,6 @@ main header {
 	transition: max-height 300ms linear;
 }
 
-.searchbar-warning:empty {
+.searchbar-warning-hidden {
 	max-height: 0;
 }

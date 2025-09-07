@@ -40,53 +40,92 @@
 		/>
 		<link
 			rel="stylesheet"
-			href="styles/image-grid-image.css"
+			href="styles/search-view.css"
+		/>
+		<link
+			rel="stylesheet"
+			href="styles/image-grid.css"
 		/>
 		<link
 			rel="stylesheet"
 			href="styles/edit-view.css"
 		/>
+		<link
+			rel="stylesheet"
+			href="styles/autocompleter.css"
+		/>
 		<title>Document</title>
 	</head>
 	<body>
+		<ol class="autocompleter-hidden autocompleter">
+			<li>animal</li>
+			<li>wild</li>
+			<li>domestic</li>
+			<li>animal</li>
+			<li>wild</li>
+			<li>domestic</li>
+			<li>animal</li>
+			<li>wild</li>
+			<li>domestic</li>
+			<li>animal</li>
+			<li>wild</li>
+			<li>domestic</li>
+			<li>animal</li>
+			<li>wild</li>
+			<li>domestic</li>
+			<li>animal</li>
+			<li>wild</li>
+			<li>domestic</li>
+			<li>animal</li>
+			<li>wild</li>
+			<li>domestic</li>
+			<li>animal</li>
+			<li>wild</li>
+			<li>domestic</li>
+			<li>animal</li>
+			<li>wild</li>
+			<li>domestic</li>
+		</ol>
 		<nav id="menu">
-			<button class="menu-button"><div class="menu-icon search"></div></button>
-			<button class="menu-button"><div class="menu-icon upload"></div></button>
-			<button class="menu-button"><div class="menu-icon favourites"></div></button>
-			<button class="menu-button"><div class="menu-icon history"></div></button>
+			<button class="menu-button"><div class="menu-icon menu-search-icon"></div></button>
+			<button class="menu-button"><div class="menu-icon menu-upload-icon"></div></button>
+			<button class="menu-button"><div class="menu-icon menu-favourites-icon"></div></button>
+			<button class="menu-button"><div class="menu-icon menu-history-icon"></div></button>
 
-			<button class="menu-button last"><div class="menu-icon config"></div></button>
+			<button class="menu-button menu-last"><div class="menu-icon menu-config-icon"></div></button>
 		</nav>
 		<nav id="tab-bar">
 			<div class="tab">
-				<div class="tab-body open">
+				<div class="tab-body tab-closed">
 					<div class="tab-title">animal amal cat</div>
-					<button class="close-tab"><div class="close-tab-icon"></div></button>
+					<button class="tab-close-tab-button"><div class="tab-close-tab-icon"></div></button>
 				</div>
 				<div class="tab-tooltip">animal amal cat</div>
 			</div>
 			<div class="tab">
-				<div class="tab-body closed">
+				<div class="tab-body">
 					<div class="tab-title">
 						Open tab 123456789012345678901 234567890123456 78901234567890<
 					</div>
-					<button class="close-tab"><div class="close-tab-icon"></div></button>
+					<button class="tab-close-tab-button"><div class="tab-close-tab-icon"></div></button>
 				</div>
 				<div class="tab-tooltip">
 					Open tab 123456789012345678901 234567890123456 78901234567890<
 				</div>
 			</div>
 			<div class="tab">
-				<div class="tab-body closed">
+				<div class="tab-body tab-closed">
 					<div class="tab-title">Closed tab 2</div>
-					<button class="close-tab"><div class="close-tab-icon"></div></button>
+					<button class="tab-close-tab-button"><div class="tab-close-tab-icon"></div></button>
 				</div>
 				<div class="tab-tooltip">Closed tab 2</div>
 			</div>
+
 			<button class="tab-add-button"><div class="tab-add-icon"></div></button>
 		</nav>
+
 		<main>
-			<section class="search-view">
+			<section class="scrollable search-view">
 				<header>
 					<search class="searchbar">
 						<div class="searchbar-body">
@@ -99,21 +138,42 @@
 							<div class="search-tag">rabbit</div>
 							<div class="search-tag">goat</div>
 							<div class="search-tag">front-view</div>
+							<div class="excluded-tag search-tag">bull</div>
 
 							<div
-								class="searchbar-input"
+								class="tag-input searchbar-input"
 								contenteditable=""
 							></div>
 						</div>
 						<button class="searchbar-clear-button"></button>
 					</search>
-					<p class="searchbar-warning"><strong>amal</strong> tag doesn't exist.</p>
+					<p class="searchbar-warning-hidden searchbar-warning">
+						<strong>amal</strong> tag doesn't exist.
+					</p>
 				</header>
-				<button
-					onclick="document.querySelector('.image-grid-image').classList.toggle('selected-image')"
-				>
-					Select
+
+				<button onclick="document.querySelector('.editor').classList.toggle('editor-hidden')">
+					Show/Hide editor
 				</button>
+
+				<button
+					onclick="document.querySelector('.editor-preview').classList.toggle('editor-multi-preview')"
+				>
+					Show/Hide editor-multi-preview
+				</button>
+
+				<!-- <button
+					onclick="document.querySelector('.tag-editor-warning').classList.toggle('tag-editor-warning-hidden')"
+				>
+					Show/Hide editor warning
+				</button>
+
+				<button
+					onclick="document.querySelector('.searchbar-warning').classList.toggle('searchbar-warning-hidden')"
+				>
+					Show/Hide search warning
+				</button> -->
+
 				<ul class="image-grid">
 					<li>
 						<img
@@ -167,26 +227,21 @@
 				</ul>
 			</section>
 
-			<section class="editor">
+			<section class="scrollable editor-hidden editor">
 				<div class="editor-open-delete-container">
 					<button class="editor-delete-button"><div class="image-delete-icon"></div></button>
 					<button class="editor-open-button">Open</button>
 				</div>
 
-				<div class="editor-multi-preview">
+				<div class="editor-preview editor-multi-preview">
 					<img
-						class="editor-image-preview"
+						class="editor-preview-image"
 						src="images/gato2.jpg"
 					/>
 				</div>
 
-				<!-- <img
-					class="editor-image-preview"
-					src="images/gato2.jpg"
-				/> -->
-
 				<div class="editor-body">
-					<p class="editor-selection-counter"><strong>2</strong> imágenes seleccionadas</p>
+					<p class="editor-selection-counter"><strong>2</strong> images selected</p>
 					<div class="tag-editor">
 						<div class="search-tag">wild</div>
 						<div class="search-tag">domestic</div>
@@ -196,12 +251,14 @@
 						<div class="new-tag search-tag">goat</div>
 						<div class="first-time-tag new-tag search-tag">front-view</div>
 						<span
-							class="tag-editor-input"
+							class="tag-input tag-editor-input"
 							contenteditable=""
 						></span>
 					</div>
 
-					<p class="editor-warning"><strong>front-view</strong> hasn't been used yet.</p>
+					<p class="tag-editor-warning-hidden tag-editor-warning">
+						<strong>front-view</strong> hasn't been used yet.
+					</p>
 				</div>
 
 				<div class="editor-confirm-container">
