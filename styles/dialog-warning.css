@@ -1,0 +1,65 @@
+dialog {
+	z-index: 3;
+
+	width: 300px;
+	height: 100px;
+
+	display: flex;
+	flex-direction: column;
+
+	align-items: stretch;
+
+	border: none;
+
+	padding: 20px;
+
+	background-color: rgb(251, 250, 253);
+}
+
+dialog p {
+	flex: 1;
+
+	display: flex;
+	flex-direction: column;
+	justify-content: center;
+
+	font-size: 13px;
+	color: rgb(42, 65, 75);
+
+	text-align: center;
+}
+
+.dialog-buttons-container {
+	display: flex;
+
+	column-gap: 10px;
+}
+
+.dialog-buttons-container > button {
+	cursor: pointer;
+
+	flex: 1;
+
+	height: 35px;
+
+	border: none;
+	border-radius: 30px;
+}
+
+.dialog-cancel-button {
+	color: rgb(34, 53, 61);
+	background-color: rgb(231, 248, 255);
+}
+
+.dialog-cancel-button:hover {
+	background-color: rgb(203, 241, 255);
+}
+
+.dialog-accept-button {
+	color: white;
+	background-color: rgb(255, 87, 137);
+}
+
+.dialog-accept-button:hover {
+	background-color: rgb(255, 16, 96);
+}
