@@ -62,6 +62,10 @@
 			rel="stylesheet"
 			href="styles/dialog-warning.css"
 		/>
+		<link
+			rel="stylesheet"
+			href="styles/favourites-menu.css"
+		/>
 		<title>Document</title>
 	</head>
 	<body>
@@ -107,7 +111,7 @@
 			<button class="menu-button"><div class="menu-icon menu-upload-icon"></div></button>
 			<button class="menu-button"><div class="menu-icon menu-favourites-icon"></div></button>
 			<button class="menu-button"><div class="menu-icon menu-history-icon"></div></button>
-			<button onclick="document.querySelector('.editor').classList.toggle('editor-hidden')">
+			<!-- <button onclick="document.querySelector('.editor').classList.toggle('editor-hidden')">
 				Show/Hide editor
 			</button>
 
@@ -126,9 +130,125 @@
 				onclick="document.querySelector('.searchbar-warning').classList.toggle('searchbar-warning-hidden')"
 			>
 				Show/Hide search warning
-			</button>
+			</button> -->
 			<button class="menu-button menu-last"><div class="menu-icon menu-config-icon"></div></button>
 		</nav>
+
+		<nav
+			id="favourites-menu"
+			class="scrollable"
+		>
+			<h1>Favourites</h1>
+			<div class="favourite">
+				<ul class="favourite-tags">
+					<div class="search-tag">animal</div>
+					<div class="excluded-tag search-tag">cat</div>
+					<div class="search-tag">wild</div>
+					<div class="search-tag">front-view</div>
+				</ul>
+				<button class="favourite-delete-button"></button>
+			</div>
+			<div class="favourite">
+				<ul class="favourite-tags">
+					<div class="search-tag">animal</div>
+					<div class="excluded-tag search-tag">cat</div>
+				</ul>
+				<button class="favourite-delete-button"></button>
+			</div>
+			<div class="favourite">
+				<ul class="favourite-tags">
+					<div class="search-tag">animal</div>
+					<div class="excluded-tag search-tag">cat</div>
+				</ul>
+				<button class="favourite-delete-button"></button>
+			</div>
+			<div class="favourite">
+				<ul class="favourite-tags">
+					<div class="search-tag">animal</div>
+					<div class="excluded-tag search-tag">cat</div>
+				</ul>
+				<button class="favourite-delete-button"></button>
+			</div>
+			<div class="favourite">
+				<ul class="favourite-tags">
+					<div class="search-tag">animal</div>
+					<div class="excluded-tag search-tag">cat</div>
+				</ul>
+				<button class="favourite-delete-button"></button>
+			</div>
+			<div class="favourite">
+				<ul class="favourite-tags">
+					<div class="search-tag">animal</div>
+					<div class="excluded-tag search-tag">cat</div>
+				</ul>
+				<button class="favourite-delete-button"></button>
+			</div>
+
+			<div class="favourite">
+				<ul class="favourite-tags">
+					<div class="search-tag">animal</div>
+					<div class="excluded-tag search-tag">cat</div>
+				</ul>
+				<button class="favourite-delete-button"></button>
+			</div>
+			<div class="favourite">
+				<ul class="favourite-tags">
+					<div class="search-tag">animal</div>
+					<div class="excluded-tag search-tag">cat</div>
+				</ul>
+				<button class="favourite-delete-button"></button>
+			</div>
+			<div class="favourite">
+				<ul class="favourite-tags">
+					<div class="search-tag">animal</div>
+					<div class="excluded-tag search-tag">cat</div>
+				</ul>
+				<button class="favourite-delete-button"></button>
+			</div>
+			<div class="favourite">
+				<ul class="favourite-tags">
+					<div class="search-tag">animal</div>
+					<div class="excluded-tag search-tag">cat</div>
+				</ul>
+				<button class="favourite-delete-button"></button>
+			</div>
+			<div class="favourite">
+				<ul class="favourite-tags">
+					<div class="search-tag">animal</div>
+					<div class="excluded-tag search-tag">cat</div>
+				</ul>
+				<button class="favourite-delete-button"></button>
+			</div>
+			<div class="favourite">
+				<ul class="favourite-tags">
+					<div class="search-tag">animal</div>
+					<div class="excluded-tag search-tag">cat</div>
+				</ul>
+				<button class="favourite-delete-button"></button>
+			</div>
+			<div class="favourite">
+				<ul class="favourite-tags">
+					<div class="search-tag">animal</div>
+					<div class="excluded-tag search-tag">cat</div>
+				</ul>
+				<button class="favourite-delete-button"></button>
+			</div>
+			<div class="favourite">
+				<ul class="favourite-tags">
+					<div class="search-tag">animal</div>
+					<div class="excluded-tag search-tag">cat</div>
+				</ul>
+				<button class="favourite-delete-button"></button>
+			</div>
+			<div class="favourite">
+				<ul class="favourite-tags">
+					<div class="search-tag">animal</div>
+					<div class="excluded-tag search-tag">cat</div>
+				</ul>
+				<button class="favourite-delete-button"></button>
+			</div>
+		</nav>
+
 		<nav id="tab-bar">
 			<div class="tab">
 				<div class="tab-body tab-closed">

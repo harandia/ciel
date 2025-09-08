@@ -1,0 +1,93 @@
+#favourites-menu {
+	overflow-y: scroll;
+	overflow-x: hidden;
+
+	overscroll-behavior: contain;
+
+	z-index: 2;
+
+	position: absolute;
+	top: 93px;
+	left: 50px;
+
+	width: 25%;
+	height: 60%;
+
+	padding: 20px;
+
+	display: flex;
+	flex-direction: column;
+
+	row-gap: 10px;
+
+	border-radius: 5px;
+
+	box-shadow: 0 0 10px rgba(0, 0, 0, 0.13);
+
+	background-color: rgb(242, 249, 252);
+}
+
+#favourites-menu h1 {
+	margin: 0;
+
+	font-size: 29px;
+	color: rgb(23, 116, 145);
+}
+
+.favourite {
+	cursor: pointer;
+
+	min-height: fit-content;
+
+	padding: 0 10px;
+
+	display: flex;
+	align-items: center;
+
+	column-gap: 5px;
+
+	border: none;
+	border-radius: 5px;
+
+	background-color: rgb(234, 246, 250);
+}
+
+.favourite:hover {
+	background-color: rgb(229, 249, 255);
+}
+
+.favourite-tags {
+	flex: 1;
+
+	list-style: none;
+
+	padding: 0;
+
+	display: flex;
+	flex-wrap: wrap;
+
+	column-gap: 4px;
+	row-gap: 5px;
+}
+
+.favourite-delete-button {
+	cursor: pointer;
+
+	aspect-ratio: 1;
+	width: 24px;
+
+	padding: 0;
+
+	border: none;
+
+	background-color: rgb(255, 103, 149);
+
+	mask-image: url('../icon/close-bold-svgrepo-com.svg');
+	mask-position: center;
+	mask-size: 55%;
+	mask-repeat: no-repeat;
+}
+
+.favourite-delete-button:hover {
+	background-color: rgb(255, 0, 76);
+}
