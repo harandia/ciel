@@ -81,7 +81,7 @@
 	aspect-ratio: 1;
 	width: inherit;
 
-	mask-image: url('../icon/trash-alt-svgrepo-com.svg');
+	mask-image: url('../../icon/trash-alt-svgrepo-com.svg');
 	mask-position: center;
 	mask-repeat: no-repeat;
 	mask-size: 80%;

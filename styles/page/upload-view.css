@@ -34,7 +34,7 @@
 
 	background-color: rgb(74, 178, 209);
 
-	mask-image: url('../icon/add-svgrepo-com.svg');
+	mask-image: url('../../icon/add-svgrepo-com.svg');
 	mask-position: center;
 	mask-repeat: no-repeat;
 	mask-size: 50%;

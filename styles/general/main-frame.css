@@ -1,0 +1,23 @@
+@media (max-width: 700px) {
+	main {
+		flex-direction: column;
+	}
+}
+
+@media (min-width: 700px) {
+	main {
+		flex-direction: row;
+	}
+}
+
+main {
+	margin: 41px 0 0 45px;
+
+	display: flex;
+
+	align-items: stretch;
+
+	max-height: calc(100vh - 41px);
+
+	background-color: rgb(251, 250, 253);
+}

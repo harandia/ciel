@@ -16,55 +16,71 @@
 
 		<link
 			rel="stylesheet"
-			href="styles/general.css"
+			href="styles/general/general.css"
 		/>
 		<link
 			rel="stylesheet"
-			href="styles/menu.css"
+			href="styles/general/menu.css"
 		/>
 		<link
 			rel="stylesheet"
-			href="styles/tab-bar.css"
+			href="styles/general/tab-bar.css"
 		/>
 		<link
 			rel="stylesheet"
-			href="styles/main-frame.css"
+			href="styles/general/main-frame.css"
 		/>
 		<link
 			rel="stylesheet"
-			href="styles/searchbar.css"
+			href="styles/page/searchbar.css"
 		/>
 		<link
 			rel="stylesheet"
-			href="styles/search-tag.css"
+			href="styles/page/search-tag.css"
 		/>
 		<link
 			rel="stylesheet"
-			href="styles/search-view.css"
+			href="styles/page/search-view.css"
 		/>
 		<link
 			rel="stylesheet"
-			href="styles/image-grid.css"
+			href="styles/page/image-grid.css"
 		/>
 		<link
 			rel="stylesheet"
-			href="styles/editor.css"
+			href="styles/page/editor.css"
 		/>
 		<link
 			rel="stylesheet"
-			href="styles/autocompleter.css"
+			href="styles/general/autocompleter.css"
 		/>
 		<link
 			rel="stylesheet"
-			href="styles/upload-view.css"
+			href="styles/page/upload-view.css"
 		/>
 		<link
 			rel="stylesheet"
-			href="styles/dialog-warning.css"
+			href="styles/general/dialog-warning.css"
 		/>
 		<link
 			rel="stylesheet"
-			href="styles/favourites-menu.css"
+			href="styles/submenu/submenu-tab-list.css"
+		/>
+		<link
+			rel="stylesheet"
+			href="styles/submenu/favourites-menu.css"
+		/>
+		<link
+			rel="stylesheet"
+			href="styles/submenu/history-menu.css"
+		/>
+		<link
+			rel="stylesheet"
+			href="styles/submenu/submenu.css"
+		/>
+		<link
+			rel="stylesheet"
+			href="styles/submenu/settings-menu.css"
 		/>
 		<title>Document</title>
 	</head>
@@ -134,119 +150,165 @@
 			<button class="menu-button menu-last"><div class="menu-icon menu-config-icon"></div></button>
 		</nav>
 
-		<nav
+		<!-- <nav
 			id="favourites-menu"
-			class="scrollable"
+			class="scrollable submenu"
 		>
 			<h1>Favourites</h1>
-			<div class="favourite">
-				<ul class="favourite-tags">
-					<div class="search-tag">animal</div>
-					<div class="excluded-tag search-tag">cat</div>
-					<div class="search-tag">wild</div>
-					<div class="search-tag">front-view</div>
-				</ul>
-				<button class="favourite-delete-button"></button>
-			</div>
-			<div class="favourite">
-				<ul class="favourite-tags">
-					<div class="search-tag">animal</div>
-					<div class="excluded-tag search-tag">cat</div>
-				</ul>
-				<button class="favourite-delete-button"></button>
-			</div>
-			<div class="favourite">
-				<ul class="favourite-tags">
-					<div class="search-tag">animal</div>
-					<div class="excluded-tag search-tag">cat</div>
-				</ul>
-				<button class="favourite-delete-button"></button>
-			</div>
-			<div class="favourite">
-				<ul class="favourite-tags">
-					<div class="search-tag">animal</div>
-					<div class="excluded-tag search-tag">cat</div>
-				</ul>
-				<button class="favourite-delete-button"></button>
-			</div>
-			<div class="favourite">
-				<ul class="favourite-tags">
-					<div class="search-tag">animal</div>
-					<div class="excluded-tag search-tag">cat</div>
-				</ul>
-				<button class="favourite-delete-button"></button>
-			</div>
-			<div class="favourite">
-				<ul class="favourite-tags">
-					<div class="search-tag">animal</div>
-					<div class="excluded-tag search-tag">cat</div>
-				</ul>
-				<button class="favourite-delete-button"></button>
-			</div>
+			<ul class="submenu-tab-list">
+				<div class="submenu-tab">
+					<ul class="submenu-tab-tag-list">
+						<div class="search-tag">animal</div>
+						<div class="excluded-tag search-tag">cat</div>
+						<div class="search-tag">wild</div>
+						<div class="search-tag">front-view</div>
+					</ul>
+					<button class="submenu-tab-delete-button"></button>
+				</div>
+				<div class="submenu-tab">
+					<ul class="submenu-tab-tag-list">
+						<div class="search-tag">animal</div>
+						<div class="excluded-tag search-tag">cat</div>
+					</ul>
+					<button class="submenu-tab-delete-button"></button>
+				</div>
+				<div class="submenu-tab">
+					<ul class="submenu-tab-tag-list">
+						<div class="search-tag">animal</div>
+						<div class="excluded-tag search-tag">cat</div>
+					</ul>
+					<button class="submenu-tab-delete-button"></button>
+				</div>
+				<div class="submenu-tab">
+					<ul class="submenu-tab-tag-list">
+						<div class="search-tag">animal</div>
+						<div class="excluded-tag search-tag">cat</div>
+					</ul>
+					<button class="submenu-tab-delete-button"></button>
+				</div>
+				<div class="submenu-tab">
+					<ul class="submenu-tab-tag-list">
+						<div class="search-tag">animal</div>
+						<div class="excluded-tag search-tag">cat</div>
+					</ul>
+					<button class="submenu-tab-delete-button"></button>
+				</div>
+				<div class="submenu-tab">
+					<ul class="submenu-tab-tag-list">
+						<div class="search-tag">animal</div>
+						<div class="excluded-tag search-tag">cat</div>
+					</ul>
+					<button class="submenu-tab-delete-button"></button>
+				</div>
 
-			<div class="favourite">
-				<ul class="favourite-tags">
-					<div class="search-tag">animal</div>
-					<div class="excluded-tag search-tag">cat</div>
-				</ul>
-				<button class="favourite-delete-button"></button>
-			</div>
-			<div class="favourite">
-				<ul class="favourite-tags">
-					<div class="search-tag">animal</div>
-					<div class="excluded-tag search-tag">cat</div>
-				</ul>
-				<button class="favourite-delete-button"></button>
-			</div>
-			<div class="favourite">
-				<ul class="favourite-tags">
-					<div class="search-tag">animal</div>
-					<div class="excluded-tag search-tag">cat</div>
-				</ul>
-				<button class="favourite-delete-button"></button>
-			</div>
-			<div class="favourite">
-				<ul class="favourite-tags">
-					<div class="search-tag">animal</div>
-					<div class="excluded-tag search-tag">cat</div>
-				</ul>
-				<button class="favourite-delete-button"></button>
-			</div>
-			<div class="favourite">
-				<ul class="favourite-tags">
-					<div class="search-tag">animal</div>
-					<div class="excluded-tag search-tag">cat</div>
-				</ul>
-				<button class="favourite-delete-button"></button>
-			</div>
-			<div class="favourite">
-				<ul class="favourite-tags">
-					<div class="search-tag">animal</div>
-					<div class="excluded-tag search-tag">cat</div>
-				</ul>
-				<button class="favourite-delete-button"></button>
-			</div>
-			<div class="favourite">
-				<ul class="favourite-tags">
-					<div class="search-tag">animal</div>
-					<div class="excluded-tag search-tag">cat</div>
-				</ul>
-				<button class="favourite-delete-button"></button>
-			</div>
-			<div class="favourite">
-				<ul class="favourite-tags">
-					<div class="search-tag">animal</div>
-					<div class="excluded-tag search-tag">cat</div>
-				</ul>
-				<button class="favourite-delete-button"></button>
-			</div>
-			<div class="favourite">
-				<ul class="favourite-tags">
-					<div class="search-tag">animal</div>
-					<div class="excluded-tag search-tag">cat</div>
-				</ul>
-				<button class="favourite-delete-button"></button>
-			</div>
+				<div class="submenu-tab">
+					<ul class="submenu-tab-tag-list">
+						<div class="search-tag">animal</div>
+						<div class="excluded-tag search-tag">cat</div>
+					</ul>
+					<button class="submenu-tab-delete-button"></button>
+				</div>
+			</ul>
+		</nav> -->
+
+		<!-- <nav
+			id="history-menu"
+			class="scrollable submenu"
+		>
+			<h1>History</h1>
+			<h2>9th September 2025</h2>
+			<ul class="submenu-tab-list">
+				<div class="submenu-tab">
+					<ul class="submenu-tab-tag-list">
+						<div class="search-tag">animal</div>
+						<div class="excluded-tag search-tag">cat</div>
+						<div class="search-tag">wild</div>
+						<div class="search-tag">front-view</div>
+					</ul>
+					<button class="submenu-tab-delete-button"></button>
+				</div>
+				<div class="submenu-tab">
+					<ul class="submenu-tab-tag-list">
+						<div class="search-tag">animal</div>
+						<div class="excluded-tag search-tag">cat</div>
+					</ul>
+					<button class="submenu-tab-delete-button"></button>
+				</div>
+				<div class="submenu-tab">
+					<ul class="submenu-tab-tag-list">
+						<div class="search-tag">animal</div>
+						<div class="excluded-tag search-tag">cat</div>
+					</ul>
+					<button class="submenu-tab-delete-button"></button>
+				</div>
+			</ul>
+			<h2>8th September 2025</h2>
+			<ul class="submenu-tab-list">
+				<div class="submenu-tab">
+					<ul class="submenu-tab-tag-list">
+						<div class="search-tag">animal</div>
+						<div class="excluded-tag search-tag">cat</div>
+						<div class="search-tag">wild</div>
+						<div class="search-tag">front-view</div>
+					</ul>
+					<button class="submenu-tab-delete-button"></button>
+				</div>
+				<div class="submenu-tab">
+					<ul class="submenu-tab-tag-list">
+						<div class="search-tag">animal</div>
+						<div class="excluded-tag search-tag">cat</div>
+					</ul>
+					<button class="submenu-tab-delete-button"></button>
+				</div>
+				<div class="submenu-tab">
+					<ul class="submenu-tab-tag-list">
+						<div class="search-tag">animal</div>
+						<div class="excluded-tag search-tag">cat</div>
+					</ul>
+					<button class="submenu-tab-delete-button"></button>
+				</div>
+			</ul>
+		</nav> -->
+
+		<nav
+			id="settings-menu"
+			class="scrollable submenu"
+		>
+			<h1>Settings</h1>
+			<h2>General</h2>
+			<label class="settings-open-last-session"
+				><p>Open previous tabs on startup</p>
+				<input
+					type="checkbox"
+					checked
+				/>
+				<span class="checkbox"><div class="checkbox-icon"></div></span>
+			</label>
+			<label class="settings-show-confirmation">
+				<p>Show confirmation windows</p>
+				<input
+					type="checkbox"
+					checked
+				/>
+				<span class="checkbox"><div class="checkbox-icon"></div></span>
+			</label>
+			<label class="settings-open-in-new-tab">
+				<p>Open new pages in a new tab</p>
+				<input
+					type="checkbox"
+					checked
+				/>
+				<span class="checkbox"><div class="checkbox-icon"></div></span>
+			</label>
+
+			<h2>Visualization</h2>
+			<label class="settings-image-size">
+				<p>Image size</p>
+				<input
+					type="range"
+					value="50"
+				/>
+			</label>
 		</nav>
 
 		<nav id="tab-bar">
@@ -344,7 +406,7 @@
 
 			<section class="scrollable editor">
 				<div class="editor-open-delete-container">
-					<button class="editor-delete-button"><div class="image-delete-icon"></div></button>
+					<button class="editor-delete-button"><div class="editor-delete-icon"></div></button>
 					<button class="editor-open-button">Open</button>
 				</div>
 
@@ -460,7 +522,7 @@
 
 				<section class="scrollable editor-hidden editor">
 					<div class="editor-open-delete-container">
-						<button class="editor-delete-button"><div class="image-delete-icon"></div></button>
+						<button class="editor-delete-button"><div class="editor-delete-icon"></div></button>
 						<button class="editor-open-button">Open</button>
 					</div>
 

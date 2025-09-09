@@ -1,0 +1,41 @@
+.submenu {
+	overflow-y: scroll;
+	overflow-x: hidden;
+
+	overscroll-behavior: contain;
+
+	z-index: 2;
+
+	min-width: 240px;
+
+	width: 23%;
+	height: 54%;
+
+	padding: 20px;
+
+	display: flex;
+	flex-direction: column;
+
+	row-gap: 10px;
+
+	border-radius: 5px;
+
+	box-shadow: 0 0 10px rgba(0, 0, 0, 0.13);
+
+	background-color: rgb(242, 249, 252);
+}
+
+.submenu h1 {
+	margin: 0;
+
+	font-size: 29px;
+	color: rgb(23, 116, 145);
+}
+
+.submenu h2 {
+	margin: 0;
+	margin-top: 5px;
+
+	font-size: 18px;
+	color: rgb(23, 116, 145);
+}

@@ -1,45 +1,20 @@
-#favourites-menu {
-	overflow-y: scroll;
-	overflow-x: hidden;
-
-	overscroll-behavior: contain;
-
-	z-index: 2;
-
-	position: absolute;
-	top: 93px;
-	left: 50px;
-
-	width: 25%;
-	height: 60%;
-
-	padding: 20px;
+.submenu-tab-list {
+	list-style: none;
+	padding: 0;
+	margin: 0;
 
 	display: flex;
 	flex-direction: column;
 
-	row-gap: 10px;
-
-	border-radius: 5px;
-
-	box-shadow: 0 0 10px rgba(0, 0, 0, 0.13);
-
-	background-color: rgb(242, 249, 252);
+	row-gap: 7px;
 }
 
-#favourites-menu h1 {
-	margin: 0;
-
-	font-size: 29px;
-	color: rgb(23, 116, 145);
-}
-
-.favourite {
+.submenu-tab {
 	cursor: pointer;
 
 	min-height: fit-content;
 
-	padding: 0 10px;
+	padding: 10px 10px;
 
 	display: flex;
 	align-items: center;
@@ -52,11 +27,11 @@
 	background-color: rgb(234, 246, 250);
 }
 
-.favourite:hover {
+.submenu-tab:hover {
 	background-color: rgb(229, 249, 255);
 }
 
-.favourite-tags {
+.submenu-tab-tag-list {
 	flex: 1;
 
 	list-style: none;
@@ -70,7 +45,7 @@
 	row-gap: 5px;
 }
 
-.favourite-delete-button {
+.submenu-tab-delete-button {
 	cursor: pointer;
 
 	aspect-ratio: 1;
@@ -82,12 +57,12 @@
 
 	background-color: rgb(255, 103, 149);
 
-	mask-image: url('../icon/close-bold-svgrepo-com.svg');
+	mask-image: url('../../icon/close-bold-svgrepo-com.svg');
 	mask-position: center;
 	mask-size: 55%;
 	mask-repeat: no-repeat;
 }
 
-.favourite-delete-button:hover {
+.submenu-tab-delete-button:hover {
 	background-color: rgb(255, 0, 76);
 }
