@@ -16,6 +16,8 @@
 		border-left: 1px solid rgb(211, 211, 211);
 
 		box-shadow: -3px 10px 10px rgba(0, 0, 0, 0.03);
+
+		transition: max-width 400ms;
 	}
 
 	.editor-hidden {
@@ -39,6 +41,8 @@
 		border-top: 1px solid rgb(211, 211, 211);
 
 		box-shadow: 10px -3px 10px rgba(0, 0, 0, 0.03);
+
+		transition: min-height 400ms, max-height 400ms;
 	}
 
 	.editor-hidden {
@@ -65,8 +69,6 @@
 	row-gap: 20px;
 
 	background-color: rgb(251, 250, 253);
-
-	transition: max-width 400ms, min-height 400ms, max-height 400ms;
 }
 
 /*Open-Delete Container*/
