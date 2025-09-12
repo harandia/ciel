@@ -1,4 +1,7 @@
 .submenu {
+	visibility: visible;
+	opacity: 1;
+
 	overflow-y: scroll;
 	overflow-x: hidden;
 
@@ -23,6 +26,13 @@
 	box-shadow: 0 0 10px rgba(0, 0, 0, 0.13);
 
 	background-color: rgb(242, 249, 252);
+
+	transition: opacity 200ms, visibility 200ms;
+}
+
+.submenu-hidden {
+	visibility: hidden;
+	opacity: 0;
 }
 
 .submenu h1 {

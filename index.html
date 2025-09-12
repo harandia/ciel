@@ -13,7 +13,6 @@
 			type="image/x-icon"
 			href="icon/ciel-logo.svg"
 		/>
-
 		<link
 			rel="stylesheet"
 			href="styles/general/general.css"
@@ -82,197 +81,69 @@
 			rel="stylesheet"
 			href="styles/submenu/settings-menu.css"
 		/>
-		<title>Document</title>
+
+		<script
+			src="scripts/menu/menu.js"
+			type="module"
+			defer
+		></script>
 	</head>
+
 	<body>
-		<!-- <dialog open>
-			<p>Are you sure you want to delete 4 images?</p>
-			<div class="dialog-buttons-container">
-				<button class="dialog-cancel-button">Cancel</button>
-				<button class="dialog-accept-button">Delete</button>
-			</div>
-		</dialog> -->
+		<ol class="scrollable autocompleter-hidden autocompleter"></ol>
 
-		<ol class="scrollable autocompleter-hidden autocompleter">
-			<li>animal</li>
-			<li>wild</li>
-			<li>domestic</li>
-			<li>animal</li>
-			<li>wild</li>
-			<li>domestic</li>
-			<li>animal</li>
-			<li>wild</li>
-			<li>domestic</li>
-			<li>animal</li>
-			<li>wild</li>
-			<li>domestic</li>
-			<li>animal</li>
-			<li>wild</li>
-			<li>domestic</li>
-			<li>animal</li>
-			<li>wild</li>
-			<li>domestic</li>
-			<li>animal</li>
-			<li>wild</li>
-			<li>domestic</li>
-			<li>animal</li>
-			<li>wild</li>
-			<li>domestic</li>
-			<li>animal</li>
-			<li>wild</li>
-			<li>domestic</li>
-		</ol>
 		<nav id="menu">
-			<button class="menu-button"><div class="menu-icon menu-search-icon"></div></button>
-			<button class="menu-button"><div class="menu-icon menu-upload-icon"></div></button>
-			<button class="menu-button"><div class="menu-icon menu-favourites-icon"></div></button>
-			<button class="menu-button"><div class="menu-icon menu-history-icon"></div></button>
-			<!-- <button onclick="document.querySelector('.editor').classList.toggle('editor-hidden')">
-				Show/Hide editor
+			<button
+				id="menu-search-button"
+				class="menu-button"
+			>
+				<div class="menu-icon menu-search-icon"></div>
+			</button>
+			<button
+				id="menu-upload-button"
+				class="menu-button"
+			>
+				<div class="menu-icon menu-upload-icon"></div>
+			</button>
+			<button
+				id="menu-favourites-button"
+				class="menu-button"
+			>
+				<div class="menu-icon menu-favourites-icon"></div>
+			</button>
+			<button
+				id="menu-history-button"
+				class="menu-button"
+			>
+				<div class="menu-icon menu-history-icon"></div>
 			</button>
 
 			<button
-				onclick="document.querySelector('.editor-preview').classList.toggle('editor-multi-preview')"
+				id="menu-settings-button"
+				class="menu-button menu-last"
 			>
-				Show/Hide editor-multi-preview
+				<div class="menu-icon menu-settings-icon"></div>
 			</button>
-			<button
-				onclick="document.querySelector('.tag-editor-warning').classList.toggle('tag-editor-warning-hidden')"
-			>
-				Show/Hide editor warning
-			</button>
-
-			<button
-				onclick="document.querySelector('.searchbar-warning').classList.toggle('searchbar-warning-hidden')"
-			>
-				Show/Hide search warning
-			</button> -->
-			<button class="menu-button menu-last"><div class="menu-icon menu-config-icon"></div></button>
 		</nav>
 
-		<!-- <nav
+		<nav
 			id="favourites-menu"
-			class="scrollable submenu"
+			class="scrollable submenu-hidden submenu"
 		>
 			<h1>Favourites</h1>
-			<ul class="submenu-tab-list">
-				<div class="submenu-tab">
-					<ul class="submenu-tab-tag-list">
-						<div class="search-tag">animal</div>
-						<div class="excluded-tag search-tag">cat</div>
-						<div class="search-tag">wild</div>
-						<div class="search-tag">front-view</div>
-					</ul>
-					<button class="submenu-tab-delete-button"></button>
-				</div>
-				<div class="submenu-tab">
-					<ul class="submenu-tab-tag-list">
-						<div class="search-tag">animal</div>
-						<div class="excluded-tag search-tag">cat</div>
-					</ul>
-					<button class="submenu-tab-delete-button"></button>
-				</div>
-				<div class="submenu-tab">
-					<ul class="submenu-tab-tag-list">
-						<div class="search-tag">animal</div>
-						<div class="excluded-tag search-tag">cat</div>
-					</ul>
-					<button class="submenu-tab-delete-button"></button>
-				</div>
-				<div class="submenu-tab">
-					<ul class="submenu-tab-tag-list">
-						<div class="search-tag">animal</div>
-						<div class="excluded-tag search-tag">cat</div>
-					</ul>
-					<button class="submenu-tab-delete-button"></button>
-				</div>
-				<div class="submenu-tab">
-					<ul class="submenu-tab-tag-list">
-						<div class="search-tag">animal</div>
-						<div class="excluded-tag search-tag">cat</div>
-					</ul>
-					<button class="submenu-tab-delete-button"></button>
-				</div>
-				<div class="submenu-tab">
-					<ul class="submenu-tab-tag-list">
-						<div class="search-tag">animal</div>
-						<div class="excluded-tag search-tag">cat</div>
-					</ul>
-					<button class="submenu-tab-delete-button"></button>
-				</div>
+			<ul class="submenu-tab-list"></ul>
+		</nav>
 
-				<div class="submenu-tab">
-					<ul class="submenu-tab-tag-list">
-						<div class="search-tag">animal</div>
-						<div class="excluded-tag search-tag">cat</div>
-					</ul>
-					<button class="submenu-tab-delete-button"></button>
-				</div>
-			</ul>
-		</nav> -->
-
-		<!-- <nav
+		<nav
 			id="history-menu"
-			class="scrollable submenu"
+			class="scrollable submenu-hidden submenu"
 		>
 			<h1>History</h1>
-			<h2>9th September 2025</h2>
-			<ul class="submenu-tab-list">
-				<div class="submenu-tab">
-					<ul class="submenu-tab-tag-list">
-						<div class="search-tag">animal</div>
-						<div class="excluded-tag search-tag">cat</div>
-						<div class="search-tag">wild</div>
-						<div class="search-tag">front-view</div>
-					</ul>
-					<button class="submenu-tab-delete-button"></button>
-				</div>
-				<div class="submenu-tab">
-					<ul class="submenu-tab-tag-list">
-						<div class="search-tag">animal</div>
-						<div class="excluded-tag search-tag">cat</div>
-					</ul>
-					<button class="submenu-tab-delete-button"></button>
-				</div>
-				<div class="submenu-tab">
-					<ul class="submenu-tab-tag-list">
-						<div class="search-tag">animal</div>
-						<div class="excluded-tag search-tag">cat</div>
-					</ul>
-					<button class="submenu-tab-delete-button"></button>
-				</div>
-			</ul>
-			<h2>8th September 2025</h2>
-			<ul class="submenu-tab-list">
-				<div class="submenu-tab">
-					<ul class="submenu-tab-tag-list">
-						<div class="search-tag">animal</div>
-						<div class="excluded-tag search-tag">cat</div>
-						<div class="search-tag">wild</div>
-						<div class="search-tag">front-view</div>
-					</ul>
-					<button class="submenu-tab-delete-button"></button>
-				</div>
-				<div class="submenu-tab">
-					<ul class="submenu-tab-tag-list">
-						<div class="search-tag">animal</div>
-						<div class="excluded-tag search-tag">cat</div>
-					</ul>
-					<button class="submenu-tab-delete-button"></button>
-				</div>
-				<div class="submenu-tab">
-					<ul class="submenu-tab-tag-list">
-						<div class="search-tag">animal</div>
-						<div class="excluded-tag search-tag">cat</div>
-					</ul>
-					<button class="submenu-tab-delete-button"></button>
-				</div>
-			</ul>
-		</nav> -->
+		</nav>
 
-		<!-- <nav
+		<nav
 			id="settings-menu"
-			class="scrollable submenu"
+			class="scrollable submenu-hidden submenu"
 		>
 			<h1>Settings</h1>
 			<h2>General</h2>
@@ -309,153 +180,69 @@
 					value="50"
 				/>
 			</label>
-		</nav> -->
+		</nav>
 
 		<nav id="tab-bar">
-			<div class="tab">
-				<div class="tab-body tab-closed">
-					<div class="tab-title">animal amal cat</div>
-					<button class="tab-close-tab-button"><div class="tab-close-tab-icon"></div></button>
-				</div>
-				<div class="tab-tooltip">animal amal cat</div>
-			</div>
-			<div class="tab">
-				<div class="tab-body">
-					<div class="tab-title">
-						Open tab 123456789012345678901 234567890123456 78901234567890<
-					</div>
-					<button class="tab-close-tab-button"><div class="tab-close-tab-icon"></div></button>
-				</div>
-				<div class="tab-tooltip">
-					Open tab 123456789012345678901 234567890123456 78901234567890<
-				</div>
-			</div>
-			<div class="tab">
-				<div class="tab-body tab-closed">
-					<div class="tab-title">Closed tab 2</div>
-					<button class="tab-close-tab-button"><div class="tab-close-tab-icon"></div></button>
-				</div>
-				<div class="tab-tooltip">Closed tab 2</div>
-			</div>
-
 			<button class="tab-add-button"><div class="tab-add-icon"></div></button>
 		</nav>
 
 		<main>
-			<section class="upload-view">
-				<div class="scrollable upload-view-image-grid-container">
-					<ul class="image-grid">
-						<li>
-							<img
-								class="image-grid-image"
-								src="images/cabra1.jpg"
-							/>
-							<button class="image-delete-button"><div class="image-delete-icon"></div></button>
-						</li>
-						<li>
-							<img
-								class="image-grid-image"
-								src="images/cabra2.jpg"
-							/>
-							<button class="image-delete-button"><div class="image-delete-icon"></div></button>
-						</li>
-						<li>
-							<img
-								class="image-grid-image"
-								src="images/gato1.avif"
-							/>
-							<button class="image-delete-button"><div class="image-delete-icon"></div></button>
-						</li>
-						<li>
-							<img
-								class="image-grid-image"
-								src="images/gato2.jpg"
-							/>
-							<button class="image-delete-button"><div class="image-delete-icon"></div></button>
-						</li>
-						<li>
-							<img
-								class="image-grid-image"
-								src="images/jabali1.webp"
-							/>
-							<button class="image-delete-button"><div class="image-delete-icon"></div></button>
-						</li>
-						<li>
-							<img
-								class="image-grid-image"
-								src="images/jabali2.jpg"
-							/>
-							<button class="image-delete-button"><div class="image-delete-icon"></div></button>
-						</li>
-						<li>
-							<img
-								class="image-grid-image"
-								src="images/liebre1.JPG"
-							/>
-							<button class="image-delete-button"><div class="image-delete-icon"></div></button>
-						</li>
-						<li>
-							<button class="upload-add-button"><div class="upload-add-icon"></div></button>
-						</li>
-					</ul>
+			<template id="tab">
+				<div class="tab">
+					<div class="tab-body">
+						<div class="tab-title"></div>
+						<button class="tab-close-tab-button"><div class="tab-close-tab-icon"></div></button>
+					</div>
 				</div>
-				<footer>
-					<button class="upload-cancel-button">Cancel</button>
-					<button class="upload-upload-button">Upload</button>
-				</footer>
-			</section>
+			</template>
 
-			<section class="scrollable editor">
-				<div class="editor-open-delete-container">
-					<button class="editor-delete-button"><div class="editor-delete-icon"></div></button>
-					<button class="editor-open-button">Open</button>
-				</div>
+			<template id="upload-page">
+				<section class="upload-view">
+					<div class="scrollable upload-view-image-grid-container">
+						<ul class="image-grid">
+							<li>
+								<button class="upload-add-button"><div class="upload-add-icon"></div></button>
+							</li>
+						</ul>
+					</div>
+					<footer>
+						<button class="upload-cancel-button">Cancel</button>
+						<button class="upload-upload-button">Upload</button>
+					</footer>
+				</section>
 
-				<div class="editor-preview editor-multi-preview">
-					<img
-						class="editor-preview-image"
-						src="images/gato2.jpg"
-					/>
-				</div>
-
-				<div class="editor-body">
-					<p class="editor-selection-counter"><strong>2</strong> images selected</p>
-					<div class="tag-editor">
-						<div class="search-tag">wild</div>
-						<div class="search-tag">domestic</div>
-						<div class="search-tag">cat</div>
-						<div class="deleted-tag search-tag">dog</div>
-						<div class="search-tag">rabbit</div>
-						<div class="new-tag search-tag">goat</div>
-						<div class="first-time-tag new-tag search-tag">front-view</div>
-						<span
-							class="tag-input tag-editor-input"
-							contenteditable=""
-						></span>
+				<section class="scrollable editor">
+					<div class="editor-open-delete-container">
+						<button class="editor-delete-button"><div class="editor-delete-icon"></div></button>
+						<button class="editor-open-button">Open</button>
 					</div>
 
-					<p class="tag-editor-warning-hidden tag-editor-warning">
-						<strong>front-view</strong> hasn't been used yet.
-					</p>
-				</div>
-			</section>
+					<div class="editor-preview">
+						<img
+							class="editor-preview-image"
+							src=""
+						/>
+					</div>
+
+					<div class="editor-body">
+						<p class="editor-selection-counter"></p>
+						<div class="tag-editor">
+							<span
+								class="tag-input tag-editor-input"
+								contenteditable=""
+							></span>
+						</div>
+
+						<p class="tag-editor-warning-hidden tag-editor-warning"></p>
+					</div>
+				</section>
+			</template>
 
 			<template id="search-page"
 				><section class="scrollable search-view">
 					<header>
 						<search class="searchbar">
 							<div class="searchbar-body">
-								<div class="search-tag">animal</div>
-								<div class="wrong-tag search-tag">amal</div>
-								<div class="search-tag">wild</div>
-								<div class="search-tag">domestic</div>
-								<div class="search-tag">cat</div>
-								<div class="search-tag">dog</div>
-								<div class="search-tag">rabbit</div>
-								<div class="search-tag">goat</div>
-								<div class="search-tag">front-view</div>
-								<div class="excluded-tag search-tag">bull</div>
-
 								<div
 									class="tag-input searchbar-input"
 									contenteditable=""
@@ -463,62 +250,10 @@
 							</div>
 							<button class="searchbar-clear-button"></button>
 						</search>
-						<p class="searchbar-warning-hidden searchbar-warning">
-							<strong>amal</strong> tag doesn't exist.
-						</p>
+						<p class="searchbar-warning-hidden searchbar-warning"></p>
 					</header>
 
-					<ul class="image-grid">
-						<li>
-							<img
-								class="image-grid-image"
-								src="images/cabra1.jpg"
-							/>
-							<button class="image-delete-button"><div class="image-delete-icon"></div></button>
-						</li>
-						<li>
-							<img
-								class="image-grid-image"
-								src="images/cabra2.jpg"
-							/>
-							<button class="image-delete-button"><div class="image-delete-icon"></div></button>
-						</li>
-						<li>
-							<img
-								class="image-grid-image"
-								src="images/gato1.avif"
-							/>
-							<button class="image-delete-button"><div class="image-delete-icon"></div></button>
-						</li>
-						<li>
-							<img
-								class="image-grid-image"
-								src="images/gato2.jpg"
-							/>
-							<button class="image-delete-button"><div class="image-delete-icon"></div></button>
-						</li>
-						<li>
-							<img
-								class="image-grid-image"
-								src="images/jabali1.webp"
-							/>
-							<button class="image-delete-button"><div class="image-delete-icon"></div></button>
-						</li>
-						<li>
-							<img
-								class="image-grid-image"
-								src="images/jabali2.jpg"
-							/>
-							<button class="image-delete-button"><div class="image-delete-icon"></div></button>
-						</li>
-						<li>
-							<img
-								class="image-grid-image"
-								src="images/liebre1.JPG"
-							/>
-							<button class="image-delete-button"><div class="image-delete-icon"></div></button>
-						</li>
-					</ul>
+					<ul class="image-grid"></ul>
 				</section>
 
 				<section class="scrollable editor-hidden editor">
@@ -527,32 +262,23 @@
 						<button class="editor-open-button">Open</button>
 					</div>
 
-					<div class="editor-preview editor-multi-preview">
+					<div class="editor-preview">
 						<img
 							class="editor-preview-image"
-							src="images/gato2.jpg"
+							src=""
 						/>
 					</div>
 
 					<div class="editor-body">
-						<p class="editor-selection-counter"><strong>2</strong> images selected</p>
+						<p class="editor-selection-counter"></p>
 						<div class="tag-editor">
-							<div class="search-tag">wild</div>
-							<div class="search-tag">domestic</div>
-							<div class="search-tag">cat</div>
-							<div class="deleted-tag search-tag">dog</div>
-							<div class="search-tag">rabbit</div>
-							<div class="new-tag search-tag">goat</div>
-							<div class="first-time-tag new-tag search-tag">front-view</div>
 							<span
 								class="tag-input tag-editor-input"
 								contenteditable=""
 							></span>
 						</div>
 
-						<p class="tag-editor-warning-hidden tag-editor-warning">
-							<strong>front-view</strong> hasn't been used yet.
-						</p>
+						<p class="tag-editor-warning-hidden tag-editor-warning"></p>
 					</div>
 
 					<div class="editor-confirm-container">
@@ -560,6 +286,42 @@
 						<button class="editor-apply-button">Apply</button>
 					</div>
 				</section>
+			</template>
+
+			<template id="image-grid-image">
+				<li>
+					<img
+						class="image-grid-image"
+						src=""
+					/>
+					<button class="image-delete-button"><div class="image-delete-icon"></div></button>
+				</li>
+			</template>
+
+			<template id="search-tag">
+				<div class="search-tag"></div>
+			</template>
+
+			<template id="dialog-confirmation">
+				<dialog open>
+					<p></p>
+					<div class="dialog-buttons-container">
+						<button class="dialog-cancel-button"></button>
+						<button class="dialog-accept-button"></button>
+					</div>
+				</dialog>
+			</template>
+
+			<template id="submenu-tab">
+				<div class="submenu-tab">
+					<ul class="submenu-tab-tag-list"></ul>
+					<button class="submenu-tab-delete-button"></button>
+				</div>
+			</template>
+
+			<template id="history-day">
+				<h2></h2>
+				<ul class="submenu-tab-list"></ul>
 			</template>
 		</main>
 	</body>

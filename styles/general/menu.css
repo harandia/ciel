@@ -47,6 +47,8 @@
 }
 
 .menu-icon {
+	pointer-events: none;
+
 	aspect-ratio: inherit;
 	width: inherit;
 
@@ -69,7 +71,7 @@
 	mask-image: url('../../icon/history-svgrepo-com.svg');
 }
 
-.menu-config-icon {
+.menu-settings-icon {
 	mask-image: url('../../icon/configuration-gears-svgrepo-com.svg');
 }
 
