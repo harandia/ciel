@@ -24,5 +24,8 @@
 	"homepage": "https://github.com/harandia/ciel#readme",
 	"devDependencies": {
 		"electron": "38.1.0"
+	},
+	"dependencies": {
+		"sqlite3": "^5.1.7"
 	}
 }

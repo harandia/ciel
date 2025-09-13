@@ -1,5 +1,5 @@
 /**
- * Represents the ".submenu" elements of the document.
+ * Represents a generic submenu.
  */
 class Submenu {
 	/**@param {string} id */

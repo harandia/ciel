@@ -1,3 +1,4 @@
+import ClosedSearchPage from './closedSearchPage.js';
 import SearchPage from './searchPage.js';
 
 /**
@@ -5,9 +6,12 @@ import SearchPage from './searchPage.js';
  * @class
  */
 class OpenSearchPage extends SearchPage {
-	/** @param {SearchPage} searchPage*/
+	#newSearchTags;
+
+	/** @param {ClosedSearchPage} searchPage*/
 	constructor(searchPage) {
 		super(searchPage.searchTags);
+		this.#newSearchTags = new Set();
 	}
 
 	/**
@@ -15,7 +19,7 @@ class OpenSearchPage extends SearchPage {
 	 * @param {string} tag
 	 */
 	addSearchTag(tag) {
-		this._searchTags.add(tag);
+		this.#newSearchTags.add(tag);
 	}
 
 	/**
@@ -23,7 +27,23 @@ class OpenSearchPage extends SearchPage {
 	 * @param {string} tag
 	 */
 	removeSearchTag(tag) {
-		this._searchTags.delete(tag);
+		this.#newSearchTags.delete(tag);
+	}
+
+	/**
+	 * Search the images with the corresponding tags.
+	 */
+	search() {
+		// @ts-ignore
+		this._searchTags = this._searchTags.union(this.#newSearchTags);
+	}
+
+	/**
+	 * Returns the page closed as a ClosedSearchPage.
+	 * @returns {ClosedSearchPage}
+	 */
+	close() {
+		return new ClosedSearchPage(this.searchTags);
 	}
 }
 

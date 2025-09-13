@@ -1,0 +1,62 @@
+.shortcut {
+	padding: 7px;
+
+	display: flex;
+	align-items: center;
+
+	column-gap: 5px;
+
+	border-radius: 5px;
+}
+
+.shortcut:hover {
+	background-color: rgb(229, 249, 255);
+}
+
+.shortcut p {
+	margin: 0;
+
+	color: rgb(41, 64, 73);
+	font-size: 14px;
+}
+
+.shortcut-key {
+	height: 14px;
+
+	padding: 4px;
+
+	font-size: 12px;
+
+	color: rgb(88, 107, 112);
+	border-radius: 3px;
+
+	background-color: rgb(186, 240, 255);
+}
+
+.shortcut-change-button {
+	cursor: pointer;
+
+	visibility: hidden;
+	opacity: 0;
+
+	aspect-ratio: 1;
+	height: 14px;
+
+	margin-left: auto;
+
+	border: none;
+
+	background-color: rgb(76, 216, 255);
+
+	mask-image: url('../../icon/reload-svgrepo-com.svg');
+	mask-position: center;
+	mask-repeat: no-repeat;
+	mask-size: contain;
+
+	transition: opacity 100ms;
+}
+
+.shortcut:hover .shortcut-change-button {
+	visibility: visible;
+	opacity: 1;
+}

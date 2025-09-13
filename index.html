@@ -81,6 +81,10 @@
 			rel="stylesheet"
 			href="styles/submenu/settings-menu.css"
 		/>
+		<link
+			rel="stylesheet"
+			href="styles/submenu/shortcut.css"
+		/>
 
 		<script
 			src="scripts/menu/menu.js"
@@ -180,6 +184,8 @@
 					value="50"
 				/>
 			</label>
+
+			<h2>Shortcuts</h2>
 		</nav>
 
 		<nav id="tab-bar">
@@ -322,6 +328,14 @@
 			<template id="history-day">
 				<h2></h2>
 				<ul class="submenu-tab-list"></ul>
+			</template>
+
+			<template id="shortcut">
+				<div class="shortcut">
+					<p></p>
+					<div class="shortcut-key"></div>
+					<button class="shortcut-change-button"></button>
+				</div>
 			</template>
 		</main>
 	</body>

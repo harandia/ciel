@@ -1,6 +1,5 @@
 /**
- * Represents a closed SearchPage.
- * @class
+ * Represents a SearchPage.
  */
 class SearchPage {
 	/**@type {Set<string>} */
@@ -23,34 +22,6 @@ class SearchPage {
 			tagsArray.push(tag);
 		}
 		return tagsArray;
-	}
-
-	/**
-	 * Returns a serializable object with the search tags of the page in an array.
-	 * @returns {{searchTags: string[]}}
-	 */
-	toJSON() {
-		return {
-			searchTags: this.searchTags,
-		};
-	}
-
-	/**
-	 * Returns a new SearchPage built from a serialized object like the ones returned by the toJSON() method.
-	 * @param {{searchTags: string[]}} pageJSON
-	 * @returns {SearchPage}
-	 */
-	static fromJSON(pageJSON) {
-		return new SearchPage(pageJSON.searchTags);
-	}
-
-	/**
-	 * Returns true or false wether this SearchPage has the same tags as otherPage or not.
-	 * @param {SearchPage} otherPage
-	 */
-	equals(otherPage) {
-		// @ts-ignore
-		return this._searchTags.isSupersetOf(otherPage) && this._searchTags.isSubsetOf(otherPage);
 	}
 }
 
