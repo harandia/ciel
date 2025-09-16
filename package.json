@@ -26,6 +26,7 @@
 		"electron": "38.1.0"
 	},
 	"dependencies": {
-		"sqlite3": "^5.1.7"
+		"sqlite3": "5.1.7",
+		"stream-mime-type": "2.0.0"
 	}
 }
