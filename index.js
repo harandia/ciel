@@ -1,5 +1,6 @@
-const { BrowserWindow, app, Menu } = require('electron');
+const { BrowserWindow, app, Menu, dialog } = require('electron');
 const path = require('node:path');
+const openImage = require('./scripts/general/open');
 
 function createWindow() {
 	const win = new BrowserWindow({

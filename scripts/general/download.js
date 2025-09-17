@@ -4,12 +4,17 @@ const url = require('node:url');
 // @ts-ignore
 const mimeType = require('stream-mime-type');
 
+const { FileTypeError, RequestError, InvalidURLError } = require('../errors');
+
 /**
- * Given a https (or http) or file:// URL, it copies the contents of the URL in the indicated file path.
+ * Given a https (or http) or file:// URL, it copies the contents of the URL in the indicated file path in a file with the name fileName (the file extension
+ * will be added by the method itself). Returns the path of the new file.
  * @param {string} sourceURL
  * @param {string} destPath
+ * @param {string} fileName
+ * @returns {Promise<string>}
  */
-const downloadImage = async function (sourceURL, destPath) {
+const downloadImage = async function (sourceURL, destPath, fileName) {
 	let sourceFile;
 	let sourceResponse;
 	let source;
@@ -32,7 +37,8 @@ const downloadImage = async function (sourceURL, destPath) {
 		if (!mime.startsWith('image/')) {
 			throw new FileTypeError();
 		}
-		destFile = await fs.open(destPath, 'ax');
+		const newPath = path.join(destPath, fileName + '.' + mime.split('/')[1]);
+		destFile = await fs.open(newPath, 'ax');
 		const fileWriter = new WritableStream({
 			async write(chunk) {
 				await destFile.write(chunk);
@@ -44,20 +50,17 @@ const downloadImage = async function (sourceURL, destPath) {
 			});
 			throw err;
 		});
+		return newPath;
 	} catch (err) {
 		throw err;
 	} finally {
-		sourceFile?.close().catch((err) => {
+		await sourceFile?.close().catch((err) => {
 			throw err;
 		});
-		destFile?.close().catch((err) => {
+		await destFile?.close().catch((err) => {
 			throw err;
 		});
 	}
 };
-
-class InvalidURLError extends Error {}
-class RequestError extends Error {}
-class FileTypeError extends Error {}
 
 module.exports = downloadImage;
