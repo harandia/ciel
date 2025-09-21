@@ -176,9 +176,16 @@
 				<span class="checkbox"><div class="checkbox-icon"></div></span>
 			</label>
 
-			<h2>Visualization</h2>
-			<label class="settings-image-size">
+			<h2>Appearance</h2>
+			<label class="settings-image-size settings-slider">
 				<p>Image size</p>
+				<input
+					type="range"
+					value="50"
+				/>
+			</label>
+			<label class="settings-zoom settings-slider">
+				<p>Zoom</p>
 				<input
 					type="range"
 					value="50"
@@ -186,6 +193,51 @@
 			</label>
 
 			<h2>Shortcuts</h2>
+
+			<label id="shortcut">
+				<div class="shortcut">
+					<p>Select all</p>
+					<div class="shortcut-key">Ctrl</div>
+					<div class="shortcut-key">A</div>
+					<button class="shortcut-change-button"></button>
+				</div>
+			</label>
+
+			<label id="shortcut">
+				<div class="shortcut">
+					<p>Open tab</p>
+					<div class="shortcut-key">Ctrl</div>
+					<div class="shortcut-key">T</div>
+					<button class="shortcut-change-button"></button>
+				</div>
+			</label>
+
+			<label id="shortcut">
+				<div class="shortcut">
+					<p>Close tab</p>
+					<div class="shortcut-key">Ctrl</div>
+					<div class="shortcut-key">W</div>
+					<button class="shortcut-change-button"></button>
+				</div>
+			</label>
+
+			<label id="shortcut">
+				<div class="shortcut">
+					<p>Zoom in</p>
+					<div class="shortcut-key">Ctrl</div>
+					<div class="shortcut-key">+</div>
+					<button class="shortcut-change-button"></button>
+				</div>
+			</label>
+
+			<label id="shortcut">
+				<div class="shortcut">
+					<p>Zoom out</p>
+					<div class="shortcut-key">Ctrl</div>
+					<div class="shortcut-key">-</div>
+					<button class="shortcut-change-button"></button>
+				</div>
+			</label>
 		</nav>
 
 		<nav id="tab-bar">

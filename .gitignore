@@ -1,2 +1,4 @@
 node_modules/
 jsconfig.json
+test/
+testDB.db

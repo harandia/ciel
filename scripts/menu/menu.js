@@ -1,6 +1,8 @@
 import favouritesMenu from './favouritesMenu.js';
 import historyMenu from './historyMenu.js';
-import settingsMenu from './settingsMenu.js';
+import settingsMenu from './settings.js';
+
+const menu = document.querySelector('#menu');
 
 const hideSubmenus = function () {
 	favouritesMenu.hide();

@@ -2,7 +2,7 @@ const { shell } = require('electron');
 const fs = require('node:fs/promises');
 // @ts-ignore
 const mimeType = require('stream-mime-type');
-const { FileTypeError } = require('../errors');
+const { FileTypeError } = require('./errors');
 const path = require('node:path');
 
 /**

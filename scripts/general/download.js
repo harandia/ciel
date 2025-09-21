@@ -4,7 +4,7 @@ const url = require('node:url');
 // @ts-ignore
 const mimeType = require('stream-mime-type');
 
-const { FileTypeError, RequestError, InvalidURLError } = require('../errors');
+const { FileTypeError, RequestError, InvalidURLError } = require('errors');
 
 /**
  * Given a https (or http) or file:// URL, it copies the contents of the URL in the indicated file path in a file with the name fileName (the file extension

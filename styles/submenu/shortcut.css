@@ -1,4 +1,7 @@
 .shortcut {
+	cursor: pointer;
+
+	flex: 1;
 	padding: 7px;
 
 	display: flex;

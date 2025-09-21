@@ -77,7 +77,7 @@ input[type='checkbox'] {
 	opacity: 1;
 }
 
-.settings-image-size input {
+.settings-slider input {
 	--slider-value: 50;
 	appearance: none;
 
@@ -94,7 +94,7 @@ input[type='checkbox'] {
 	background-size: calc(var(--slider-value) * 1%);
 }
 
-.settings-image-size input::-webkit-slider-thumb {
+.settings-slider input::-webkit-slider-thumb {
 	appearance: none;
 
 	aspect-ratio: 1;
