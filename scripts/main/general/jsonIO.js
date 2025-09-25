@@ -8,11 +8,7 @@ const jsonIO = {
 	 * @param {string} path
 	 */
 	write: async function (object, path) {
-		try {
-			await fs.writeFile(path, JSON.stringify(object), { encoding: 'utf-8' });
-		} catch (err) {
-			throw err;
-		}
+		fs.writeFile(path, JSON.stringify(object), { encoding: 'utf-8' });
 	},
 
 	/**
@@ -21,11 +17,7 @@ const jsonIO = {
 	 * @returns {Promise<Object>}
 	 */
 	read: async function (path) {
-		try {
-			return JSON.parse(await fs.readFile(path, { encoding: 'utf-8' }));
-		} catch (err) {
-			throw err;
-		}
+		return JSON.parse(await fs.readFile(path, { encoding: 'utf-8' }));
 	},
 };
 

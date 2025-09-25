@@ -27,7 +27,7 @@
 	padding: 0;
 
 	aspect-ratio: 1;
-	width: 250px;
+	width: calc(var(--image-size) * 1px);
 
 	border: none;
 	border-radius: 20px;

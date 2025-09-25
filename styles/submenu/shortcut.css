@@ -7,7 +7,7 @@
 	display: flex;
 	align-items: center;
 
-	column-gap: 5px;
+	column-gap: 10px;
 
 	border-radius: 5px;
 }
@@ -23,10 +23,24 @@
 	font-size: 14px;
 }
 
+.shortcut-key-list {
+	display: flex;
+	flex-direction: row;
+
+	min-height: 22px;
+
+	column-gap: 4px;
+
+	margin-left: auto;
+}
+
 .shortcut-key {
+	min-width: 14px;
 	height: 14px;
 
 	padding: 4px;
+
+	text-align: center;
 
 	font-size: 12px;
 
@@ -45,8 +59,6 @@
 	aspect-ratio: 1;
 	height: 14px;
 
-	margin-left: auto;
-
 	border: none;
 
 	background-color: rgb(76, 216, 255);
@@ -62,4 +74,13 @@
 .shortcut:hover .shortcut-change-button {
 	visibility: visible;
 	opacity: 1;
+}
+
+.shortcut-listening {
+	cursor: default;
+	background-color: rgb(229, 249, 255);
+}
+
+.shortcut-listening.shortcut:hover .shortcut-change-button {
+	visibility: hidden;
 }

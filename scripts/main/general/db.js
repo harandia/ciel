@@ -1,6 +1,10 @@
 const SQLite = require('better-sqlite3');
 const path = require('node:path');
 
+/**
+ * Represents a database containing the images and their associated tags.
+ * @class
+ */
 class Database {
 	#db;
 
@@ -103,7 +107,6 @@ class Database {
 	 * @returns {string[]}
 	 */
 	getAllImages() {
-		// @ts-ignore
 		try {
 			// @ts-ignore
 			return this.#getAllImagesStmt.all().map(({ name }) => name);

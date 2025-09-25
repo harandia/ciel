@@ -87,7 +87,13 @@
 		/>
 
 		<script
-			src="scripts/menu/menu.js"
+			src="scripts/renderer/menu/menu.js"
+			type="module"
+			defer
+		></script>
+
+		<script
+			src="scripts/renderer/menu/settingsMenu.js"
 			type="module"
 			defer
 		></script>
@@ -181,62 +187,76 @@
 				<p>Image size</p>
 				<input
 					type="range"
-					value="50"
+					min="100"
+					max="600"
+					value="250"
 				/>
 			</label>
 			<label class="settings-zoom settings-slider">
 				<p>Zoom</p>
 				<input
 					type="range"
+					min="75"
+					max="175"
 					value="50"
 				/>
 			</label>
 
 			<h2>Shortcuts</h2>
 
-			<label id="shortcut">
-				<div class="shortcut">
-					<p>Select all</p>
-					<div class="shortcut-key">Ctrl</div>
-					<div class="shortcut-key">A</div>
-					<button class="shortcut-change-button"></button>
-				</div>
+			<label
+				class="shortcut"
+				id="shortcut-select-all"
+			>
+				<p>Select all</p>
+
+				<div class="shortcut-key-list"></div>
+
+				<button class="shortcut-change-button"></button>
 			</label>
 
-			<label id="shortcut">
-				<div class="shortcut">
-					<p>Open tab</p>
-					<div class="shortcut-key">Ctrl</div>
-					<div class="shortcut-key">T</div>
-					<button class="shortcut-change-button"></button>
-				</div>
+			<label
+				class="shortcut"
+				id="shortcut-open-tab"
+			>
+				<p>Open tab</p>
+
+				<div class="shortcut-key-list"></div>
+
+				<button class="shortcut-change-button"></button>
 			</label>
 
-			<label id="shortcut">
-				<div class="shortcut">
-					<p>Close tab</p>
-					<div class="shortcut-key">Ctrl</div>
-					<div class="shortcut-key">W</div>
-					<button class="shortcut-change-button"></button>
-				</div>
+			<label
+				class="shortcut"
+				id="shortcut-close-tab"
+			>
+				<p>Close tab</p>
+
+				<div class="shortcut-key-list"></div>
+
+				<button class="shortcut-change-button"></button>
 			</label>
 
-			<label id="shortcut">
-				<div class="shortcut">
-					<p>Zoom in</p>
-					<div class="shortcut-key">Ctrl</div>
-					<div class="shortcut-key">+</div>
-					<button class="shortcut-change-button"></button>
-				</div>
+			<label
+				class="shortcut"
+				id="shortcut-zoom-in"
+			>
+				<p>Zoom in</p>
+
+				<div class="shortcut-key-list"></div>
+
+				<button class="shortcut-change-button"></button>
 			</label>
 
-			<label id="shortcut">
-				<div class="shortcut">
-					<p>Zoom out</p>
-					<div class="shortcut-key">Ctrl</div>
-					<div class="shortcut-key">-</div>
-					<button class="shortcut-change-button"></button>
-				</div>
+			<label
+				class="shortcut"
+				id="shortcut-zoom-out"
+			>
+				<p>Zoom out</p>
+
+				<div class="shortcut-key-list"></div>
+
+				<button class="shortcut-change-button"></button>
 			</label>
 		</nav>
 
@@ -382,12 +402,8 @@
 				<ul class="submenu-tab-list"></ul>
 			</template>
 
-			<template id="shortcut">
-				<div class="shortcut">
-					<p></p>
-					<div class="shortcut-key"></div>
-					<button class="shortcut-change-button"></button>
-				</div>
+			<template id="shortcut-key">
+				<div class="shortcut-key"></div>
 			</template>
 		</main>
 	</body>

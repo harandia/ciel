@@ -78,7 +78,7 @@ input[type='checkbox'] {
 }
 
 .settings-slider input {
-	--slider-value: 50;
+	--slider-percent: 50;
 	appearance: none;
 
 	cursor: pointer;
@@ -91,7 +91,7 @@ input[type='checkbox'] {
 	border-radius: 5px;
 
 	background: linear-gradient(rgb(76, 216, 255), rgb(76, 216, 255)) no-repeat, rgb(221, 221, 223);
-	background-size: calc(var(--slider-value) * 1%);
+	background-size: calc(var(--slider-percent) * 1%);
 }
 
 .settings-slider input::-webkit-slider-thumb {

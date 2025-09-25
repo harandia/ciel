@@ -1,11 +1,13 @@
 .image-grid {
+	--image-size: 250;
+
 	list-style: none;
 
 	margin: 20px 20px;
 	padding: 0;
 
 	display: grid;
-	grid-template-columns: repeat(auto-fill, 250px);
+	grid-template-columns: repeat(auto-fill, calc(var(--image-size) * 1px));
 
 	justify-content: center;
 
@@ -24,7 +26,7 @@
 .image-grid-image {
 	cursor: pointer;
 
-	width: 250px;
+	width: calc(var(--image-size) * 1px);
 
 	border-radius: 10px;
 

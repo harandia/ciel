@@ -1,6 +1,8 @@
-const { BrowserWindow, app, Menu, dialog } = require('electron');
+const { BrowserWindow, app, ipcMain } = require('electron');
 const path = require('node:path');
-const openImage = require('./scripts/general/open.js');
+
+const startTestDatabase = require('./test/dbTest.js');
+const settings = require('./scripts/main/settings.js');
 
 function createWindow() {
 	const win = new BrowserWindow({
@@ -13,10 +15,13 @@ function createWindow() {
 		minWidth: 500,
 
 		show: false,
+
+		webPreferences: {
+			preload: path.join(app.getAppPath(), 'preload.js'),
+		},
 	});
 
 	win.maximize();
-	// Menu.setApplicationMenu(null);
 
 	win.loadFile('index.html');
 
@@ -26,5 +31,19 @@ function createWindow() {
 }
 
 app.whenReady().then(() => {
+	ipcMain.handle('get-settings', async () => {
+		return (await settings.init()).properties;
+	});
+
+	ipcMain.on('update-settings', (event, config) => {
+		Object.assign(settings, config);
+	});
+
+	startTestDatabase(path.join(app.getPath('userData'), 'test.db'));
+
 	createWindow();
+});
+
+app.addListener('quit', () => {
+	settings.writeConfig();
 });
