@@ -1,14 +1,18 @@
 /**
- * Represents a SearchPage.
+ * This class represents an abstract SearchPage.
  * @class
  */
 class SearchPage {
 	/**@type {Set<string>} */
 	_searchTags;
 
-	/**@param {string[]} searchTags*/
+	/**
+	 * This constructor shouldn't be called directly as this class is abstract.
+	 * @param {string[]} [searchTags]
+	 */
 	constructor(searchTags) {
-		searchTags.forEach((tag) => {
+		this._searchTags = new Set();
+		searchTags?.forEach((tag) => {
 			this._searchTags.add(tag);
 		});
 	}
@@ -23,6 +27,15 @@ class SearchPage {
 			tagsArray.push(tag);
 		}
 		return tagsArray;
+	}
+
+	/**
+	 * Returns true or false wether this SearchPage has the same tags as otherPage or not.
+	 * @param {SearchPage} otherPage
+	 */
+	equals(otherPage) {
+		// @ts-ignore
+		return this._searchTags.isSupersetOf(otherPage) && this._searchTags.isSubsetOf(otherPage);
 	}
 }
 

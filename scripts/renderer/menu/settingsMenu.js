@@ -171,8 +171,6 @@ const addKeyToShortcut = function (shortcut, key) {
 	const shortcutKey = (keyStr) => {
 		const keyEl = document.getElementById('shortcut-key').content.cloneNode(true);
 
-		console.log(keyEl);
-
 		const specialKeys = {
 			Alt: 'Alt',
 			Control: 'Ctrl',
@@ -189,5 +187,5 @@ const addKeyToShortcut = function (shortcut, key) {
 
 		return keyEl;
 	};
-	shortcutKeyList.appendChild(shortcutKey(key));
+	shortcutKeyList.append(shortcutKey(key));
 };

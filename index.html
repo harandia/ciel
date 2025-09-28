@@ -97,6 +97,12 @@
 			type="module"
 			defer
 		></script>
+
+		<script
+			src="scripts/renderer/tabBar.js"
+			type="module"
+			defer
+		></script>
 	</head>
 
 	<body>
@@ -267,7 +273,7 @@
 		<main>
 			<template id="tab">
 				<div class="tab">
-					<div class="tab-body">
+					<div class="tab-body tab-body-closed">
 						<div class="tab-title"></div>
 						<button class="tab-close-tab-button"><div class="tab-close-tab-icon"></div></button>
 					</div>
@@ -404,6 +410,10 @@
 
 			<template id="shortcut-key">
 				<div class="shortcut-key"></div>
+			</template>
+
+			<template id="tab-tooltip">
+				<div class="tab-tooltip-hidden"></div>
 			</template>
 		</main>
 	</body>

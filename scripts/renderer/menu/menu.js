@@ -1,3 +1,7 @@
+import OpenSearchPage from '../page/openSearchPage.js';
+import UploadPage from '../page/uploadPage.js';
+import { addTab } from '../tabBar.js';
+
 const submenus = {
 	settings: document.getElementById('settings-menu'),
 	history: document.getElementById('history-menu'),
@@ -18,6 +22,14 @@ document.addEventListener('click', (event) => {
 	} else if (event.target.id === 'menu-settings-button') {
 		openSubmenu(submenus.settings);
 	}
+});
+
+document.getElementById('menu-search-button').addEventListener('click', (event) => {
+	addTab('New search', new OpenSearchPage());
+});
+
+document.getElementById('menu-upload-button').addEventListener('click', (event) => {
+	addTab('Upload', new UploadPage());
 });
 
 /**

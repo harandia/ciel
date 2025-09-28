@@ -16,21 +16,12 @@ class ClosedSearchPage extends SearchPage {
 	}
 
 	/**
-	 * Returns a new SearchPage built from a serialized object like the ones returned by the toJSON() method.
+	 * Returns a new ClosedSearchPage built from a serialized object like the ones returned by the toJSON() method.
 	 * @param {{searchTags: string[]}} pageJSON
 	 * @returns {ClosedSearchPage}
 	 */
 	static fromJSON(pageJSON) {
 		return new ClosedSearchPage(pageJSON.searchTags);
-	}
-
-	/**
-	 * Returns true or false wether this SearchPage has the same tags as otherPage or not.
-	 * @param {ClosedSearchPage} otherPage
-	 */
-	equals(otherPage) {
-		// @ts-ignore
-		return this._searchTags.isSupersetOf(otherPage) && this._searchTags.isSubsetOf(otherPage);
 	}
 }
 

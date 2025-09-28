@@ -6,12 +6,19 @@ import SearchPage from './searchPage.js';
  * @class
  */
 class OpenSearchPage extends SearchPage {
-	#newSearchTags;
+	/**
+	 * @type {Set<string>}
+	 */
+	#unsearchedTags;
 
-	/** @param {ClosedSearchPage} searchPage*/
+	/** @param {ClosedSearchPage} [searchPage]*/
 	constructor(searchPage) {
-		super(searchPage.searchTags);
-		this.#newSearchTags = new Set();
+		if (searchPage) {
+			super(searchPage.searchTags);
+		} else {
+			super();
+		}
+		this.#unsearchedTags = new Set();
 	}
 
 	/**
@@ -19,7 +26,7 @@ class OpenSearchPage extends SearchPage {
 	 * @param {string} tag
 	 */
 	addSearchTag(tag) {
-		this.#newSearchTags.add(tag);
+		if (!this._searchTags.has(tag)) this.#unsearchedTags.add(tag);
 	}
 
 	/**
@@ -27,7 +34,8 @@ class OpenSearchPage extends SearchPage {
 	 * @param {string} tag
 	 */
 	removeSearchTag(tag) {
-		this.#newSearchTags.delete(tag);
+		this._searchTags.delete(tag);
+		this.#unsearchedTags.delete(tag);
 	}
 
 	/**
@@ -35,7 +43,8 @@ class OpenSearchPage extends SearchPage {
 	 */
 	search() {
 		// @ts-ignore
-		this._searchTags = this._searchTags.union(this.#newSearchTags);
+		this._searchTags = this._searchTags.union(this.#unsearchedTags);
+		this.#unsearchedTags.clear();
 	}
 
 	/**

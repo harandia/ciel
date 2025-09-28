@@ -51,11 +51,11 @@ const settings = {
 				openInNewTab: true,
 				imageSize: 250,
 				zoom: 100,
-				selectAllShcut: ['control', 'a'],
-				openTabShcut: ['control', 't'],
-				closeTabShcut: ['control', 'w'],
-				zoomInShcut: ['control', '+'],
-				zoomOutShcut: ['control', '-'],
+				selectAllShcut: ['Control', 'a'],
+				openTabShcut: ['Control', 't'],
+				closeTabShcut: ['Control', 'w'],
+				zoomInShcut: ['Control', '+'],
+				zoomOutShcut: ['Control', '-'],
 			};
 
 		Object.assign(this, config);

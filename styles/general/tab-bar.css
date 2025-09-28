@@ -45,11 +45,11 @@
 	background-color: rgba(251, 250, 253, var(--alpha));
 }
 
-.tab-closed {
+.tab-body-closed {
 	--alpha: 0;
 }
 
-.tab-closed:hover {
+.tab-body-closed:hover {
 	--alpha: 0.65;
 }
 
@@ -85,7 +85,7 @@
 	border-radius: 100px;
 }
 
-.tab-closed .tab-close-tab-button {
+.tab-body-closed .tab-close-tab-button {
 	opacity: var(--alpha);
 }
 
@@ -105,7 +105,7 @@
 	mask-size: 70%;
 }
 
-.tab-tooltip {
+.tab-tooltip-hidden {
 	visibility: hidden;
 
 	cursor: default;
@@ -127,7 +127,7 @@
 	transition: opacity 150ms ease-in;
 }
 
-.tab-body:hover + .tab-tooltip {
+.tab-tooltip-visible {
 	visibility: visible;
 
 	opacity: 1;
