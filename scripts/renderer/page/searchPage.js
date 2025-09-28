@@ -1,5 +1,5 @@
 /**
- * This class represents an abstract SearchPage.
+ * Represents an abstract SearchPage.
  * @class
  */
 class SearchPage {
@@ -7,7 +7,8 @@ class SearchPage {
 	_searchTags;
 
 	/**
-	 * This constructor shouldn't be called directly as this class is abstract.
+	 * Creates a new SearchPage with the specified search tags. This constructor shouldn't be used on its own as this
+	 * class is abstract.
 	 * @param {string[]} [searchTags]
 	 */
 	constructor(searchTags) {

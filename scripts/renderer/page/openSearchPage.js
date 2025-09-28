@@ -6,9 +6,7 @@ import SearchPage from './searchPage.js';
  * @class
  */
 class OpenSearchPage extends SearchPage {
-	/**
-	 * @type {Set<string>}
-	 */
+	/** @type {Set<string>} */
 	#unsearchedTags;
 
 	/** @param {ClosedSearchPage} [searchPage]*/
