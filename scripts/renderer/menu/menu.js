@@ -25,11 +25,11 @@ document.addEventListener('click', (event) => {
 });
 
 document.getElementById('menu-search-button').addEventListener('click', (event) => {
-	addTab('New search', new OpenSearchPage());
+	addTab(new OpenSearchPage());
 });
 
 document.getElementById('menu-upload-button').addEventListener('click', (event) => {
-	addTab('Upload', new UploadPage());
+	addTab(new UploadPage());
 });
 
 /**
