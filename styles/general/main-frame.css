@@ -11,6 +11,8 @@
 }
 
 main {
+	position: relative;
+
 	margin: 41px 0 0 45px;
 
 	display: flex;

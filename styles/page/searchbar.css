@@ -7,6 +7,12 @@ main header {
 	flex-direction: column;
 }
 
+.searchbar-container {
+	display: flex;
+
+	column-gap: 10px;
+}
+
 .searchbar {
 	flex: 1;
 
@@ -106,4 +112,37 @@ main header {
 
 .searchbar-warning-hidden {
 	max-height: 0;
+}
+
+.searchbar-search-button {
+	cursor: pointer;
+
+	aspect-ratio: 1;
+
+	width: 45px;
+
+	display: flex;
+	align-items: center;
+
+	border: none;
+
+	border-radius: 100px;
+
+	background-color: rgb(207, 241, 250);
+}
+
+.searchbar-search-icon {
+	aspect-ratio: inherit;
+	flex: 1;
+
+	background-color: rgb(74, 178, 209);
+
+	mask-image: url(../../icon/search-svgrepo-com.svg);
+	mask-position: center;
+	mask-size: 70%;
+	mask-repeat: no-repeat;
+}
+
+.searchbar-search-button:hover {
+	background-color: rgb(188, 240, 255);
 }

@@ -1,0 +1,46 @@
+.prev-next-container {
+	position: absolute;
+	top: 15px;
+	left: 20px;
+
+	display: flex;
+
+	column-gap: 15px;
+}
+
+.prev-next-container button {
+	cursor: pointer;
+
+	aspect-ratio: 1;
+
+	width: 15px;
+
+	border: none;
+
+	mask-position: center;
+	mask-size: 150%;
+	mask-repeat: no-repeat;
+
+	background-color: rgb(74, 178, 209);
+}
+
+.prev-button {
+	mask-image: url(../../icon/previous.svg);
+}
+
+.next-button {
+	mask-image: url(../../icon/next.svg);
+}
+
+.prev-next-container button:hover {
+	background-color: rgb(0, 166, 216);
+}
+
+.prev-next-container .prev-next-disabled {
+	cursor: default;
+	opacity: 0.3;
+}
+
+.prev-next-container .prev-next-disabled:hover {
+	background-color: rgb(74, 178, 209);
+}

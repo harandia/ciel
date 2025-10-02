@@ -1,7 +1,10 @@
 .upload-view {
 	overflow-y: scroll;
 	overscroll-behavior: contain;
+
 	flex: 1;
+
+	margin-top: 35px;
 
 	display: flex;
 	flex-direction: column;

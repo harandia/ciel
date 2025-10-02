@@ -1,10 +1,11 @@
 //@ts-nocheck
 import OpenSearchPage from './page/openSearchPage.js';
 import UploadPage from './page/uploadPage.js';
+import Tab from './tab.js';
 import { AbsoluteTooltip, StickyTooltip } from './tooltip.js';
 
 /**
- * @type {(OpenSearchPage | UploadPage)[]}
+ * @type {(Tab)[]}
  */
 const tabs = [];
 
@@ -23,156 +24,146 @@ const tabBar = document.getElementById('tab-bar');
 const tabBarInput = {
 	addButton: tabBar.querySelector('.tab-add-button'),
 };
+/**
+ * @type {Tab}
+ */
+let selectedTab;
 
 tabBarInput.addButton.addEventListener('click', () => {
-	addTab(new OpenSearchPage());
+	addTab(new OpenSearchPage(), true);
 });
 
 /**
- * Adds a new tab to the tab bar with the given page.
+ * Adds a new tab to the tab bar with the given page. If forceNewTab is enabled it will add the page in a new tab regardless of the
+ * configuration settings.
  * @param {OpenSearchPage | UploadPage} page
+ * @param {boolean} [forceNewTab]
  */
-const addTab = function (page) {
-	let tab = document.getElementById('tab').content.cloneNode(true);
-	const title = getTitle(page);
-	tab.querySelector('.tab-title').textContent = title;
+const addTab = async function (page, forceNewTab = false) {
+	const { openInNewTab } = await window.app.getSettings();
 
-	tabBar.insertBefore(tab, tabBar.lastElementChild);
+	if (openInNewTab || forceNewTab || tabs.length === 0) {
+		const tab = new Tab(page);
 
-	tab = tabBar.children[tabBar.children.length - 2];
+		tabBar.insertBefore(tab.element, tabBar.lastElementChild);
 
-	const closeButton = tab.querySelector('.tab-close-tab-button');
+		tab.closeButton.addEventListener('click', (event) => {
+			event.stopPropagation();
 
-	closeButton.addEventListener('click', (event) => {
-		event.stopPropagation();
+			const tabIndex = tabs.indexOf(tab);
 
-		if (tabBar.children.length > 2 && isSelected(tab)) {
-			const nextTab = tab.previousElementSibling || tab.nextElementSibling;
-			selectTab(nextTab);
-		}
-		tabBar.removeChild(tab);
+			if (tabs.length > 1 && tab === selectedTab) {
+				const newIndex = tabIndex - 1 < 0 ? 1 : tabIndex;
+				selectTab(tabs[newIndex]);
+			}
+			tabBar.removeChild(tab.element);
 
-		const tabIndex = tabs.indexOf(page);
-		tabs.splice(tabIndex, 1);
-
-		tabTooltip.hide();
-	});
-
-	closeButton.addEventListener('mousedown', (event) => {
-		event.stopPropagation();
-	});
-
-	tab.addEventListener('click', () => {
-		selectTab(tab);
-	});
-
-	tab.addEventListener('mouseenter', () => {
-		const tabPosition = tab.getBoundingClientRect();
-		const position = [tabPosition.left + 5, tabPosition.top + 40];
-
-		tabTooltip.x = position[0];
-		tabTooltip.y = position[1];
-		tabTooltip.show(title, 200);
-	});
-
-	tab.addEventListener('mouseleave', () => {
-		tabTooltip.hide();
-	});
-
-	tab.addEventListener('dragstart', (event) => {
-		event.preventDefault();
-	});
-
-	tab.addEventListener('mousedown', () => {
-		movingTooltip.show(title);
-
-		const hideTooltip = () => {
-			movingTooltip.hide();
-			document.documentElement.style.removeProperty('cursor');
-			document.removeEventListener('mouseup', hideTooltip);
-		};
-
-		document.addEventListener('mouseup', hideTooltip);
-
-		document.documentElement.style.cursor = 'grabbing';
-
-		const moveTab = (event) => {
-			const tabElements = tabBar.children;
-
-			if (tabElements.length <= 2) return;
-
-			const tabIndex = Array.from(tabElements).indexOf(tab);
-			const tabRect = tab.getBoundingClientRect();
-
-			const tabMidPoint = tabRect.x + tabRect.width / 2;
-
-			let indexShift;
-
-			if (event.clientX > tabMidPoint + tabRect.width) {
-				indexShift = Math.trunc((event.clientX - tabMidPoint) / tabRect.width) + 1;
-			} else if (event.clientX < tabMidPoint - tabRect.width) {
-				indexShift = Math.trunc((event.clientX - tabMidPoint) / tabRect.width);
-			} else return;
-
-			const newIndex = Math.min(Math.max(0, tabIndex + indexShift), tabElements.length - 1);
-
-			tabBar.insertBefore(tab, tabElements[newIndex]);
-			tabs.splice(Math.max(newIndex, tabs.length - 1), 0, tabs[tabIndex]);
 			tabs.splice(tabIndex, 1);
 
-			tabBar.removeEventListener('mouseup', moveTab);
-		};
+			tabTooltip.hide();
+		});
 
-		tabBar.addEventListener('mouseup', moveTab);
-	});
+		tab.closeButton.addEventListener('mousedown', (event) => {
+			event.stopPropagation();
+		});
 
-	selectTab(tab);
+		tab.element.addEventListener('click', () => {
+			selectTab(tab);
+		});
 
-	tabs.push(page);
+		tab.element.addEventListener('mouseenter', () => {
+			const tabPosition = tab.element.getBoundingClientRect();
+			const position = [tabPosition.left + 5, tabPosition.top + 40];
+
+			tabTooltip.x = position[0];
+			tabTooltip.y = position[1];
+			tabTooltip.show(tab.title, 200);
+		});
+
+		tab.element.addEventListener('mouseleave', () => {
+			tabTooltip.hide();
+		});
+
+		tab.element.addEventListener('dragstart', (event) => {
+			event.preventDefault();
+		});
+
+		tab.element.addEventListener('mousedown', () => {
+			let timeout;
+
+			const cancelTimeout = () => {
+				clearTimeout(timeout);
+			};
+
+			timeout = setTimeout(() => {
+				document.removeEventListener('mouseup', cancelTimeout);
+
+				movingTooltip.show(tab.title);
+
+				document.addEventListener(
+					'mouseup',
+					() => {
+						movingTooltip.hide();
+						document.documentElement.style.removeProperty('cursor');
+					},
+					{ once: true },
+				);
+
+				document.documentElement.style.cursor = 'grabbing';
+
+				tabBar.addEventListener(
+					'mouseup',
+					(event) => {
+						const tabElements = tabBar.children;
+
+						if (tabElements.length <= 2) return;
+
+						const tabIndex = Array.from(tabElements).indexOf(tab.element);
+						const tabRect = tab.element.getBoundingClientRect();
+
+						const tabMidPoint = tabRect.x + tabRect.width / 2;
+
+						let indexShift;
+
+						if (event.clientX > tabMidPoint + tabRect.width) {
+							indexShift = Math.trunc((event.clientX - tabMidPoint) / tabRect.width) + 1;
+						} else if (event.clientX < tabMidPoint - tabRect.width) {
+							indexShift = Math.trunc((event.clientX - tabMidPoint) / tabRect.width);
+						} else return;
+
+						const newIndex = Math.min(Math.max(0, tabIndex + indexShift), tabElements.length - 1);
+
+						tabBar.insertBefore(tab.element, tabElements[newIndex]);
+						tabs.splice(Math.max(newIndex, tabs.length - 1), 0, tabs[tabIndex]);
+						tabs.splice(tabIndex, 1);
+					},
+					{ once: true },
+				);
+			}, 400);
+
+			document.addEventListener('mouseup', cancelTimeout, { once: true });
+		});
+
+		selectTab(tab);
+
+		tabs.push(tab);
+	} else {
+		selectedTab.loadPage(page);
+	}
 };
 
 /**
  * Selects the specified tab.
- * @param {OpenSearchPage | UploadPage} tab
+ * @param {Tab} tab
  */
 const selectTab = function (tab) {
-	tab.querySelector('.tab-body').classList.remove('tab-body-closed');
-	for (const otherTab of tabBar.children) {
-		if (otherTab !== tab && otherTab !== tabBar.lastElementChild) {
-			otherTab.querySelector('.tab-body').classList.add('tab-body-closed');
+	tab.select();
+	for (const otherTab of tabs) {
+		if (otherTab !== tab) {
+			otherTab.deselect();
 		}
 	}
-};
-
-/**
- * Updates the Tab Bar with the changes made to the tabs' pages.
- */
-const updateTabBar = function () {
-	const tabElements = tabBar.children;
-
-	for (let i = 0; i < tabElements.length; i++) {
-		tabElements[i].querySelector('.tab-title').textContent = getTitle(tabs[i]);
-	}
-};
-
-/**
- * Returns true if the specified tab is currently selected.
- * @param {OpenSearchPage | UploadPage} tab
- * @returns {boolean}
- */
-const isSelected = function (tab) {
-	if (tab.querySelector('.tab-body-closed')) return false;
-	return true;
-};
-
-/**
- * Returns the title corresponding to the given page
- * @param {OpenSearchPage | UploadPage} page
- */
-const getTitle = function (page) {
-	if (page instanceof UploadPage) return 'Upload page';
-	if (page.searchTags.length === 0) return 'New search';
-	return page.searchTags.join(' ');
+	selectedTab = tab;
 };
 
 export { addTab };

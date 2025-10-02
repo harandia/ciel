@@ -85,10 +85,13 @@
 			rel="stylesheet"
 			href="styles/submenu/shortcut.css"
 		/>
-
 		<link
 			rel="stylesheet"
 			href="styles/general/tooltip.css"
+		/>
+		<link
+			rel="stylesheet"
+			href="styles/page/prev-next.css"
 		/>
 
 		<script
@@ -276,6 +279,119 @@
 		</nav>
 
 		<main>
+			<section class="scrollable search-view">
+				<nav class="prev-next-container">
+					<button class="prev-button prev-next-disabled"></button>
+					<button class="next-button"></button>
+				</nav>
+				<header>
+					<div class="searchbar-container">
+						<search class="searchbar">
+							<div class="searchbar-body">
+								<div
+									class="tag-input searchbar-input"
+									contenteditable=""
+								></div>
+							</div>
+							<button class="searchbar-clear-button"></button>
+						</search>
+						<button class="searchbar-search-button"><div class="searchbar-search-icon"></div></button>
+					</div>
+
+					<p class="searchbar-warning">adadwadwdwawd</p>
+				</header>
+
+				<ul class="image-grid">
+					<li>
+						<img
+							class="image-grid-image"
+							src="images/cabra1.jpg"
+						/>
+						<button class="image-delete-button"><div class="image-delete-icon"></div></button>
+					</li>
+				</ul>
+			</section>
+
+			<section class="scrollable editor">
+				<div class="editor-open-delete-container">
+					<button class="editor-delete-button"><div class="editor-delete-icon"></div></button>
+					<button class="editor-open-button">Open</button>
+				</div>
+
+				<div class="editor-preview">
+					<img
+						class="editor-preview-image"
+						src="images/cabra1.jpg"
+					/>
+				</div>
+
+				<div class="editor-body">
+					<p class="editor-selection-counter"></p>
+					<div class="tag-editor">
+						<span
+							class="tag-input tag-editor-input"
+							contenteditable=""
+						></span>
+					</div>
+
+					<p class="tag-editor-warning-hidden tag-editor-warning"></p>
+				</div>
+
+				<div class="editor-confirm-container">
+					<button class="editor-discard-button">Discard</button>
+					<button class="editor-apply-button">Apply</button>
+				</div>
+			</section>
+
+			<!-- <nav class="prev-next-container">
+				<button class="prev-button"></button>
+				<button class="next-button"></button>
+			</nav>
+
+			<section class="upload-view">
+				<div class="scrollable upload-view-image-grid-container">
+					<ul class="image-grid">
+						<img
+							class="image-grid-image"
+							src="images/cabra1.jpg"
+						/>
+						<li>
+							<button class="upload-add-button"><div class="upload-add-icon"></div></button>
+						</li>
+					</ul>
+				</div>
+				<footer>
+					<button class="upload-cancel-button">Cancel</button>
+					<button class="upload-upload-button">Upload</button>
+				</footer>
+			</section>
+
+			<section class="scrollable editor">
+				<div class="editor-open-delete-container">
+					<button class="editor-delete-button"><div class="editor-delete-icon"></div></button>
+					<button class="editor-open-button">Open</button>
+				</div>
+
+				<div class="editor-preview">
+					<img
+						class="editor-preview-image"
+						src="images/cabra1.jpg"
+					/>
+				</div>
+
+				<div class="editor-body">
+					<p class="editor-selection-counter"></p>
+					<div class="tag-editor">
+						<span
+							class="tag-input tag-editor-input"
+							contenteditable=""
+						></span>
+					</div>
+
+					<p class="tag-editor-warning-hidden tag-editor-warning"></p>
+				</div>
+			</section> -->
+
 			<template id="tab">
 				<div class="tab">
 					<div class="tab-body tab-body-closed">
@@ -327,8 +443,8 @@
 				</section>
 			</template>
 
-			<template id="search-page"
-				><section class="scrollable search-view">
+			<template id="search-page">
+				<section class="scrollable search-view">
 					<header>
 						<search class="searchbar">
 							<div class="searchbar-body">
