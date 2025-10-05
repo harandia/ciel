@@ -107,7 +107,7 @@
 		></script>
 
 		<script
-			src="scripts/renderer/tabBar.js"
+			src="scripts/renderer/tab/tabBar.js"
 			type="module"
 			defer
 		></script>
@@ -279,7 +279,7 @@
 		</nav>
 
 		<main>
-			<section class="scrollable search-view">
+			<!-- <section class="scrollable search-view">
 				<nav class="prev-next-container">
 					<button class="prev-button prev-next-disabled"></button>
 					<button class="next-button"></button>
@@ -341,20 +341,27 @@
 					<button class="editor-discard-button">Discard</button>
 					<button class="editor-apply-button">Apply</button>
 				</div>
-			</section>
+			</section> -->
 
-			<!-- <nav class="prev-next-container">
-				<button class="prev-button"></button>
-				<button class="next-button"></button>
+			<nav class="prev-next-container">
+				<button class="prev-button prev-next-disabled"></button>
+				<button class="next-button prev-next-disabled"></button>
 			</nav>
+		</main>
 
+		<template id="tab">
+			<div class="tab">
+				<div class="tab-body tab-body-closed">
+					<div class="tab-title"></div>
+					<button class="tab-close-tab-button"><div class="tab-close-tab-icon"></div></button>
+				</div>
+			</div>
+		</template>
+
+		<template id="upload-page">
 			<section class="upload-view">
 				<div class="scrollable upload-view-image-grid-container">
 					<ul class="image-grid">
-						<img
-							class="image-grid-image"
-							src="images/cabra1.jpg"
-						/>
 						<li>
 							<button class="upload-add-button"><div class="upload-add-icon"></div></button>
 						</li>
@@ -366,7 +373,7 @@
 				</footer>
 			</section>
 
-			<section class="scrollable editor">
+			<section class="scrollable editor-hidden editor">
 				<div class="editor-open-delete-container">
 					<button class="editor-delete-button"><div class="editor-delete-icon"></div></button>
 					<button class="editor-open-button">Open</button>
@@ -375,7 +382,7 @@
 				<div class="editor-preview">
 					<img
 						class="editor-preview-image"
-						src="images/cabra1.jpg"
+						src=""
 					/>
 				</div>
 
@@ -390,62 +397,13 @@
 
 					<p class="tag-editor-warning-hidden tag-editor-warning"></p>
 				</div>
-			</section> -->
+			</section>
+		</template>
 
-			<template id="tab">
-				<div class="tab">
-					<div class="tab-body tab-body-closed">
-						<div class="tab-title"></div>
-						<button class="tab-close-tab-button"><div class="tab-close-tab-icon"></div></button>
-					</div>
-				</div>
-			</template>
-
-			<template id="upload-page">
-				<section class="upload-view">
-					<div class="scrollable upload-view-image-grid-container">
-						<ul class="image-grid">
-							<li>
-								<button class="upload-add-button"><div class="upload-add-icon"></div></button>
-							</li>
-						</ul>
-					</div>
-					<footer>
-						<button class="upload-cancel-button">Cancel</button>
-						<button class="upload-upload-button">Upload</button>
-					</footer>
-				</section>
-
-				<section class="scrollable editor">
-					<div class="editor-open-delete-container">
-						<button class="editor-delete-button"><div class="editor-delete-icon"></div></button>
-						<button class="editor-open-button">Open</button>
-					</div>
-
-					<div class="editor-preview">
-						<img
-							class="editor-preview-image"
-							src=""
-						/>
-					</div>
-
-					<div class="editor-body">
-						<p class="editor-selection-counter"></p>
-						<div class="tag-editor">
-							<span
-								class="tag-input tag-editor-input"
-								contenteditable=""
-							></span>
-						</div>
-
-						<p class="tag-editor-warning-hidden tag-editor-warning"></p>
-					</div>
-				</section>
-			</template>
-
-			<template id="search-page">
-				<section class="scrollable search-view">
-					<header>
+		<template id="search-page">
+			<section class="scrollable search-view">
+				<header>
+					<div class="searchbar-container">
 						<search class="searchbar">
 							<div class="searchbar-body">
 								<div
@@ -455,87 +413,87 @@
 							</div>
 							<button class="searchbar-clear-button"></button>
 						</search>
-						<p class="searchbar-warning-hidden searchbar-warning"></p>
-					</header>
-
-					<ul class="image-grid"></ul>
-				</section>
-
-				<section class="scrollable editor-hidden editor">
-					<div class="editor-open-delete-container">
-						<button class="editor-delete-button"><div class="editor-delete-icon"></div></button>
-						<button class="editor-open-button">Open</button>
+						<button class="searchbar-search-button"><div class="searchbar-search-icon"></div></button>
 					</div>
+				</header>
 
-					<div class="editor-preview">
-						<img
-							class="editor-preview-image"
-							src=""
-						/>
-					</div>
+				<ul class="image-grid"></ul>
+			</section>
 
-					<div class="editor-body">
-						<p class="editor-selection-counter"></p>
-						<div class="tag-editor">
-							<span
-								class="tag-input tag-editor-input"
-								contenteditable=""
-							></span>
-						</div>
+			<section class="scrollable editor-hidden editor">
+				<div class="editor-open-delete-container">
+					<button class="editor-delete-button"><div class="editor-delete-icon"></div></button>
+					<button class="editor-open-button">Open</button>
+				</div>
 
-						<p class="tag-editor-warning-hidden tag-editor-warning"></p>
-					</div>
-
-					<div class="editor-confirm-container">
-						<button class="editor-discard-button">Discard</button>
-						<button class="editor-apply-button">Apply</button>
-					</div>
-				</section>
-			</template>
-
-			<template id="image-grid-image">
-				<li>
+				<div class="editor-preview">
 					<img
-						class="image-grid-image"
+						class="editor-preview-image"
 						src=""
 					/>
-					<button class="image-delete-button"><div class="image-delete-icon"></div></button>
-				</li>
-			</template>
-
-			<template id="search-tag">
-				<div class="search-tag"></div>
-			</template>
-
-			<template id="dialog-confirmation">
-				<dialog open>
-					<p></p>
-					<div class="dialog-buttons-container">
-						<button class="dialog-cancel-button"></button>
-						<button class="dialog-accept-button"></button>
-					</div>
-				</dialog>
-			</template>
-
-			<template id="submenu-tab">
-				<div class="submenu-tab">
-					<ul class="submenu-tab-tag-list"></ul>
-					<button class="submenu-tab-delete-button"></button>
 				</div>
-			</template>
 
-			<template id="history-day">
-				<h2></h2>
-				<ul class="submenu-tab-list"></ul>
-			</template>
+				<div class="editor-body">
+					<p class="editor-selection-counter"></p>
+					<div class="tag-editor">
+						<span
+							class="tag-input tag-editor-input"
+							contenteditable=""
+						></span>
+					</div>
 
-			<template id="shortcut-key">
-				<div class="shortcut-key"></div>
-			</template>
+					<p class="tag-editor-warning-hidden tag-editor-warning"></p>
+				</div>
 
-			<template id="tooltip">
-				<div class="tooltip tooltip-hidden"></div>
-			</template>
-		</main>
+				<div class="editor-confirm-container">
+					<button class="editor-discard-button">Discard</button>
+					<button class="editor-apply-button">Apply</button>
+				</div>
+			</section>
+		</template>
+
+		<template id="image-grid-image">
+			<li>
+				<img
+					class="image-grid-image"
+					src=""
+				/>
+				<button class="image-delete-button"><div class="image-delete-icon"></div></button>
+			</li>
+		</template>
+
+		<template id="search-tag">
+			<div class="search-tag"></div>
+		</template>
+
+		<template id="dialog-confirmation">
+			<dialog open>
+				<p></p>
+				<div class="dialog-buttons-container">
+					<button class="dialog-cancel-button"></button>
+					<button class="dialog-accept-button"></button>
+				</div>
+			</dialog>
+		</template>
+
+		<template id="submenu-tab">
+			<div class="submenu-tab">
+				<ul class="submenu-tab-tag-list"></ul>
+				<button class="submenu-tab-delete-button"></button>
+			</div>
+		</template>
+
+		<template id="history-day">
+			<h2></h2>
+			<ul class="submenu-tab-list"></ul>
+		</template>
+
+		<template id="shortcut-key">
+			<div class="shortcut-key"></div>
+		</template>
+
+		<template id="tooltip">
+			<div class="tooltip tooltip-hidden"></div>
+		</template>
 	</body>
 </html>

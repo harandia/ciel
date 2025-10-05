@@ -9,13 +9,10 @@ class SearchPage {
 	/**
 	 * Creates a new SearchPage with the specified search tags. This constructor shouldn't be used on its own as this
 	 * class is abstract.
-	 * @param {string[]} [searchTags]
+	 * @param {string[] | Set<string>} [searchTags]
 	 */
 	constructor(searchTags) {
-		this._searchTags = new Set();
-		searchTags?.forEach((tag) => {
-			this._searchTags.add(tag);
-		});
+		this._searchTags = new Set(searchTags);
 	}
 
 	/**
@@ -23,11 +20,7 @@ class SearchPage {
 	 * @returns {string[]}
 	 */
 	get searchTags() {
-		const tagsArray = [];
-		for (const tag of this._searchTags) {
-			tagsArray.push(tag);
-		}
-		return tagsArray;
+		return Array.from(this._searchTags);
 	}
 
 	/**

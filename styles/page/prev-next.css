@@ -37,6 +37,8 @@
 }
 
 .prev-next-container .prev-next-disabled {
+	pointer-events: none;
+
 	cursor: default;
 	opacity: 0.3;
 }

@@ -1,6 +1,6 @@
 import OpenSearchPage from '../page/openSearchPage.js';
 import UploadPage from '../page/uploadPage.js';
-import { addTab } from '../tabBar.js';
+import { addTab } from '../tab/tabBar.js';
 
 const submenus = {
 	settings: document.getElementById('settings-menu'),

@@ -1,8 +1,8 @@
 //@ts-nocheck
-import OpenSearchPage from './page/openSearchPage.js';
-import UploadPage from './page/uploadPage.js';
+import OpenSearchPage from '../page/openSearchPage.js';
+import UploadPage from '../page/uploadPage.js';
 import Tab from './tab.js';
-import { AbsoluteTooltip, StickyTooltip } from './tooltip.js';
+import { AbsoluteTooltip, StickyTooltip } from '../tooltip.js';
 
 /**
  * @type {(Tab)[]}
@@ -21,16 +21,26 @@ const movingTooltip = new StickyTooltip();
 
 const tabBar = document.getElementById('tab-bar');
 
-const tabBarInput = {
-	addButton: tabBar.querySelector('.tab-add-button'),
-};
 /**
  * @type {Tab}
  */
 let selectedTab;
 
-tabBarInput.addButton.addEventListener('click', () => {
+const addButton = tabBar.querySelector('.tab-add-button');
+
+addButton.addEventListener('click', () => {
 	addTab(new OpenSearchPage(), true);
+});
+
+const prevButton = document.querySelector('.prev-button');
+const nextButton = document.querySelector('.next-button');
+
+prevButton.addEventListener('click', () => {
+	selectedTab.loadPrevPage();
+});
+
+nextButton.addEventListener('click', () => {
+	selectedTab.loadNextPage();
 });
 
 /**
@@ -53,14 +63,21 @@ const addTab = async function (page, forceNewTab = false) {
 			const tabIndex = tabs.indexOf(tab);
 
 			if (tabs.length > 1 && tab === selectedTab) {
-				const newIndex = tabIndex - 1 < 0 ? 1 : tabIndex;
+				const newIndex = tabIndex - 1 < 0 ? 1 : tabIndex - 1;
 				selectTab(tabs[newIndex]);
+				console.log(newIndex);
+			} else if (tabs.length === 1) {
+				selectedTab = undefined;
 			}
+
 			tabBar.removeChild(tab.element);
 
 			tabs.splice(tabIndex, 1);
 
 			tabTooltip.hide();
+
+			tab.derender();
+			updatePrevNext();
 		});
 
 		tab.closeButton.addEventListener('mousedown', (event) => {
@@ -88,7 +105,9 @@ const addTab = async function (page, forceNewTab = false) {
 			event.preventDefault();
 		});
 
-		tab.element.addEventListener('mousedown', () => {
+		tab.element.addEventListener('mousedown', (event) => {
+			event.preventDefault();
+
 			let timeout;
 
 			const cancelTimeout = () => {
@@ -139,7 +158,7 @@ const addTab = async function (page, forceNewTab = false) {
 					},
 					{ once: true },
 				);
-			}, 400);
+			}, 200);
 
 			document.addEventListener('mouseup', cancelTimeout, { once: true });
 		});
@@ -157,13 +176,44 @@ const addTab = async function (page, forceNewTab = false) {
  * @param {Tab} tab
  */
 const selectTab = function (tab) {
+	if (tab === selectedTab) return;
+
+	const onload = (tab) => {
+		tab.render();
+		updatePrevNext();
+	};
+
+	selectedTab?.deselect();
+	selectedTab?.derender();
+	selectedTab?.removeEventListener('loadpage', onload);
+
+	selectedTab = tab;
 	tab.select();
-	for (const otherTab of tabs) {
-		if (otherTab !== tab) {
-			otherTab.deselect();
+	tab.render();
+	updatePrevNext();
+	selectedTab.addEventListener('loadpage', onload);
+};
+
+/**
+ * Updates the state othe previous and next page buttons.
+ */
+const updatePrevNext = function () {
+	if (!selectedTab) {
+		prevButton.classList.add('prev-next-disabled');
+		nextButton.classList.add('prev-next-disabled');
+	} else {
+		if (selectedTab.prevPages.length === 0) {
+			prevButton.classList.add('prev-next-disabled');
+		} else {
+			prevButton.classList.remove('prev-next-disabled');
+		}
+
+		if (selectedTab.nextPages.length === 0) {
+			nextButton.classList.add('prev-next-disabled');
+		} else {
+			nextButton.classList.remove('prev-next-disabled');
 		}
 	}
-	selectedTab = tab;
 };
 
 export { addTab };
