@@ -43,6 +43,11 @@ nextButton.addEventListener('click', () => {
 	selectedTab.loadNextPage();
 });
 
+tabBar.addEventListener('wheel', (event) => {
+	// @ts-ignore
+	tabBar.scrollLeft = tabBar.scrollLeft - event.deltaY;
+});
+
 /**
  * Adds a new tab to the tab bar with the given page. If forceNewTab is enabled it will add the page in a new tab regardless of the
  * configuration settings.

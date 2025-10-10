@@ -93,7 +93,10 @@
 			rel="stylesheet"
 			href="styles/page/prev-next.css"
 		/>
-
+		<link
+			rel="stylesheet"
+			href="styles/general/tag-input-caret.css"
+		/>
 		<script
 			src="scripts/renderer/menu/menu.js"
 			type="module"
@@ -114,8 +117,6 @@
 	</head>
 
 	<body>
-		<ol class="scrollable autocompleter-hidden autocompleter"></ol>
-
 		<nav id="menu">
 			<button
 				id="menu-search-button"
@@ -279,70 +280,6 @@
 		</nav>
 
 		<main>
-			<!-- <section class="scrollable search-view">
-				<nav class="prev-next-container">
-					<button class="prev-button prev-next-disabled"></button>
-					<button class="next-button"></button>
-				</nav>
-				<header>
-					<div class="searchbar-container">
-						<search class="searchbar">
-							<div class="searchbar-body">
-								<div
-									class="tag-input searchbar-input"
-									contenteditable=""
-								></div>
-							</div>
-							<button class="searchbar-clear-button"></button>
-						</search>
-						<button class="searchbar-search-button"><div class="searchbar-search-icon"></div></button>
-					</div>
-
-					<p class="searchbar-warning">adadwadwdwawd</p>
-				</header>
-
-				<ul class="image-grid">
-					<li>
-						<img
-							class="image-grid-image"
-							src="images/cabra1.jpg"
-						/>
-						<button class="image-delete-button"><div class="image-delete-icon"></div></button>
-					</li>
-				</ul>
-			</section>
-
-			<section class="scrollable editor">
-				<div class="editor-open-delete-container">
-					<button class="editor-delete-button"><div class="editor-delete-icon"></div></button>
-					<button class="editor-open-button">Open</button>
-				</div>
-
-				<div class="editor-preview">
-					<img
-						class="editor-preview-image"
-						src="images/cabra1.jpg"
-					/>
-				</div>
-
-				<div class="editor-body">
-					<p class="editor-selection-counter"></p>
-					<div class="tag-editor">
-						<span
-							class="tag-input tag-editor-input"
-							contenteditable=""
-						></span>
-					</div>
-
-					<p class="tag-editor-warning-hidden tag-editor-warning"></p>
-				</div>
-
-				<div class="editor-confirm-container">
-					<button class="editor-discard-button">Discard</button>
-					<button class="editor-apply-button">Apply</button>
-				</div>
-			</section> -->
-
 			<nav class="prev-next-container">
 				<button class="prev-button prev-next-disabled"></button>
 				<button class="next-button prev-next-disabled"></button>
@@ -388,7 +325,10 @@
 
 				<div class="editor-body">
 					<p class="editor-selection-counter"></p>
-					<div class="tag-editor">
+					<div
+						class="tag-editor"
+						tabindex="-1"
+					>
 						<span
 							class="tag-input tag-editor-input"
 							contenteditable=""
@@ -405,7 +345,10 @@
 				<header>
 					<div class="searchbar-container">
 						<search class="searchbar">
-							<div class="searchbar-body">
+							<div
+								class="searchbar-body"
+								tabindex="-1"
+							>
 								<div
 									class="tag-input searchbar-input"
 									contenteditable=""
@@ -413,8 +356,9 @@
 							</div>
 							<button class="searchbar-clear-button"></button>
 						</search>
-						<button class="searchbar-search-button"><div class="searchbar-search-icon"></div></button>
+						<button class="searchbar-search-button searchbar-search-button-disabled"><div class="searchbar-search-icon"></div></button>
 					</div>
+					<p class="searchbar-warning searchbar-warning-hidden"></p>
 				</header>
 
 				<ul class="image-grid"></ul>
@@ -435,7 +379,10 @@
 
 				<div class="editor-body">
 					<p class="editor-selection-counter"></p>
-					<div class="tag-editor">
+					<div
+						class="tag-editor"
+						tabindex="-1"
+					>
 						<span
 							class="tag-input tag-editor-input"
 							contenteditable=""
@@ -494,6 +441,14 @@
 
 		<template id="tooltip">
 			<div class="tooltip tooltip-hidden"></div>
+		</template>
+
+		<template id="tag-input-caret">
+			<div class="tag-input-caret"></div>
+		</template>
+
+		<template id="autocompleter">
+			<ol class="scrollable autocompleter-hidden autocompleter"></ol>
 		</template>
 	</body>
 </html>

@@ -1,6 +1,7 @@
 /**
  * Represents an abstract SearchPage.
  * @class
+ * @abstract
  */
 class SearchPage {
 	/**@type {Set<string>} */

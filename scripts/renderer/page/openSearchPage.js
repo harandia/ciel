@@ -1,4 +1,5 @@
 import ClosedSearchPage from './closedSearchPage.js';
+import TagAutocompleter from './components/autocompleter.js';
 import Editor from './components/editor.js';
 import ImageGrid from './components/imageGrid.js';
 import SearchBar from './components/searchbar.js';
@@ -47,9 +48,39 @@ class OpenSearchPage extends SearchPage {
 
 		this.#elements = Array.from(pageFragment.children);
 
-		this.#searchBar = new SearchBar(pageFragment.querySelector('.searchbar-container'));
+		const autocompleter = new TagAutocompleter(this.#elements.find((element) => element.classList.contains('search-view')));
+
+		this.#searchBar = new SearchBar(pageFragment.querySelector('header'), autocompleter);
 		this.#imageGrid = new ImageGrid(pageFragment.querySelector('.image-grid'));
 		this.#editor = new Editor(pageFragment.querySelector('.editor'));
+
+		this.#searchBar.body.addEventListener('keydown', (event) => {
+			// @ts-ignore
+			switch (event.key) {
+				case 'Enter':
+					if (this.#searchBar.bodyText.length !== 0) {
+						this.#searchBar.addTag(this.#searchBar.bodyText);
+						this.#searchBar.clearInput();
+					}
+					setTimeout(() => {
+						if (autocompleter.isHidden && !this.#searchBar.tags.some((tag) => tag.type === 'wrong') && this.#searchBar.tags.length !== 0) {
+							console.log(2);
+						}
+					}, 1);
+			}
+		});
+
+		this.#searchBar.searchButton.addEventListener('click', () => {
+			if (this.#searchBar.bodyText.length !== 0) {
+				this.#searchBar.addTag(this.#searchBar.bodyText);
+				this.#searchBar.clearInput();
+			}
+			setTimeout(() => {
+				if (autocompleter.isHidden && !this.#searchBar.tags.some((tag) => tag.type === 'wrong') && this.#searchBar.tags.length !== 0) {
+					console.log(2);
+				}
+			}, 1);
+		});
 	}
 
 	/**

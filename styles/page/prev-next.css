@@ -1,11 +1,25 @@
 .prev-next-container {
-	position: absolute;
-	top: 15px;
-	left: 20px;
+	z-index: 1;
+
+	position: fixed;
+	top: 41px;
+	left: 40px;
 
 	display: flex;
 
+	align-items: center;
+
 	column-gap: 15px;
+
+	width: 100%;
+
+	padding: 15px 0 15px 20px;
+
+	background-color: rgb(251, 250, 253);
+
+	border-bottom: 1px solid rgb(233, 233, 233);
+
+	box-shadow: 10px -3px 10px rgba(0, 0, 0, 0.03);
 }
 
 .prev-next-container button {

@@ -4,6 +4,8 @@ const path = require('node:path');
 const startTestDatabase = require('./test/dbTest.js');
 const settings = require('./scripts/main/settings.js');
 
+const Database = require('./scripts/main/general/db.js');
+
 function createWindow() {
 	const win = new BrowserWindow({
 		title: 'ciel',
@@ -31,6 +33,9 @@ function createWindow() {
 }
 
 app.whenReady().then(() => {
+	const db = new Database(path.join(app.getPath('userData'), 'data.db'));
+	startTestDatabase(db);
+
 	ipcMain.handle('get-settings', async () => {
 		return (await settings.init()).properties;
 	});
@@ -39,7 +44,13 @@ app.whenReady().then(() => {
 		Object.assign(settings, config);
 	});
 
-	startTestDatabase(path.join(app.getPath('userData'), 'test.db'));
+	ipcMain.handle('exist-tag', async (event, tag) => {
+		return db.existTag(tag);
+	});
+
+	ipcMain.handle('all-tags', () => {
+		return db.getAllTags();
+	});
 
 	createWindow();
 });

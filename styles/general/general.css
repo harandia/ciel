@@ -19,7 +19,7 @@ body {
 }
 
 .scrollable::-webkit-scrollbar {
-	width: 6px;
+	width: 7px;
 	height: auto;
 }
 
@@ -34,4 +34,8 @@ body {
 
 *:focus-visible {
 	outline: solid 1px rgb(16, 219, 255);
+}
+
+::selection {
+	background-color: rgb(215, 250, 255);
 }

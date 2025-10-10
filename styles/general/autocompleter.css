@@ -11,8 +11,8 @@
 	z-index: 3;
 
 	position: absolute;
-	top: 110px;
-	left: 570px;
+	top: var(--autocompleter-top);
+	left: var(--autocompleter-left);
 
 	padding: 10px;
 
@@ -46,8 +46,11 @@
 }
 
 .autocompleter li:hover {
-	color: white;
-	background-color: rgb(139, 217, 241);
+	background-color: rgb(204, 243, 255);
+}
+
+.autocompleter .autocompleter-selected {
+	background-color: rgb(172, 236, 255);
 }
 
 .autocompleter-hidden {

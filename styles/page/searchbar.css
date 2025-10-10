@@ -35,6 +35,8 @@ main header {
 }
 
 .searchbar-body {
+	cursor: text;
+
 	contain: inline-size;
 
 	overflow: scroll;
@@ -44,6 +46,10 @@ main header {
 
 	height: 45px;
 
+	padding-left: 5px;
+
+	font-size: 14px;
+
 	flex: 1;
 	min-width: 100px;
 
@@ -52,7 +58,8 @@ main header {
 	column-gap: 3px;
 }
 
-.searchbar:has(.searchbar-input:focus) {
+.searchbar:has(.searchbar-input:focus),
+.searchbar:has(.searchbar-body:focus) {
 	outline: solid 1px rgb(16, 219, 255);
 }
 
@@ -69,7 +76,8 @@ main header {
 	border: none;
 }
 
-.searchbar-input:focus {
+.searchbar-input:focus,
+.searchbar-body:focus {
 	outline: none;
 }
 
@@ -145,4 +153,10 @@ main header {
 
 .searchbar-search-button:hover {
 	background-color: rgb(188, 240, 255);
+}
+
+.searchbar-search-button-disabled {
+	pointer-events: none;
+
+	opacity: 0.3;
 }

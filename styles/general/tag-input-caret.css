@@ -1,0 +1,14 @@
+.tag-input-caret {
+	min-height: 1lh;
+	min-width: 1px;
+
+	background-color: black;
+
+	animation: blink 1.3s steps(2, start) infinite;
+}
+
+@keyframes blink {
+	to {
+		visibility: hidden;
+	}
+}

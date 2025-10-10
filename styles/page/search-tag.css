@@ -17,11 +17,6 @@
 	text-decoration: line-through;
 }
 
-.wrong-tag {
-	color: rgb(255, 0, 76);
-	background-color: rgb(255, 202, 218);
-}
-
 .new-tag {
 	color: white;
 	background-color: rgb(149, 208, 248);
@@ -44,4 +39,9 @@
 
 .excluded-tag {
 	background-color: rgb(255, 218, 149);
+}
+
+.wrong-tag {
+	color: rgb(255, 0, 76);
+	background-color: rgb(255, 202, 218);
 }

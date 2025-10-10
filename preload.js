@@ -22,4 +22,19 @@ contextBridge.exposeInMainWorld('app', {
 	setZoom: (zoom) => {
 		webFrame.setZoomFactor(zoom / 100);
 	},
+	/**
+	 * Returns true if the tag exists in the database.
+	 * @param {string} tag
+	 * @returns {Promise<boolean>}
+	 */
+	existTag: (tag) => {
+		return ipcRenderer.invoke('exist-tag', tag);
+	},
+	/**
+	 * Returns all the tags stored in the database.
+	 * @returns {Promise<string[]>}
+	 */
+	getTags: () => {
+		return ipcRenderer.invoke('all-tags');
+	},
 });
