@@ -33,7 +33,7 @@ class Tag {
 	}
 
 	/**
-	 * It returns a Tag object built from the given a search-tag HTML element,
+	 * It returns a Tag object built from the given a search-tag HTML element, this object creates a whole new element of its own.
 	 * @param {HTMLElement} element
 	 * @returns {Tag}
 	 */

@@ -34,11 +34,6 @@ class SearchBar extends TagInput {
 	}
 
 	#updateSearchButton() {
-		if (this.tags.length === 0) {
-			this.#searchButton.classList.add('searchbar-search-button-disabled');
-			return;
-		}
-
 		if (this.tags.some((tag) => tag.type === 'wrong')) {
 			this.#searchButton.classList.add('searchbar-search-button-disabled');
 			return;
@@ -79,16 +74,26 @@ class SearchBar extends TagInput {
 	 */
 	async addTag(tag) {
 		let type;
-		if (!(await window.app.existTag(tag))) {
-			type = 'wrong';
+		if (tag.startsWith('!')) {
+			tag = tag.slice(1);
+			if (!(await window.app.existTag(tag))) {
+				type = 'wrong';
+			} else {
+				type = 'excluded';
+			}
 		} else {
-			type = 'normal';
+			if (!(await window.app.existTag(tag))) {
+				type = 'wrong';
+			} else {
+				type = 'normal';
+			}
 		}
+
 		// @ts-ignore
 		const newTag = new Tag(tag, type);
 
 		newTag.element.addEventListener('click', () => {
-			this.removeTag(tag);
+			this.removeTag(newTag);
 		});
 
 		this._addTag(newTag);
@@ -101,7 +106,7 @@ class SearchBar extends TagInput {
 	 * Deletes the first tag with the specified name if param is a string.
 	 * Deletes the tag in that specific position if param is a number.
 	 * The positions go from 0 to tagCount - 1. Negative numbers are allowed and start from the last position.
-	 * @param {number | Tag | string} param
+	 * @param {number | Tag} param
 	 * @returns {boolean}
 	 */
 	removeTag(param) {
@@ -119,17 +124,6 @@ class SearchBar extends TagInput {
 					isRemoved = true;
 				} else isRemoved = false;
 			}
-		} else if (typeof param === 'string') {
-			isRemoved = false;
-
-			for (let i = 0; i < this.tagCount; i++) {
-				// @ts-ignore
-				if (Tag.fromElement(children[i]).name === param) {
-					const removed = this._container.removeChild(children[i]);
-
-					isRemoved = true;
-				}
-			}
 		} else {
 			isRemoved = false;
 
@@ -138,6 +132,7 @@ class SearchBar extends TagInput {
 				if (param.equals(Tag.fromElement(children[i]))) {
 					const removed = this._container.removeChild(children[i]);
 					isRemoved = true;
+					break;
 				}
 			}
 		}

@@ -39,7 +39,19 @@ class TagInput {
 				const inputRect = this._input.getBoundingClientRect();
 				autocompleter.show(inputRect.x - 50, inputRect.y - 50);
 			}
-			autocompleter.showOptions(this._input.textContent.toLowerCase());
+			const text = this._input.textContent.startsWith('!')
+				? this._input.textContent.trim().toLowerCase().slice(1)
+				: this._input.textContent.trim().toLowerCase();
+			autocompleter.showOptions(text);
+		};
+
+		const autocomplete = () => {
+			let text = autocompleter.selectedOption;
+			if (this._input.textContent.startsWith('!')) {
+				text = '!' + text;
+			}
+			this.addTag(text);
+			this._input.textContent = '';
 		};
 
 		const caretHandle = (event) => {
@@ -141,16 +153,14 @@ class TagInput {
 					event.preventDefault();
 
 					if (autocompleter.selectedOption) {
-						this.addTag(autocompleter.selectedOption);
-						this._input.textContent = '';
+						autocomplete();
 					}
 					break;
 				case 'Tab':
 					event.preventDefault();
 
 					if (autocompleter.selectedOption) {
-						this.addTag(autocompleter.selectedOption);
-						this._input.textContent = '';
+						autocomplete();
 					}
 					break;
 				case ' ':
@@ -174,12 +184,12 @@ class TagInput {
 				case 'ArrowUp':
 					break;
 				case 'Tab':
-					if (this._input.textContent.length === 0 && !autocompleter.selectedOption) {
+					if (this._input.textContent.trim().length === 0 && !autocompleter.selectedOption) {
 						updateAutocompleter();
 						break;
 					}
 				default:
-					if (this._input.textContent.length === 0) {
+					if (this._input.textContent.trim().length === 0) {
 						autocompleter.hide();
 					} else {
 						updateAutocompleter();
@@ -218,8 +228,7 @@ class TagInput {
 		document.addEventListener('mousedown', (event) => {
 			// @ts-ignore
 			if (event.composedPath().some((element) => Array.from(autocompleter.element.children).includes(element))) {
-				this.addTag(autocompleter.selectedOption);
-				this._input.textContent = '';
+				autocomplete();
 			}
 		});
 
@@ -229,7 +238,7 @@ class TagInput {
 				updateAutocompleter();
 			}
 
-			if (this._input.textContent.length === 0) autocompleter.hide();
+			if (this._input.textContent.trim().length === 0) autocompleter.hide();
 		});
 	}
 

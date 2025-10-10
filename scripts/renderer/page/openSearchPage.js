@@ -10,13 +10,10 @@ import SearchPage from './searchPage.js';
  * @class
  */
 class OpenSearchPage extends SearchPage {
-	/** @type {Set<string>} */
-	#unsearchedTags;
-
 	/** @type {SearchBar} */
 	#searchBar;
 	/** @type {ImageGrid} */
-	#imageGrid;
+	_imageGrid;
 	/** @type {Editor} */
 	#editor;
 	/** @type {HTMLElement[]} */
@@ -38,7 +35,8 @@ class OpenSearchPage extends SearchPage {
 		} else {
 			super();
 		}
-		this.#unsearchedTags = new Set(this._searchTags);
+
+		console.log(this.searchTags);
 
 		this.#onClose = [];
 		this.#onSearch = [];
@@ -51,8 +49,12 @@ class OpenSearchPage extends SearchPage {
 		const autocompleter = new TagAutocompleter(this.#elements.find((element) => element.classList.contains('search-view')));
 
 		this.#searchBar = new SearchBar(pageFragment.querySelector('header'), autocompleter);
-		this.#imageGrid = new ImageGrid(pageFragment.querySelector('.image-grid'));
+		this._imageGrid = new ImageGrid(pageFragment.querySelector('.image-grid'));
 		this.#editor = new Editor(pageFragment.querySelector('.editor'));
+
+		for (const tag of this.searchTags) {
+			this.#searchBar.addTag(tag);
+		}
 
 		this.#searchBar.body.addEventListener('keydown', (event) => {
 			// @ts-ignore
@@ -63,8 +65,8 @@ class OpenSearchPage extends SearchPage {
 						this.#searchBar.clearInput();
 					}
 					setTimeout(() => {
-						if (autocompleter.isHidden && !this.#searchBar.tags.some((tag) => tag.type === 'wrong') && this.#searchBar.tags.length !== 0) {
-							console.log(2);
+						if (autocompleter.isHidden && !this.#searchBar.tags.some((tag) => tag.type === 'wrong')) {
+							this.search();
 						}
 					}, 1);
 			}
@@ -76,36 +78,40 @@ class OpenSearchPage extends SearchPage {
 				this.#searchBar.clearInput();
 			}
 			setTimeout(() => {
-				if (autocompleter.isHidden && !this.#searchBar.tags.some((tag) => tag.type === 'wrong') && this.#searchBar.tags.length !== 0) {
-					console.log(2);
+				if (autocompleter.isHidden && !this.#searchBar.tags.some((tag) => tag.type === 'wrong')) {
+					this.search();
 				}
 			}, 1);
+		});
+
+		const searchTags = this.searchTags.filter((tag) => !tag.startsWith('!'));
+		const excludedTags = this.searchTags.filter((tag) => tag.startsWith('!')).map((tag) => tag.slice(1));
+		window.app.searchImage(searchTags, excludedTags).then((images) => {
+			this._imageGrid.showImages(images);
 		});
 	}
 
 	/**
-	 * Adds tag as a new search tag to the page, the tag won't be used until search() is called.
-	 * @param {string} tag
+	 * Returns a new OpenSearchPage with the search bar's tags. There should not be any wrong tags.
+	 * @returns {Promise<OpenSearchPage>}
 	 */
-	addSearchTag(tag) {
-		this.#unsearchedTags.add(tag);
-	}
+	async search() {
+		let newPage;
+		if (this.#searchBar.tags.length === 0) {
+			const { default: AllImagesSearchPage } = await import('./allImagesSearchPage.js');
+			newPage = new AllImagesSearchPage();
+		} else {
+			const newTags = [];
+			for (const tag of this.#searchBar.tags) {
+				if (tag.type === 'excluded') {
+					newTags.push('!' + tag.name);
+				} else {
+					newTags.push(tag.name);
+				}
+			}
 
-	/**
-	 * Removes the specified tag from the seach tags of the page, the change won't be effective until search() is called.
-	 * @param {string} tag
-	 */
-	removeSearchTag(tag) {
-		this.#unsearchedTags.delete(tag);
-	}
-
-	/**
-	 * Returns a new OpenSearchPage with all changes made to the page's tags applied.
-	 * @returns {OpenSearchPage}
-	 */
-	search() {
-		// @ts-ignore
-		const newPage = new OpenSearchPage(this.#unsearchedTags);
+			newPage = new OpenSearchPage(newTags);
+		}
 
 		for (const func of this.#onSearch) func(newPage);
 

@@ -1,6 +1,4 @@
 .image-grid {
-	--image-size: 250;
-
 	list-style: none;
 
 	margin: 20px 20px;
@@ -20,6 +18,8 @@
 }
 
 .image-grid li {
+	user-select: none;
+
 	position: relative;
 }
 
@@ -89,6 +89,6 @@
 	mask-size: 80%;
 }
 
-.image-grid-unselected-image {
+.image-grid:has(.image-grid-selected-image) .image-grid-image:not(.image-grid-selected-image) {
 	opacity: 0.5;
 }

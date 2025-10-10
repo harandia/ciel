@@ -4,7 +4,10 @@
  * @abstract
  */
 class SearchPage {
-	/**@type {Set<string>} */
+	/**
+	 * The tags that are excluded of the search are marked with a '!' at the beginning;
+	 * @type {Set<string>}
+	 */
 	_searchTags;
 
 	/**

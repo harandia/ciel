@@ -32,6 +32,7 @@ const shortcutSettingsPropertiesToDOMId = {
 //Start-up
 window.addEventListener('load', async () => {
 	const settings = await window.app.getSettings();
+	document.documentElement.style.setProperty('--image-size', settings.imageSize);
 	updateMenu(settings);
 });
 
@@ -58,7 +59,7 @@ document.querySelectorAll('.settings-slider').forEach((slider) => {
 settingsInput.sldeImageSize.addEventListener('change', (event) => {
 	const value = Number(event.target.value);
 	window.app.updateSettings({ imageSize: value });
-	document.querySelector('image-grid')?.style.setProperty('--image-size', value);
+	document.documentElement.style.setProperty('--image-size', value);
 });
 
 settingsInput.sldeZoom.addEventListener('change', (event) => {

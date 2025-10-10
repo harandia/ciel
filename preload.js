@@ -37,4 +37,22 @@ contextBridge.exposeInMainWorld('app', {
 	getTags: () => {
 		return ipcRenderer.invoke('all-tags');
 	},
+
+	/**
+	 * Returns the paths of all the images that have the provided searchTags and DON'T have the excludedTags.
+	 * @param {string | string[]} searchTags
+	 * @param {string | string[]} excludedTags
+	 * @returns {Promise<string[]>}
+	 */
+	searchImage: (searchTags, excludedTags) => {
+		return ipcRenderer.invoke('search-image', searchTags, excludedTags);
+	},
+
+	/**
+	 * Returns the paths of all the images stored in the database.
+	 * @returns {Promise<string[]>}
+	 */
+	getAllImages: () => {
+		return ipcRenderer.invoke('all-images');
+	},
 });

@@ -52,6 +52,18 @@ app.whenReady().then(() => {
 		return db.getAllTags();
 	});
 
+	ipcMain.handle('search-image', (event, searchTags, excludedTags) => {
+		const imageFiles = db.getAllTaggedImages(searchTags, excludedTags);
+		const imageCompletePaths = imageFiles.map((file) => path.join(app.getPath('userData'), 'images', file));
+		return imageCompletePaths;
+	});
+
+	ipcMain.handle('all-images', () => {
+		const imageFiles = db.getAllImages();
+		const imageCompletePaths = imageFiles.map((file) => path.join(app.getPath('userData'), 'images', file));
+		return imageCompletePaths;
+	});
+
 	createWindow();
 });
 

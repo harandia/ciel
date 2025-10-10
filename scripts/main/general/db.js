@@ -219,28 +219,33 @@ class Database {
 	}
 
 	/**
-	 * Returns all the images associated with tag.
-	 * @param {string | string[]} tag
+	 * Returns all the images associated with the searchTags.
+	 * @param {string | string[]} searchTags
+	 * @param {string | string[]} excludedTags
 	 * @returns {string[]}
 	 */
-	getAllTaggedImages(tag) {
+	getAllTaggedImages(searchTags, excludedTags) {
 		try {
-			if (tag.constructor === Array) {
-				const stmtString = `SELECT image
-				FROM image_tag
-				WHERE tag IN (${Array(tag.length).fill('?').join(',')})
+			if (typeof searchTags === 'string') searchTags = [searchTags];
+			if (typeof excludedTags === 'string') excludedTags = [excludedTags];
+
+			const stmtString = `
+				SELECT image
+				FROM image_tag it
+				WHERE it.tag IN (${Array(searchTags.length).fill('?').join(',')})
+					AND NOT EXISTS (
+					SELECT 1
+					FROM image_tag it2
+					WHERE it.image = it2.image AND it2.tag IN (${Array(excludedTags.length).fill('?').join(',')}))
 				GROUP BY image
-				HAVING COUNT(*) = ?`;
-				return (
-					this.#db
-						.prepare(stmtString)
-						.all(...tag, tag.length)
-						// @ts-ignore
-						.map(({ image }) => image)
-				);
-			}
-			// @ts-ignore
-			return this.#getAllImagesTaggedStmt.all(tag).map(({ image }) => image);
+				HAVING COUNT(it.tag) = ?`;
+			return (
+				this.#db
+					.prepare(stmtString)
+					.all(...searchTags, ...excludedTags, searchTags.length)
+					// @ts-ignore
+					.map(({ image }) => image)
+			);
 		} catch (err) {
 			throw err;
 		}

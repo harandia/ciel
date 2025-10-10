@@ -70,13 +70,19 @@ class Tab {
 		this.#element.querySelector('.tab-title').textContent = this.title;
 	}
 
+	/**
+	 * Sets this tab's current page.
+	 * @param {OpenSearchPage | UploadPage} page
+	 */
 	#setPage(page) {
 		this.#page = page;
 		this.#updateTitle();
 
-		this.#page.addEventListener('search', (newPage) => {
-			this.loadPage(newPage);
-		});
+		if (page instanceof OpenSearchPage) {
+			this.#page.addEventListener('search', (newPage) => {
+				this.loadPage(newPage);
+			});
+		}
 
 		for (const func of this.#onPageLoad) func(this);
 	}
@@ -110,6 +116,7 @@ class Tab {
 		//@ts-ignore
 		if (prevPage instanceof ClosedSearchPage) prevPage = new OpenSearchPage(prevPage);
 
+		// @ts-ignore
 		this.#setPage(prevPage);
 	}
 
@@ -127,6 +134,7 @@ class Tab {
 		// @ts-ignore
 		if (nextPage instanceof ClosedSearchPage) nextPage = new OpenSearchPage(nextPage);
 
+		// @ts-ignore
 		this.#setPage(nextPage);
 	}
 
