@@ -64,4 +64,13 @@ contextBridge.exposeInMainWorld('app', {
 	getImageTags: (imagePath) => {
 		return ipcRenderer.invoke('image-tags', imagePath);
 	},
+
+	/**
+	 * Returns true if the image is successfully removed (file and database).
+	 * @param {string | string[]} imagePaths
+	 * @return {Promise<boolean>}
+	 */
+	deleteImage: (imagePaths) => {
+		return ipcRenderer.invoke('delete-image', imagePaths);
+	},
 });

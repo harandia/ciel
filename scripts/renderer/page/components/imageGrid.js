@@ -28,11 +28,11 @@ class ImageGrid {
 	showImages(paths) {
 		const children = this.#element.children;
 		for (let i = 0; i < children.length; i++) {
-			this.#removeImage(i);
+			this.removeImage(i);
 		}
 
 		for (const path of paths) {
-			this.#addImages(path);
+			this.addImages(path);
 		}
 
 		for (const func of this.#onshow) func(this.images);
@@ -97,7 +97,7 @@ class ImageGrid {
 	 * @param {string} imagePath
 	 * @returns {ImageGridImage}
 	 */
-	#addImages(imagePath) {
+	addImages(imagePath) {
 		const image = new ImageGridImage(imagePath);
 
 		image.element.addEventListener('click', (event) => {
@@ -126,7 +126,7 @@ class ImageGrid {
 	 * @param {ImageGridImage | number} param
 	 * @returns {boolean}
 	 */
-	#removeImage(param) {
+	removeImage(param) {
 		let removed;
 		const children = this.#element.children;
 		if (typeof param === 'number') {

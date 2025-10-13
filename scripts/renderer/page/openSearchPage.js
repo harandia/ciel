@@ -101,11 +101,12 @@ class OpenSearchPage extends SearchPage {
 			this._imageGrid.showImages(images);
 		});
 
-		this._imageGrid.addEventListener('select', (selection) => {
+		this._imageGrid.addEventListener('select', async (selection) => {
+			console.log(2);
 			if (selection.length === 0) {
 				this.#editor.hide();
 			} else {
-				this.#editor.show(selection);
+				await this.#editor.show(selection);
 			}
 		});
 
@@ -117,6 +118,13 @@ class OpenSearchPage extends SearchPage {
 				for (let i = 0; i < this._imageGrid.imageCount; i++) {
 					this._imageGrid.deselect(i);
 				}
+			}
+		});
+
+		this.#editor.addEventListener('delete', (deleted) => {
+			for (const image of deleted) {
+				this._imageGrid.deselect(image);
+				this._imageGrid.removeImage(image);
 			}
 		});
 	}
