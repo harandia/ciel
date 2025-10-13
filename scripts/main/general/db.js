@@ -229,7 +229,24 @@ class Database {
 			if (typeof searchTags === 'string') searchTags = [searchTags];
 			if (typeof excludedTags === 'string') excludedTags = [excludedTags];
 
-			const stmtString = `
+			if (excludedTags.length === 0) {
+				const stmtString = `
+				SELECT image
+				FROM image_tag it
+				WHERE it.tag IN (${Array(searchTags.length).fill('?').join(',')})
+				GROUP BY image
+				HAVING COUNT(it.tag) = ?`;
+				return (
+					this.#db
+						.prepare(stmtString)
+						.all(...searchTags, searchTags.length)
+						// @ts-ignore
+						.map(({ image }) => image)
+				);
+			}
+
+			if (searchTags.length !== 0 && excludedTags.length !== 0) {
+				const stmtString = `
 				SELECT image
 				FROM image_tag it
 				WHERE it.tag IN (${Array(searchTags.length).fill('?').join(',')})
@@ -239,13 +256,30 @@ class Database {
 					WHERE it.image = it2.image AND it2.tag IN (${Array(excludedTags.length).fill('?').join(',')}))
 				GROUP BY image
 				HAVING COUNT(it.tag) = ?`;
-			return (
-				this.#db
-					.prepare(stmtString)
-					.all(...searchTags, ...excludedTags, searchTags.length)
-					// @ts-ignore
-					.map(({ image }) => image)
-			);
+				return (
+					this.#db
+						.prepare(stmtString)
+						.all(...searchTags, ...excludedTags, searchTags.length)
+						// @ts-ignore
+						.map(({ image }) => image)
+				);
+			}
+
+			if (searchTags.length === 0) {
+				const stmtString = `
+				SELECT DISTINCT name
+				FROM image i
+					LEFT JOIN image_tag it
+						ON i.name = it.image AND it.tag IN (${Array(excludedTags.length).fill('?').join(',')})
+				WHERE it.image IS NULL`;
+				return (
+					this.#db
+						.prepare(stmtString)
+						.all(...excludedTags)
+						// @ts-ignore
+						.map(({ name }) => name)
+				);
+			}
 		} catch (err) {
 			throw err;
 		}

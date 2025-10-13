@@ -6,8 +6,12 @@ class Autocompleter {
 	//@ts-ignore
 	#element = document.getElementById('autocompleter').content.cloneNode(true).querySelector('.autocompleter');
 
-	constructor(parent) {
-		parent.appendChild(this.#element);
+	/**
+	 *
+	 * @param {Element} container
+	 */
+	constructor(container) {
+		container.appendChild(this.#element);
 
 		this.#element.addEventListener('mousedown', (event) => {
 			event.preventDefault();
@@ -207,6 +211,13 @@ class Autocompleter {
 	 */
 	get isHidden() {
 		return this.#element.classList.contains('autocompleter-hidden');
+	}
+
+	/**
+	 * Returns the element parent of the autocompleter element in the DOM.
+	 */
+	get parent() {
+		return this.#element.parentElement;
 	}
 }
 

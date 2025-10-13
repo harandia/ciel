@@ -3,6 +3,9 @@ import { Autocompleter } from './autocompleter.js';
 import TagInput from './tagInput.js';
 
 class SearchBar extends TagInput {
+	_autocompleterOffsetX = 20;
+	_autocompleterOffsetY = 50;
+
 	#body;
 	#searchButton;
 	#warning;
@@ -110,7 +113,7 @@ class SearchBar extends TagInput {
 	 * @returns {boolean}
 	 */
 	removeTag(param) {
-		const children = this._elements;
+		const children = this._tagElements;
 		let isRemoved;
 		if (typeof param === 'number') {
 			if (param >= 0) {

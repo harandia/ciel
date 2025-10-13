@@ -55,4 +55,13 @@ contextBridge.exposeInMainWorld('app', {
 	getAllImages: () => {
 		return ipcRenderer.invoke('all-images');
 	},
+
+	/**
+	 * Returns all the tags associated with an image path (complete path).
+	 * @param {string} image
+	 * @returns {Promise<string>}
+	 */
+	getImageTags: (imagePath) => {
+		return ipcRenderer.invoke('image-tags', imagePath);
+	},
 });

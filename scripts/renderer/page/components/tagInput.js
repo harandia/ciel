@@ -1,7 +1,19 @@
 import Tag from '../../tag.js';
 import TagAutocompleter, { Autocompleter } from './autocompleter.js';
 
+/**
+ * @class
+ * @abstract
+ */
 class TagInput {
+	/**Autocompleter offset position in pixels */
+	_autocompleterOffsetX = 0;
+	_autocompleterOffsetY = 0;
+
+	/**Autocompleter last registered position */
+	#autocompleterX;
+	#autocompleterY;
+
 	/** @type {HTMLElement} */
 	_container;
 
@@ -33,12 +45,25 @@ class TagInput {
 
 		const updateAutocompleter = () => {
 			const caretRect = window.getSelection().getRangeAt(0).getBoundingClientRect();
-			if (caretRect.x && caretRect.y) {
-				autocompleter.show(caretRect.x - 50, caretRect.y - 50);
+			const containerParentRect = autocompleter.parent.getBoundingClientRect();
+			const completerRect = autocompleter.element.getBoundingClientRect();
+
+			const positionx = caretRect.x - containerParentRect.x + this._autocompleterOffsetX;
+			const positiony = caretRect.y - containerParentRect.y + this._autocompleterOffsetY;
+
+			const autcompleterOverflows = containerParentRect.x + containerParentRect.width - caretRect.x <= completerRect.width - 20;
+
+			if (!autcompleterOverflows) {
+				if (caretRect.x && caretRect.y) {
+					autocompleter.show(positionx, positiony);
+
+					this.#autocompleterX = positionx;
+					this.#autocompleterY = positiony;
+				}
 			} else {
-				const inputRect = this._input.getBoundingClientRect();
-				autocompleter.show(inputRect.x - 50, inputRect.y - 50);
+				autocompleter.show(this.#autocompleterX, this.#autocompleterY);
 			}
+
 			const text = this._input.textContent.startsWith('!')
 				? this._input.textContent.trim().toLowerCase().slice(1)
 				: this._input.textContent.trim().toLowerCase();
@@ -69,8 +94,10 @@ class TagInput {
 				}
 			} else if (event.key === 'Backspace') {
 				if (caretElement.previousElementSibling) {
+					const removingElemente = caretElement.previousElementSibling;
+					this._container.insertBefore(caretElement, removingElemente);
 					// @ts-ignore
-					this.removeTag(Tag.fromElement(caretElement.previousElementSibling));
+					this.removeTag(Tag.fromElement(removingElemente));
 				}
 			} else {
 				this._input.focus();
@@ -85,7 +112,7 @@ class TagInput {
 		const insertCaret = (pos) => {
 			this._container.focus();
 
-			const children = this._elements;
+			const children = this._tagElements;
 			if (!this._container.contains(caretElement)) {
 				this._container.addEventListener(
 					'blur',
@@ -114,40 +141,45 @@ class TagInput {
 					break;
 				case 'ArrowDown':
 					event.preventDefault();
-					if (autocompleter.options.length !== 0) {
-						if (autocompleter.selectedIndex !== autocompleter.options.length - 1) {
-							autocompleter.selectOption(autocompleter.selectedIndex + 1).scrollIntoView({
-								behavior: 'smooth',
-								block: 'nearest',
-								inline: 'nearest',
-							});
-						} else {
-							autocompleter.selectOption(0).scrollIntoView({
-								behavior: 'smooth',
-								block: 'nearest',
-								inline: 'nearest',
-							});
+					if (!autocompleter.isHidden) {
+						if (autocompleter.options.length !== 0) {
+							if (autocompleter.selectedIndex !== autocompleter.options.length - 1) {
+								autocompleter.selectOption(autocompleter.selectedIndex + 1).scrollIntoView({
+									behavior: 'smooth',
+									block: 'nearest',
+									inline: 'nearest',
+								});
+							} else {
+								autocompleter.selectOption(0).scrollIntoView({
+									behavior: 'smooth',
+									block: 'nearest',
+									inline: 'nearest',
+								});
+							}
 						}
 					}
 
 					break;
 				case 'ArrowUp':
 					event.preventDefault();
-					if (autocompleter.options.length !== 0) {
-						if (autocompleter.selectedIndex > 0) {
-							autocompleter.selectOption(autocompleter.selectedIndex - 1).scrollIntoView({
-								behavior: 'smooth',
-								block: 'nearest',
-								inline: 'nearest',
-							});
-						} else {
-							autocompleter.selectOption(autocompleter.options.length - 1).scrollIntoView({
-								behavior: 'smooth',
-								block: 'nearest',
-								inline: 'nearest',
-							});
+					if (!autocompleter.isHidden) {
+						if (autocompleter.options.length !== 0) {
+							if (autocompleter.selectedIndex > 0) {
+								autocompleter.selectOption(autocompleter.selectedIndex - 1).scrollIntoView({
+									behavior: 'smooth',
+									block: 'nearest',
+									inline: 'nearest',
+								});
+							} else {
+								autocompleter.selectOption(autocompleter.options.length - 1).scrollIntoView({
+									behavior: 'smooth',
+									block: 'nearest',
+									inline: 'nearest',
+								});
+							}
 						}
 					}
+
 					break;
 				case 'Enter':
 					event.preventDefault();
@@ -202,6 +234,7 @@ class TagInput {
 		this._input.addEventListener('beforeinput', (event) => {
 			if (event.inputType === 'deleteContentBackward') {
 				if (this._input.textContent.length === 0) {
+					insertCaret(1);
 					this.removeTag(-1);
 				}
 			}
@@ -213,8 +246,16 @@ class TagInput {
 
 		this._container.addEventListener('click', (event) => {
 			if (event.target === this._container) {
-				const children = this._elements;
-				for (let i = 0; i < children.length - 1; i++) {
+				const children = this._tagElements;
+				let firstOfRow = 0;
+				for (let i = 1; i < children.length - 1; i++) {
+					const rect = children[i].getBoundingClientRect();
+
+					if (rect.y > event.clientY) break;
+
+					if (rect.y > children[firstOfRow].getBoundingClientRect().y) firstOfRow = i;
+				}
+				for (let i = firstOfRow; i < children.length - 1; i++) {
 					const rect = children[i].getBoundingClientRect();
 					if (rect.x + rect.width / 2 > event.clientX) {
 						insertCaret(children.length - i - 1);
@@ -292,7 +333,7 @@ class TagInput {
 	 * Returns the tag elements stored in the container.
 	 * @returns {Element[]}
 	 */
-	get _elements() {
+	get _tagElements() {
 		const children = this._container.children;
 		const tags = [];
 		for (let i = 0; i < children.length; i++) {

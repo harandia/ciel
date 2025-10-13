@@ -105,7 +105,7 @@ class Tab {
 	/**
 	 * Loads the the previous page in the tab history. This method should only be used if prevPages isn't empty.
 	 */
-	loadPrevPage() {
+	async loadPrevPage() {
 		if (this.#page instanceof UploadPage) {
 			this.#nextPages.push(new UploadPage());
 		} else {
@@ -114,7 +114,7 @@ class Tab {
 
 		let prevPage = this.#prevPages.pop();
 		//@ts-ignore
-		if (prevPage instanceof ClosedSearchPage) prevPage = new OpenSearchPage(prevPage);
+		if (prevPage instanceof ClosedSearchPage) prevPage = await OpenSearchPage.open(prevPage);
 
 		// @ts-ignore
 		this.#setPage(prevPage);
@@ -123,7 +123,7 @@ class Tab {
 	/**
 	 * Loads the the next page in the tab history. This method should only be used if nextPages isn't empty.
 	 */
-	loadNextPage() {
+	async loadNextPage() {
 		if (this.#page instanceof UploadPage) {
 			this.#prevPages.push(new UploadPage());
 		} else {
@@ -132,7 +132,7 @@ class Tab {
 
 		let nextPage = this.#nextPages.pop();
 		// @ts-ignore
-		if (nextPage instanceof ClosedSearchPage) nextPage = new OpenSearchPage(nextPage);
+		if (nextPage instanceof ClosedSearchPage) nextPage = await OpenSearchPage.open(nextPage);
 
 		// @ts-ignore
 		this.#setPage(nextPage);

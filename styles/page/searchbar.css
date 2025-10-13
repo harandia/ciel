@@ -16,6 +16,8 @@ main header {
 .searchbar {
 	flex: 1;
 
+	position: relative;
+
 	height: 45px;
 
 	padding: 0 15px;
@@ -64,6 +66,8 @@ main header {
 }
 
 .searchbar-input {
+	position: relative;
+
 	white-space: nowrap;
 
 	flex: 1;

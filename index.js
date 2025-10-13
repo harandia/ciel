@@ -64,6 +64,11 @@ app.whenReady().then(() => {
 		return imageCompletePaths;
 	});
 
+	ipcMain.handle('image-tags', (event, imagePath) => {
+		const imageId = path.basename(imagePath);
+		return db.getAllImageTags(imageId);
+	});
+
 	createWindow();
 });
 

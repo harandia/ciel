@@ -1,17 +1,24 @@
 class Tag {
-	/** @type {HTMLElement} */
+	/** @type {Element} */
 	#element;
 
 	/**
-	 *
-	 * @param {string} name
+	 * Builds a Tag object.
+	 * If param is a tag element in the DOM, no more parameters should be given, the Tag object will be built from the given search-tag HTML element
+	 * If param is the name of the tag, you can specify the type or use the default (normal).
+	 * @param {string | Element} param
 	 * @param {'normal' | 'wrong' | 'newAdded' | 'firstTime' | 'deleted' | 'excluded'} [type]
 	 */
-	constructor(name, type = 'normal') {
+	constructor(param, type = 'normal') {
+		if (param instanceof Element) {
+			this.#element = param;
+			return;
+		}
+
 		//@ts-ignore
 		this.#element = document.getElementById('search-tag').content.cloneNode(true).querySelector('.search-tag');
 
-		this.#element.textContent = name;
+		this.#element.textContent = param;
 
 		switch (type) {
 			case 'wrong':
@@ -21,7 +28,7 @@ class Tag {
 				this.#element.classList.add('new-tag');
 				break;
 			case 'firstTime':
-				this.#element.classList.add('first-time-tag');
+				this.#element.classList.add('first-time-tag', 'new-tag');
 				break;
 			case 'deleted':
 				this.#element.classList.add('deleted-tag');
@@ -33,37 +40,12 @@ class Tag {
 	}
 
 	/**
-	 * It returns a Tag object built from the given a search-tag HTML element, this object creates a whole new element of its own.
+	 * It returns a Tag object built from the given a search-tag HTML element.
 	 * @param {HTMLElement} element
 	 * @returns {Tag}
 	 */
 	static fromElement(element) {
-		let type = Array.from(element.classList).find((className) => className !== 'search-tag');
-		switch (type) {
-			case 'wrong-tag':
-				type = 'wrong';
-				break;
-			case 'new-tag':
-				type = 'newAdded';
-				break;
-			case 'first-time-tag':
-				type = 'firstTime';
-				break;
-			case 'deleted-tag':
-				type = 'deleted';
-				break;
-			case 'excluded-tag':
-				type = 'excluded';
-				break;
-			default:
-				type = 'normal';
-				break;
-		}
-
-		const name = element.textContent;
-
-		// @ts-ignore
-		return new Tag(name, type);
+		return new Tag(element);
 	}
 
 	/**
@@ -108,6 +90,8 @@ class Tag {
 				return 'deleted';
 			case 'excluded-tag':
 				return 'excluded';
+			default:
+				return 'normal';
 		}
 	}
 
@@ -126,7 +110,7 @@ class Tag {
 				classNewType = 'new-tag';
 				break;
 			case 'firstTime':
-				classNewType = 'first-time-tag';
+				classNewType = ['first-time-tag', 'newTag'];
 				break;
 			case 'deleted':
 				classNewType = 'deleted-tag';
@@ -138,12 +122,25 @@ class Tag {
 				classNewType = 'normal';
 				break;
 		}
-		this.#element.classList.replace(currentType, classNewType);
+		if (currentType) {
+			if (typeof classNewType === 'string') {
+				this.#element.classList.replace(currentType, classNewType);
+			} else {
+				this.#element.classList.remove(currentType);
+				this.#element.classList.add(classNewType[0], classNewType[1]);
+			}
+		} else {
+			if (typeof classNewType === 'string') {
+				this.#element.classList.add(classNewType);
+			} else {
+				this.#element.classList.add(classNewType[0], classNewType[1]);
+			}
+		}
 	}
 
 	/**
 	 * Returns this tag HTML element.
-	 * @return {HTMLElement}
+	 * @return {Element}
 	 */
 	get element() {
 		return this.#element;

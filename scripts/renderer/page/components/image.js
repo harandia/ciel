@@ -6,6 +6,25 @@ class ImageGridImage {
 	#image;
 
 	/**
+	 * Returns if the given element has the structure of an ImageGridImage element.
+	 * @param {Element} element
+	 * @returns {boolean}
+	 */
+	static isImageGridImage(element) {
+		return (
+			element.matches('li') &&
+			element.children.length === 2 &&
+			element.children[0].matches('img') &&
+			element.children[0].classList.contains('image-grid-image') &&
+			element.children[1].matches('button') &&
+			element.children[1].classList.contains('image-delete-button')
+		);
+	}
+
+	/**
+	 * Builds an ImageGridImage.
+	 * If param is a string, it will build an ImageGridImage with the given image path.
+	 * If param is an Element, it will build an ImageGridImage from the given element.
 	 * @param {string | Element} param
 	 */
 	constructor(param) {

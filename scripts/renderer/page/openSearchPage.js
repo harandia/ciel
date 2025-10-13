@@ -1,3 +1,4 @@
+import ClosedAllImagesSearchPage from './closedAllImagesSearchPage.js';
 import ClosedSearchPage from './closedSearchPage.js';
 import TagAutocompleter from './components/autocompleter.js';
 import Editor from './components/editor.js';
@@ -20,25 +21,35 @@ class OpenSearchPage extends SearchPage {
 	#elements;
 
 	/** @type {Function[]}} */
-	#onClose;
+	_onClose;
 	/** @type {Function[]} */
 	#onSearch;
 
-	/** @param {SearchPage | string[] | Set<string>} [param]*/
+	/**
+	 * Returns the open version of the given closed page.
+	 * @param {ClosedSearchPage} closedPage
+	 * @returns {Promise<OpenSearchPage>}
+	 */
+	static async open(closedPage) {
+		let openPage;
+		if (closedPage instanceof ClosedAllImagesSearchPage) {
+			const { AllImagesSearchPage } = await import('./allImagesSearchPage.js');
+			return new AllImagesSearchPage();
+		} else {
+			openPage = new OpenSearchPage(closedPage.searchTags);
+		}
+		return openPage;
+	}
+
+	/** @param {string[] | Set<string>} [param]*/
 	constructor(param) {
 		if (param) {
-			if (param instanceof SearchPage) {
-				super(param.searchTags);
-			} else {
-				super(param);
-			}
+			super(param);
 		} else {
 			super();
 		}
 
-		console.log(this.searchTags);
-
-		this.#onClose = [];
+		this._onClose = [];
 		this.#onSearch = [];
 
 		//@ts-ignore
@@ -46,7 +57,7 @@ class OpenSearchPage extends SearchPage {
 
 		this.#elements = Array.from(pageFragment.children);
 
-		const autocompleter = new TagAutocompleter(this.#elements.find((element) => element.classList.contains('search-view')));
+		const autocompleter = new TagAutocompleter(pageFragment.querySelector('header'));
 
 		this.#searchBar = new SearchBar(pageFragment.querySelector('header'), autocompleter);
 		this._imageGrid = new ImageGrid(pageFragment.querySelector('.image-grid'));
@@ -89,6 +100,25 @@ class OpenSearchPage extends SearchPage {
 		window.app.searchImage(searchTags, excludedTags).then((images) => {
 			this._imageGrid.showImages(images);
 		});
+
+		this._imageGrid.addEventListener('select', (selection) => {
+			if (selection.length === 0) {
+				this.#editor.hide();
+			} else {
+				this.#editor.show(selection);
+			}
+		});
+
+		pageFragment.querySelector('.search-view').addEventListener('click', (event) => {
+			if (
+				!this._imageGrid.images.some((image) => event.composedPath().includes(image.element)) &&
+				!event.composedPath().includes(this.#searchBar.body)
+			) {
+				for (let i = 0; i < this._imageGrid.imageCount; i++) {
+					this._imageGrid.deselect(i);
+				}
+			}
+		});
 	}
 
 	/**
@@ -98,7 +128,7 @@ class OpenSearchPage extends SearchPage {
 	async search() {
 		let newPage;
 		if (this.#searchBar.tags.length === 0) {
-			const { default: AllImagesSearchPage } = await import('./allImagesSearchPage.js');
+			const { AllImagesSearchPage } = await import('./allImagesSearchPage.js');
 			newPage = new AllImagesSearchPage();
 		} else {
 			const newTags = [];
@@ -125,7 +155,7 @@ class OpenSearchPage extends SearchPage {
 	close() {
 		const closedPage = new ClosedSearchPage(this.searchTags);
 
-		for (const func of this.#onClose) func(closedPage);
+		for (const func of this._onClose) func(closedPage);
 
 		return closedPage;
 	}
@@ -158,8 +188,8 @@ class OpenSearchPage extends SearchPage {
 	 * @param {Function} callback
 	 */
 	addEventListener(eventType, callback) {
-		if (eventType === 'close' && !this.#onClose.includes(callback)) {
-			this.#onClose.push(callback);
+		if (eventType === 'close' && !this._onClose.includes(callback)) {
+			this._onClose.push(callback);
 		} else if (eventType === 'search' && !this.#onSearch.includes(callback)) {
 			this.#onSearch.push(callback);
 		}
@@ -172,7 +202,7 @@ class OpenSearchPage extends SearchPage {
 	 */
 	removeEventListener(eventType, callback) {
 		let eventCallbacks;
-		if (eventType === 'close') eventCallbacks = this.#onClose;
+		if (eventType === 'close') eventCallbacks = this._onClose;
 		else if (eventType === 'search') eventCallbacks = this.#onSearch;
 
 		eventCallbacks.splice(

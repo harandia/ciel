@@ -1,3 +1,4 @@
+import ClosedAllImagesSearchPage from './closedAllImagesSearchPage.js';
 import OpenSearchPage from './openSearchPage.js';
 
 class AllImagesSearchPage extends OpenSearchPage {
@@ -8,6 +9,14 @@ class AllImagesSearchPage extends OpenSearchPage {
 			this._imageGrid.showImages(images);
 		});
 	}
+
+	close() {
+		const closedPage = new ClosedAllImagesSearchPage();
+
+		for (const func of this._onClose) func(closedPage);
+
+		return closedPage;
+	}
 }
 
-export default AllImagesSearchPage;
+export { AllImagesSearchPage };
