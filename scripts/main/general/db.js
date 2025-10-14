@@ -219,9 +219,9 @@ class Database {
 	}
 
 	/**
-	 * Returns all the images associated with the searchTags.
+	 * Returns all the images associated with the searchTags. If no image is found, it will return an empty array ([]);
 	 * @param {string | string[]} searchTags
-	 * @param {string | string[]} excludedTags
+	 * @param {string | string[]} [excludedTags]
 	 * @returns {string[]}
 	 */
 	getAllTaggedImages(searchTags, excludedTags) {
@@ -229,7 +229,7 @@ class Database {
 			if (typeof searchTags === 'string') searchTags = [searchTags];
 			if (typeof excludedTags === 'string') excludedTags = [excludedTags];
 
-			if (excludedTags.length === 0) {
+			if (excludedTags && excludedTags.length === 0) {
 				const stmtString = `
 				SELECT image
 				FROM image_tag it
@@ -245,7 +245,7 @@ class Database {
 				);
 			}
 
-			if (searchTags.length !== 0 && excludedTags.length !== 0) {
+			if (searchTags.length !== 0 && excludedTags && excludedTags.length !== 0) {
 				const stmtString = `
 				SELECT image
 				FROM image_tag it

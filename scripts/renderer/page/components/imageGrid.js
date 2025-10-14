@@ -100,18 +100,34 @@ class ImageGrid {
 	addImages(imagePath) {
 		const image = new ImageGridImage(imagePath);
 
+		let clickTimer;
+
 		image.element.addEventListener('click', (event) => {
-			// @ts-ignore
-			if (event.ctrlKey) {
-				if (!image.isSelected) image.select();
-				else image.deselect();
-			} else {
-				image.select();
-				for (const otherImage of Array.from(this.#element.children)) {
-					if (otherImage !== image.element) new ImageGridImage(otherImage).deselect();
-				}
+			if (!clickTimer) {
+				clickTimer = setTimeout(() => {
+					// @ts-ignore
+					if (event.ctrlKey) {
+						if (!image.isSelected) image.select();
+						else image.deselect();
+					} else {
+						image.select();
+						for (const otherImage of Array.from(this.#element.children)) {
+							if (otherImage !== image.element) new ImageGridImage(otherImage).deselect();
+						}
+					}
+
+					clickTimer = undefined;
+
+					for (const func of this.#onselect) func(this.selectedImages);
+				}, 225);
 			}
-			for (const func of this.#onselect) func(this.selectedImages);
+		});
+
+		image.element.addEventListener('dblclick', () => {
+			clearTimeout(clickTimer);
+			window.app.openImage(image.path);
+
+			clickTimer = undefined;
 		});
 
 		this.#element.appendChild(image.element);

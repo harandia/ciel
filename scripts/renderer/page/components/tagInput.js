@@ -44,6 +44,7 @@ class TagInput {
 		const caretElement = caret();
 
 		const updateAutocompleter = () => {
+			console.log('funcion actualizar');
 			const caretRect = window.getSelection().getRangeAt(0).getBoundingClientRect();
 			const containerParentRect = autocompleter.parent.getBoundingClientRect();
 			const completerRect = autocompleter.element.getBoundingClientRect();
@@ -51,7 +52,7 @@ class TagInput {
 			const positionx = caretRect.x - containerParentRect.x + this._autocompleterOffsetX;
 			const positiony = caretRect.y - containerParentRect.y + this._autocompleterOffsetY;
 
-			const autcompleterOverflows = containerParentRect.x + containerParentRect.width - caretRect.x <= completerRect.width - 20;
+			const autcompleterOverflows = containerParentRect.x + containerParentRect.width - caretRect.x <= completerRect.width - 10;
 
 			if (!autcompleterOverflows) {
 				if (caretRect.x && caretRect.y) {
@@ -61,7 +62,9 @@ class TagInput {
 					this.#autocompleterY = positiony;
 				}
 			} else {
-				autocompleter.show(this.#autocompleterX, this.#autocompleterY);
+				const overflowx = completerRect.width - 20 - (containerParentRect.x + containerParentRect.width - caretRect.x);
+
+				autocompleter.show(positionx - overflowx - 10, positiony);
 			}
 
 			const text = this._input.textContent.startsWith('!')
@@ -217,6 +220,7 @@ class TagInput {
 					break;
 				case 'Tab':
 					if (this._input.textContent.trim().length === 0 && !autocompleter.selectedOption) {
+						console.log('tab');
 						updateAutocompleter();
 						break;
 					}
@@ -224,6 +228,7 @@ class TagInput {
 					if (this._input.textContent.trim().length === 0) {
 						autocompleter.hide();
 					} else {
+						console.log('keydown');
 						updateAutocompleter();
 					}
 
@@ -276,6 +281,7 @@ class TagInput {
 		document.addEventListener('mouseup', (event) => {
 			// @ts-ignore
 			if (event.composedPath().some((element) => Array.from(autocompleter.element.children).includes(element))) {
+				console.log('mouseup');
 				updateAutocompleter();
 			}
 

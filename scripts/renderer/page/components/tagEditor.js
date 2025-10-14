@@ -69,6 +69,8 @@ class TagEditor extends TagInput {
 		});
 
 		this._addTag(newTag);
+
+		this.#updateFirstTimeWarning();
 	}
 
 	/**

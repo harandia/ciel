@@ -66,6 +66,34 @@ class Editor {
 				for (const func of this.#ondelete) func(this.#selectedImages);
 			}
 		});
+
+		this.#openButton.addEventListener('click', () => {
+			for (const image of this.#selectedImages) {
+				window.app.openImage(image.path);
+			}
+		});
+
+		this.#applyButton.addEventListener('click', () => {
+			/** @type {{addedTags: string[], deletedTags: string[]}} */
+			const changes = {
+				addedTags: [],
+				deletedTags: [],
+			};
+
+			for (const tag of this.#tagEditor.tags) {
+				if (tag.type === 'deleted') {
+					changes.deletedTags.push(tag.name);
+				} else if (tag.type === 'newAdded' || tag.type === 'firstTime') {
+					changes.addedTags.push(tag.name);
+				}
+			}
+
+			for (const image of this.#selectedImages) {
+				window.app.updateImage(image.path, changes);
+			}
+
+			this.show(this.#selectedImages);
+		});
 	}
 
 	/**

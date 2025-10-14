@@ -1,6 +1,8 @@
 .search-tag {
 	cursor: pointer;
 
+	user-select: none;
+
 	white-space: nowrap;
 
 	font-size: 14px;

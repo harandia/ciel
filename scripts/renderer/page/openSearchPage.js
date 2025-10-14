@@ -102,7 +102,6 @@ class OpenSearchPage extends SearchPage {
 		});
 
 		this._imageGrid.addEventListener('select', async (selection) => {
-			console.log(2);
 			if (selection.length === 0) {
 				this.#editor.hide();
 			} else {

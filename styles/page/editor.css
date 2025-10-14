@@ -143,6 +143,8 @@
 }
 
 .editor-preview-image {
+	user-select: none;
+
 	flex: 1;
 
 	width: 1px;

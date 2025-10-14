@@ -57,7 +57,7 @@ contextBridge.exposeInMainWorld('app', {
 	},
 
 	/**
-	 * Returns all the tags associated with an image path (complete path).
+	 * Returns all the tags associated with an image path (absolute path). The image needs to be located in the app's data folder.
 	 * @param {string} image
 	 * @returns {Promise<string>}
 	 */
@@ -66,11 +66,28 @@ contextBridge.exposeInMainWorld('app', {
 	},
 
 	/**
-	 * Returns true if the image is successfully removed (file and database).
+	 * Returns true if the image is successfully removed (file and database). The image needs to be located in the app's data folder.
 	 * @param {string | string[]} imagePaths
 	 * @return {Promise<boolean>}
 	 */
 	deleteImage: (imagePaths) => {
 		return ipcRenderer.invoke('delete-image', imagePaths);
+	},
+
+	/**
+	 * Opens the given image. The image needs to be located in the app's data folder.
+	 * @param {string} imagePath
+	 */
+	openImage: (imagePath) => {
+		ipcRenderer.send('open-image', imagePath);
+	},
+
+	/**
+	 * Updates the image associated tags. The image needs to be located in the app's data folder.
+	 * @param {string} imagePath
+	 * @param {{addedTags: string[], deletedTags: string[]}} changes
+	 */
+	updateImage: (imagePath, changes) => {
+		ipcRenderer.send('update-image', imagePath, changes);
 	},
 });

@@ -1,4 +1,4 @@
-const { BrowserWindow, app, ipcMain, dialog } = require('electron');
+const { BrowserWindow, app, ipcMain, dialog, shell } = require('electron');
 const path = require('node:path');
 const fs = require('node:fs/promises');
 
@@ -81,12 +81,42 @@ app.whenReady().then(() => {
 					console.log(image);
 					if (await fs.unlink(path.join(app.getPath('userData'), 'images', image))) {
 						dialog.showErrorBox('Error', 'Image could not be deleted.');
+						return;
 					}
 					db.deleteImage(image);
 				}
 				return true;
 			case 1:
 				return false;
+		}
+	});
+
+	ipcMain.on('open-image', async (event, imagePath) => {
+		const imageId = path.basename(imagePath);
+
+		const error = await shell.openPath(path.join(app.getPath('userData'), 'images', imageId));
+
+		if (error) {
+			dialog.showErrorBox('Error', `Couldn't open the file: ${error}`);
+		}
+	});
+
+	ipcMain.on('update-image', (event, imagePath, changes) => {
+		const imageId = path.basename(imagePath);
+
+		const { addedTags, deletedTags } = changes;
+
+		for (const tag of addedTags) {
+			if (!db.existTag(tag)) db.addTag(tag);
+			db.addImageTag(imageId, tag);
+		}
+
+		for (const tag of deletedTags) {
+			db.deleteImageTag(imageId, tag);
+		}
+
+		for (const tag of deletedTags) {
+			if (!db.getAllTaggedImages(tag)) db.deleteTag(tag);
 		}
 	});
 
