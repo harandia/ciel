@@ -90,4 +90,17 @@ contextBridge.exposeInMainWorld('app', {
 	updateImage: (imagePath, changes) => {
 		ipcRenderer.send('update-image', imagePath, changes);
 	},
+
+	/**
+	 * Shows a warning dialog with the given options. Returns the index of the button pulsed by the user or the defaultId (in case the window is closed).
+	 * @param {string} title
+	 * @param {string} message
+	 * @param {string []} buttons
+	 * @param {number} defaultId
+	 * @returns {Promise<number>}
+	 */
+	showWarning: (title, message, buttons, defaultId) => {
+		console.log(buttons);
+		return ipcRenderer.invoke('show-warning', title, message, buttons, defaultId);
+	},
 });

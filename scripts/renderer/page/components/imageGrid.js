@@ -10,6 +10,12 @@ class ImageGrid {
 	/**@type {Function[]} */
 	#onshow = [];
 
+	/**@type {Function[]} */
+	#ondeselect = [];
+
+	/** @type {boolean} */
+	#preventDeselect;
+
 	/**
 	 * @param {Element} element
 	 */
@@ -41,15 +47,22 @@ class ImageGrid {
 	/**
 	 * Sets the callback to be executed when the specified event is triggered.
 	 * show is triggered after the showImages method, and the functions are given the displayed images.
-	 * selects is triggered when an image is selected or deselected, the functions are given the selected images.
-	 * @param {'show' | 'select'} eventType
+	 * select is triggered when an image is selected or deselected, the functions are given the selected images.
+	 * deselect is triggered before an image is deselected, the functions are given the image that is going to be deselected.
+	 * @param {'show' | 'select' | 'deselect'} eventType
 	 * @param {Function} callback
 	 */
 	addEventListener(eventType, callback) {
-		if (eventType === 'show') {
-			this.#onshow.push(callback);
-		} else if (eventType === 'select') {
-			this.#onselect.push(callback);
+		switch (eventType) {
+			case 'show':
+				this.#onshow.push(callback);
+				break;
+			case 'select':
+				this.#onselect.push(callback);
+				break;
+			case 'deselect':
+				this.#ondeselect.push(callback);
+				break;
 		}
 	}
 
@@ -78,18 +91,35 @@ class ImageGrid {
 	 * If param is an ImageGridImage, it will deselect the specific element.
 	 * If param is a number, it will deselect the specified index, starting from 0.
 	 * If param is a string, it will deselect the first image in the grid with the given path.
-	 * @param {ImageGridImage | number | string} param
+	 * @param {ImageGridImage[] | ImageGridImage | number | string} param
 	 */
-	deselect(param) {
+	async deselect(param) {
+		console.log(1);
+		let images;
+
 		if (typeof param === 'number') {
-			this.images[param].deselect();
+			images = [this.images[param]];
 		} else if (typeof param === 'string') {
-			this.images.find((image) => image.path === param).deselect();
+			images = [this.images.find((image) => image.path === param)];
+		} else if (param instanceof ImageGridImage) {
+			images = [param];
 		} else {
-			param.deselect();
+			images = param;
 		}
 
-		for (const func of this.#onselect) func(this.selectedImages);
+		for (const func of this.#ondeselect) await func(images);
+
+		if (!this.#preventDeselect) {
+			for (const image of images) image.deselect();
+		}
+		this.#preventDeselect = false;
+	}
+
+	/**
+	 * Prevents the current deselection proccess of happening.
+	 */
+	stopDeselect() {
+		this.#preventDeselect = true;
 	}
 
 	/**
@@ -104,21 +134,17 @@ class ImageGrid {
 
 		image.element.addEventListener('click', (event) => {
 			if (!clickTimer) {
-				clickTimer = setTimeout(() => {
+				clickTimer = setTimeout(async () => {
 					// @ts-ignore
 					if (event.ctrlKey) {
-						if (!image.isSelected) image.select();
-						else image.deselect();
+						if (!image.isSelected) this.select(image);
+						else this.deselect(image);
 					} else {
-						image.select();
-						for (const otherImage of Array.from(this.#element.children)) {
-							if (otherImage !== image.element) new ImageGridImage(otherImage).deselect();
-						}
+						await this.deselect(this.images.filter((otherImage) => otherImage.element !== image.element));
+						this.select(image);
 					}
 
 					clickTimer = undefined;
-
-					for (const func of this.#onselect) func(this.selectedImages);
 				}, 225);
 			}
 		});

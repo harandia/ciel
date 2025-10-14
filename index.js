@@ -65,7 +65,6 @@ app.whenReady().then(() => {
 	});
 
 	ipcMain.handle('delete-image', async (event, imagePath) => {
-		console.log(imagePath);
 		if (typeof imagePath === 'string') imagePath = [imagePath];
 
 		const imageIds = imagePath.map((imagePath) => path.basename(imagePath));
@@ -73,12 +72,13 @@ app.whenReady().then(() => {
 		let message = 'Are you sure you want to delete this image?';
 		if (imageIds.length > 1) message = 'Are you sure you want to delete this selection of images?';
 
-		const choice = dialog.showMessageBoxSync(win, { title: 'Warning', message, type: 'warning', buttons: ['Yes', 'Cancel'], defaultId: 0 });
+		const choice = dialog.showMessageBoxSync(win, { title: 'Warning', message, type: 'warning', buttons: ['Cancel', 'Yes'], defaultId: 0 });
 
 		switch (choice) {
 			case 0:
+				return false;
+			case 1:
 				for (const image of imageIds) {
-					console.log(image);
 					if (await fs.unlink(path.join(app.getPath('userData'), 'images', image))) {
 						dialog.showErrorBox('Error', 'Image could not be deleted.');
 						return;
@@ -86,8 +86,6 @@ app.whenReady().then(() => {
 					db.deleteImage(image);
 				}
 				return true;
-			case 1:
-				return false;
 		}
 	});
 
@@ -118,6 +116,18 @@ app.whenReady().then(() => {
 		for (const tag of deletedTags) {
 			if (!db.getAllTaggedImages(tag)) db.deleteTag(tag);
 		}
+	});
+
+	ipcMain.handle('show-warning', (event, title, message, buttons, defaultId) => {
+		const choice = dialog.showMessageBoxSync(win, {
+			title,
+			message,
+			type: 'warning',
+			buttons,
+			defaultId,
+		});
+
+		return choice;
 	});
 
 	win.maximize();

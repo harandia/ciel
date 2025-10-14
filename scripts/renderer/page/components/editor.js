@@ -94,6 +94,13 @@ class Editor {
 
 			this.show(this.#selectedImages);
 		});
+
+		this.#discardButton.addEventListener('click', () => {
+			for (const tag of this.#tagEditor.tags) {
+				if (tag.type === 'deleted') tag.type = 'normal';
+				else if (tag.type === 'firstTime' || tag.type === 'newAdded') this.#tagEditor.removeTag(tag);
+			}
+		});
 	}
 
 	/**
@@ -101,8 +108,6 @@ class Editor {
 	 * @param {ImageGridImage[]} selection
 	 */
 	async show(selection) {
-		this.#element.classList.remove('editor-hidden');
-
 		this.#selectedImages = selection;
 
 		if (selection.length > 1) {
@@ -118,12 +123,14 @@ class Editor {
 			previewImage.src = selection[0].path;
 		}
 
-		this.#tagEditor.clearTags();
-		this.#tagEditor.clearInput();
-
 		const selectionTags = await Promise.all(selection.map(async (image) => new Set(await window.app.getImageTags(image.path))));
 
+		this.#element.classList.remove('editor-hidden');
+
 		if (!this.#element.classList.contains('editor-hidden')) {
+			this.#tagEditor.clearTags();
+			this.#tagEditor.clearInput();
+
 			let intersectTags = selectionTags[0];
 			for (let i = 1; i < selectionTags.length; i++) {
 				// @ts-ignore
@@ -139,7 +146,10 @@ class Editor {
 	/**
 	 * Hides the editor.
 	 */
-	hide() {
+	async hide() {
+		this.#tagEditor.clearTags();
+		this.#tagEditor.clearInput();
+
 		this.#element.classList.add('editor-hidden');
 	}
 
@@ -176,6 +186,14 @@ class Editor {
 	 */
 	#hideSelectedCount() {
 		this.#counter.classList.add('editor-selection-counter-hidden');
+	}
+
+	/**
+	 * Returns true if the editor has some unapplied changes to images' tags.
+	 * @returns {boolean}
+	 */
+	get hasUnsavedChanges() {
+		return this.#tagEditor.tags.some((tag) => tag.type === 'deleted' || tag.type === 'firstTime' || tag.type === 'newAdded');
 	}
 }
 

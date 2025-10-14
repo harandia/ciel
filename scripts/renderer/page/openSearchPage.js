@@ -101,11 +101,26 @@ class OpenSearchPage extends SearchPage {
 			this._imageGrid.showImages(images);
 		});
 
-		this._imageGrid.addEventListener('select', async (selection) => {
-			if (selection.length === 0) {
+		this._imageGrid.addEventListener('select', (selection) => {
+			this.#editor.show(selection);
+		});
+
+		this._imageGrid.addEventListener('deselect', async (deselected) => {
+			const selection = this._imageGrid.selectedImages;
+
+			if (this.#editor.hasUnsavedChanges) {
+				const choice = await window.app.showWarning('Warning', 'Are you sure you want to discard the changes?', ['Cancel', 'Yes, discard'], 0);
+
+				if (choice === 0) {
+					this._imageGrid.stopDeselect();
+					return;
+				}
+			}
+
+			if (selection.length === 1) {
 				this.#editor.hide();
-			} else {
-				await this.#editor.show(selection);
+			} else if (selection.length > 1) {
+				this.#editor.show(selection.filter((image) => image.element !== deselected.element));
 			}
 		});
 
@@ -114,9 +129,7 @@ class OpenSearchPage extends SearchPage {
 				!this._imageGrid.images.some((image) => event.composedPath().includes(image.element)) &&
 				!event.composedPath().includes(this.#searchBar.body)
 			) {
-				for (let i = 0; i < this._imageGrid.imageCount; i++) {
-					this._imageGrid.deselect(i);
-				}
+				this._imageGrid.deselect(this._imageGrid.images);
 			}
 		});
 
