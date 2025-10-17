@@ -1,4 +1,4 @@
-const { contextBridge, ipcRenderer, webFrame } = require('electron');
+const { contextBridge, ipcRenderer, webFrame, webUtils } = require('electron');
 
 contextBridge.exposeInMainWorld('app', {
 	/**
@@ -100,7 +100,41 @@ contextBridge.exposeInMainWorld('app', {
 	 * @returns {Promise<number>}
 	 */
 	showWarning: (title, message, buttons, defaultId) => {
-		console.log(buttons);
 		return ipcRenderer.invoke('show-warning', title, message, buttons, defaultId);
+	},
+
+	/**
+	 * Tries to close the app.
+	 * @param {string[]} [uploadingImages]
+	 */
+	tryClose: (uploadingImages) => {
+		ipcRenderer.send('try-close', uploadingImages);
+	},
+
+	/**
+	 * Returns the file path.
+	 * @param {File} file
+	 * @returns {Promise<string>}
+	 */
+	getFilePath: (file) => {
+		return webUtils.getPathForFile(file);
+	},
+
+	/**
+	 * Downloads the given image and returns the path of the image on success or undefined if the download fails.
+	 * If param is a string, it should be either a http, https, blob or file URL pointing to an image.
+	 * @param {string | Uint8Array} param
+	 * @return {Promise<string | undefined>}
+	 */
+	downloadImage: (param) => {
+		return ipcRenderer.invoke('download-image', param);
+	},
+
+	/**
+	 * Deletes the given image, the image should only be located in the app's images folder.
+	 * @param {string} image
+	 */
+	deleteTempImage: (image) => {
+		ipcRenderer.send('delete-temp-image', image);
 	},
 });

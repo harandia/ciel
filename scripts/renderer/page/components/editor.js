@@ -140,6 +140,8 @@ class Editor {
 			for (const tag of intersectTags) {
 				this.#tagEditor.addExistingTag(tag);
 			}
+
+			this.#openButton.scrollIntoView({ behavior: 'smooth', block: 'nearest', inline: 'nearest' });
 		}
 	}
 

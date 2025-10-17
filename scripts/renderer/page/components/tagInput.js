@@ -15,7 +15,7 @@ class TagInput {
 	#autocompleterY;
 
 	/** @type {HTMLElement} */
-	_container;
+	container;
 
 	/** @type {HTMLElement} */
 	_input;
@@ -27,7 +27,7 @@ class TagInput {
 	 * @param {Autocompleter} autocompleter
 	 */
 	constructor(element, autocompleter) {
-		this._container = element;
+		this.container = element;
 		this._input = element.querySelector('.tag-input');
 
 		this._input.addEventListener('paste', (event) => {
@@ -44,7 +44,6 @@ class TagInput {
 		const caretElement = caret();
 
 		const updateAutocompleter = () => {
-			console.log('funcion actualizar');
 			const caretRect = window.getSelection().getRangeAt(0).getBoundingClientRect();
 			const containerParentRect = autocompleter.parent.getBoundingClientRect();
 			const completerRect = autocompleter.element.getBoundingClientRect();
@@ -68,7 +67,7 @@ class TagInput {
 			}
 
 			const text = this._input.textContent.startsWith('!')
-				? this._input.textContent.trim().toLowerCase().slice(1)
+				? this._input.textContent.trim().toLowerCase().replace(/^!+/, '')
 				: this._input.textContent.trim().toLowerCase();
 			autocompleter.showOptions(text);
 		};
@@ -85,20 +84,20 @@ class TagInput {
 		const caretHandle = (event) => {
 			if (event.key === 'ArrowLeft') {
 				if (caretElement.previousElementSibling) {
-					this._container.insertBefore(caretElement, caretElement.previousElementSibling);
+					this.container.insertBefore(caretElement, caretElement.previousElementSibling);
 				}
 			} else if (event.key === 'ArrowRight') {
 				if (caretElement.nextElementSibling) {
 					if (caretElement.nextElementSibling.nextElementSibling === this._input) {
 						this._input.focus();
 					} else {
-						this._container.insertBefore(caretElement, caretElement.nextElementSibling.nextElementSibling);
+						this.container.insertBefore(caretElement, caretElement.nextElementSibling.nextElementSibling);
 					}
 				}
 			} else if (event.key === 'Backspace') {
 				if (caretElement.previousElementSibling) {
 					const removingElemente = caretElement.previousElementSibling;
-					this._container.insertBefore(caretElement, removingElemente);
+					this.container.insertBefore(caretElement, removingElemente);
 					// @ts-ignore
 					this.removeTag(Tag.fromElement(removingElemente));
 				}
@@ -113,24 +112,24 @@ class TagInput {
 		 * @param {number} pos
 		 */
 		const insertCaret = (pos) => {
-			this._container.focus();
+			this.container.focus();
 
 			const children = this._tagElements;
-			if (!this._container.contains(caretElement)) {
-				this._container.addEventListener(
+			if (!this.container.contains(caretElement)) {
+				this.container.addEventListener(
 					'blur',
 					() => {
-						this._container.removeChild(caretElement);
+						this.container.removeChild(caretElement);
 					},
 					{ once: true },
 				);
 
 				setTimeout(() => {
-					this._container.addEventListener('keydown', caretHandle);
+					this.container.addEventListener('keydown', caretHandle);
 				}, 100);
 			}
 
-			this._container.insertBefore(caretElement, children[children.length - 1 - pos]);
+			this.container.insertBefore(caretElement, children[children.length - 1 - pos]);
 		};
 
 		this._input.addEventListener('keydown', (event) => {
@@ -138,7 +137,7 @@ class TagInput {
 				case 'ArrowLeft':
 					event.stopPropagation();
 					const caretRange = window.getSelection().getRangeAt(0);
-					if (caretRange.startOffset === 0 && this._container.children.length > 1) {
+					if (caretRange.startOffset === 0 && this.container.children.length > 1) {
 						insertCaret(1);
 					}
 					break;
@@ -220,7 +219,6 @@ class TagInput {
 					break;
 				case 'Tab':
 					if (this._input.textContent.trim().length === 0 && !autocompleter.selectedOption) {
-						console.log('tab');
 						updateAutocompleter();
 						break;
 					}
@@ -228,7 +226,6 @@ class TagInput {
 					if (this._input.textContent.trim().length === 0) {
 						autocompleter.hide();
 					} else {
-						console.log('keydown');
 						updateAutocompleter();
 					}
 
@@ -249,8 +246,8 @@ class TagInput {
 			autocompleter.hide();
 		});
 
-		this._container.addEventListener('click', (event) => {
-			if (event.target === this._container) {
+		this.container.addEventListener('click', (event) => {
+			if (event.target === this.container) {
 				const children = this._tagElements;
 				let firstOfRow = 0;
 				for (let i = 1; i < children.length - 1; i++) {
@@ -281,7 +278,6 @@ class TagInput {
 		document.addEventListener('mouseup', (event) => {
 			// @ts-ignore
 			if (event.composedPath().some((element) => Array.from(autocompleter.element.children).includes(element))) {
-				console.log('mouseup');
 				updateAutocompleter();
 			}
 
@@ -294,7 +290,7 @@ class TagInput {
 	 * @param {Tag} tag
 	 */
 	_addTag(tag) {
-		this._container.insertBefore(tag.element, this._container.lastElementChild);
+		this.container.insertBefore(tag.element, this.container.lastElementChild);
 		this._input.scrollIntoView({ behavior: 'smooth', block: 'nearest', inline: 'nearest' });
 	}
 
@@ -328,7 +324,7 @@ class TagInput {
 	 */
 	get tagCount() {
 		let count = 0;
-		const children = this._container.children;
+		const children = this.container.children;
 		for (let i = 0; i < children.length; i++) {
 			if (children[i] !== this._input && !children[i].classList.contains('tag-input-caret')) count++;
 		}
@@ -340,7 +336,7 @@ class TagInput {
 	 * @returns {Element[]}
 	 */
 	get _tagElements() {
-		const children = this._container.children;
+		const children = this.container.children;
 		const tags = [];
 		for (let i = 0; i < children.length; i++) {
 			// @ts-ignore
@@ -354,7 +350,7 @@ class TagInput {
 	 * @returns {Tag[]}
 	 */
 	get tags() {
-		const children = this._container.children;
+		const children = this.container.children;
 		const tags = [];
 		for (let i = 0; i < children.length; i++) {
 			// @ts-ignore

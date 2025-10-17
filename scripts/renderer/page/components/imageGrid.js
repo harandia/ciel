@@ -16,6 +16,9 @@ class ImageGrid {
 	/** @type {boolean} */
 	#preventDeselect;
 
+	/** @type {boolean} */
+	#preventSelect;
+
 	/**
 	 * @param {Element} element
 	 */
@@ -73,17 +76,27 @@ class ImageGrid {
 	 * If param is a string, it will select the first image in the grid with the given path.
 	 * @param {ImageGridImage | number | string} param
 	 */
-	select(param) {
+	async select(param) {
+		let image;
 		if (typeof param === 'number') {
-			const image = new ImageGridImage(this.#element.children[param]);
-			image.select();
+			image = new ImageGridImage(this.#element.children[param]);
 		} else if (typeof param === 'string') {
-			this.images.find((image) => image.path === param).select();
+			image = this.images.find((image) => image.path === param);
 		} else {
-			param.select();
+			image = param;
 		}
 
-		for (const func of this.#onselect) func(this.selectedImages);
+		const currentSelection = this.selectedImages;
+		currentSelection.push(image);
+		for (const func of this.#onselect) await func(currentSelection);
+
+		if (!this.#preventSelect) image.select();
+
+		this.#preventSelect = false;
+	}
+
+	stopSelect() {
+		this.#preventSelect = true;
 	}
 
 	/**
@@ -94,7 +107,6 @@ class ImageGrid {
 	 * @param {ImageGridImage[] | ImageGridImage | number | string} param
 	 */
 	async deselect(param) {
-		console.log(1);
 		let images;
 
 		if (typeof param === 'number') {
@@ -138,10 +150,10 @@ class ImageGrid {
 					// @ts-ignore
 					if (event.ctrlKey) {
 						if (!image.isSelected) this.select(image);
-						else this.deselect(image);
+						else await this.deselect(image);
 					} else {
 						await this.deselect(this.images.filter((otherImage) => otherImage.element !== image.element));
-						this.select(image);
+						await this.select(image);
 					}
 
 					clickTimer = undefined;
@@ -156,7 +168,7 @@ class ImageGrid {
 			clickTimer = undefined;
 		});
 
-		this.#element.appendChild(image.element);
+		this.#element.prepend(image.element);
 
 		return image;
 	}

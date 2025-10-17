@@ -19,6 +19,7 @@ main {
 
 	align-items: stretch;
 
+	min-height: calc(100vh - 41px);
 	max-height: calc(100vh - 41px);
 
 	background-color: rgb(251, 250, 253);

@@ -78,7 +78,7 @@ class SearchBar extends TagInput {
 	async addTag(tag) {
 		let type;
 		if (tag.startsWith('!')) {
-			tag = tag.slice(1);
+			tag = tag.replace(/^!+/, '');
 			if (!(await window.app.existTag(tag))) {
 				type = 'wrong';
 			} else {
@@ -118,12 +118,12 @@ class SearchBar extends TagInput {
 		if (typeof param === 'number') {
 			if (param >= 0) {
 				if (children[param]) {
-					const removed = this._container.removeChild(children[param]);
+					const removed = this.container.removeChild(children[param]);
 					isRemoved = true;
 				} else isRemoved = false;
 			} else {
 				if (children[children.length - 1 + param]) {
-					const removed = this._container.removeChild(children[children.length - 1 + param]);
+					const removed = this.container.removeChild(children[children.length - 1 + param]);
 					isRemoved = true;
 				} else isRemoved = false;
 			}
@@ -133,7 +133,7 @@ class SearchBar extends TagInput {
 			for (let i = 0; i < this.tagCount; i++) {
 				// @ts-ignore
 				if (param.equals(Tag.fromElement(children[i]))) {
-					const removed = this._container.removeChild(children[i]);
+					const removed = this.container.removeChild(children[i]);
 					isRemoved = true;
 					break;
 				}

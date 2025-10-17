@@ -80,7 +80,7 @@ class TagEditor extends TagInput {
 	async addTag(tag) {
 		let type = 'newAdded';
 		if (tag.startsWith('!')) {
-			tag = tag.slice(1);
+			tag = tag.replace(/^!+/, '');
 		}
 
 		if (!(await window.app.existTag(tag))) {
@@ -120,7 +120,7 @@ class TagEditor extends TagInput {
 					} else if (tag.type === 'deleted') {
 						tag.type = 'normal';
 					} else {
-						this._container.removeChild(children[param]);
+						this.container.removeChild(children[param]);
 					}
 
 					isRemoved = true;
@@ -134,7 +134,7 @@ class TagEditor extends TagInput {
 					} else if (tag.type === 'deleted') {
 						tag.type = 'normal';
 					} else {
-						this._container.removeChild(children[children.length - 1 + param]);
+						this.container.removeChild(children[children.length - 1 + param]);
 					}
 
 					isRemoved = true;
@@ -153,7 +153,7 @@ class TagEditor extends TagInput {
 					} else if (tag.type === 'deleted') {
 						tag.type = 'normal';
 					} else {
-						this._container.removeChild(children[i]);
+						this.container.removeChild(children[i]);
 					}
 
 					isRemoved = true;
@@ -176,7 +176,7 @@ class TagEditor extends TagInput {
 
 	clearTags() {
 		for (const tag of this.tags) {
-			this._container.removeChild(tag.element);
+			this.container.removeChild(tag.element);
 		}
 	}
 

@@ -74,7 +74,15 @@ class Tab {
 	 * Sets this tab's current page.
 	 * @param {OpenSearchPage | UploadPage} page
 	 */
-	#setPage(page) {
+	async #setPage(page) {
+		const { showConfirmation } = await window.app.getSettings();
+
+		if (showConfirmation && this.#page.hasUnsavedChanges) {
+			const choice = await window.app.showWarning('Warning', 'Are you sure you want to discard the changes?', ['Cancel', 'Yes, discard'], 0);
+
+			if (choice === 0) return;
+		}
+
 		this.#page = page;
 		this.#updateTitle();
 

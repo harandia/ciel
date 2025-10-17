@@ -48,6 +48,25 @@ tabBar.addEventListener('wheel', (event) => {
 	tabBar.scrollLeft = tabBar.scrollLeft - event.deltaY;
 });
 
+window.addEventListener('beforeunload', async (event) => {
+	if (tabs.some((tab) => tab.page.hasUnsavedChanges)) {
+		event.preventDefault();
+
+		const uploadingImages = [];
+		for (const tab of tabs) {
+			if (tab.page instanceof UploadPage && tab.page.hasUnsavedChanges) {
+				uploadingImages.push(...tab.page.uploads.map((taggedImage) => taggedImage.image));
+			}
+		}
+
+		if (uploadingImages.length !== 0) {
+			window.app.tryClose(uploadingImages);
+		} else {
+			window.app.tryClose();
+		}
+	}
+});
+
 /**
  * Adds a new tab to the tab bar with the given page. If forceNewTab is enabled it will add the page in a new tab regardless of the
  * configuration settings.
@@ -62,15 +81,28 @@ const addTab = async function (page, forceNewTab = false) {
 
 		tabBar.insertBefore(tab.element, tabBar.lastElementChild);
 
-		tab.closeButton.addEventListener('click', (event) => {
+		tab.closeButton.addEventListener('click', async (event) => {
 			event.stopPropagation();
+
+			const { showConfirmation } = await window.app.getSettings();
+
+			if (showConfirmation && tab.page.hasUnsavedChanges) {
+				const choice = await window.app.showWarning('Warning', 'Are you sure you want to discard the changes?', ['Cancel', 'Yes, discard'], 0);
+
+				if (choice === 0) return;
+
+				if (choice === 1 && tab.page instanceof UploadPage) {
+					for (const taggedImage of tab.page.uploads) {
+						window.app.deleteTempImage(taggedImage.image);
+					}
+				}
+			}
 
 			const tabIndex = tabs.indexOf(tab);
 
 			if (tabs.length > 1 && tab === selectedTab) {
 				const newIndex = tabIndex - 1 < 0 ? 1 : tabIndex - 1;
 				selectTab(tabs[newIndex]);
-				console.log(newIndex);
 			} else if (tabs.length === 1) {
 				selectedTab = undefined;
 			}

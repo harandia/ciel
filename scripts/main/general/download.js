@@ -4,11 +4,26 @@ const url = require('node:url');
 // @ts-ignore
 const mimeType = require('stream-mime-type');
 
-const { FileTypeError, RequestError, InvalidURLError } = require('errors');
+const { FileTypeError, RequestError, InvalidURLError } = require('./errors');
+
+const fileExtensions = {
+	webp: 'webp',
+	gif: 'gif',
+	'x-icon': 'ico',
+	jpeg: 'jpeg',
+	'svg+xml': 'svg',
+	apng: 'apng',
+	avif: 'avif',
+	bmp: 'bmp',
+	jpg: 'jpeg',
+	jpe: 'jpeg',
+	png: 'png',
+};
 
 /**
- * Given a https (or http) or file:// URL, it copies the contents of the URL in the indicated file path in a file with the name fileName (the file extension
- * will be added by the method itself). Returns the path of the new file.
+ * Given a https (or http) or file:// URL if source is a string, or a Blob.
+ * It copies the contents of the source in the indicated file path in a file
+ * with the name fileName (the file extension will be added by the method itself, DON'T WRITE IT). Returns the path of the new file.
  * @param {string} sourceURL
  * @param {string} destPath
  * @param {string} fileName
@@ -17,27 +32,27 @@ const { FileTypeError, RequestError, InvalidURLError } = require('errors');
 const downloadImage = async function (sourceURL, destPath, fileName) {
 	let sourceFile;
 	let sourceResponse;
-	let source;
+	let sourceStream;
 
 	let destFile;
 	try {
 		if (sourceURL.startsWith('file://')) {
 			sourceFile = await fs.open(url.fileURLToPath(sourceURL));
-			source = sourceFile.readableWebStream();
+			sourceStream = sourceFile.readableWebStream();
 		} else if (sourceURL.startsWith('https://') || sourceURL.startsWith('http://')) {
 			sourceResponse = await fetch(sourceURL);
 			if (!sourceResponse.ok || sourceResponse.body === null) {
 				throw new RequestError();
 			}
-			source = sourceResponse.body;
+			sourceStream = sourceResponse.body;
 		} else {
 			throw new InvalidURLError();
 		}
-		const { stream, mime } = await mimeType.getMimeType(source);
-		if (!mime.startsWith('image/')) {
+		const { stream, mime } = await mimeType.getMimeType(sourceStream);
+		if (!mime.startsWith('image/') || !fileExtensions[mime.split('/')[1]]) {
 			throw new FileTypeError();
 		}
-		const newPath = path.join(destPath, fileName + '.' + mime.split('/')[1]);
+		const newPath = path.join(destPath, fileName + '.' + fileExtensions[mime.split('/')[1]]);
 		destFile = await fs.open(newPath, 'ax');
 		const fileWriter = new WritableStream({
 			async write(chunk) {
@@ -45,7 +60,7 @@ const downloadImage = async function (sourceURL, destPath, fileName) {
 			},
 		});
 		await stream.pipeTo(fileWriter).catch((err) => {
-			fs.unlink(destPath).catch((err) => {
+			fs.unlink(newPath).catch((err) => {
 				throw err;
 			});
 			throw err;

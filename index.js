@@ -7,6 +7,10 @@ const settings = require('./scripts/main/settings.js');
 
 const Database = require('./scripts/main/general/db.js');
 
+const downloadImage = require('./scripts/main/general/download.js');
+const { nanoid } = require('nanoid');
+const { pathToFileURL } = require('node:url');
+
 function createWindow() {
 	return new BrowserWindow({
 		title: 'ciel',
@@ -128,6 +132,46 @@ app.whenReady().then(() => {
 		});
 
 		return choice;
+	});
+
+	ipcMain.on('try-close', (event, uploadingImages) => {
+		if (settings.showConfirmation) {
+			const choice = dialog.showMessageBoxSync(win, {
+				title: 'Warning',
+				message: 'Are you sure you want to discard the changes?',
+				type: 'warning',
+				buttons: ['Cancel', 'Yes, discard'],
+				defaultId: 0,
+			});
+
+			if (choice === 1) {
+				if (uploadingImages) {
+					for (const image of uploadingImages) fs.unlink(path.join(app.getPath('userData'), 'images', path.basename(image)));
+				}
+				win.close();
+			}
+		} else {
+			if (uploadingImages) {
+				for (const image of uploadingImages) fs.unlink(path.join(app.getPath('userData'), 'images', path.basename(image)));
+			}
+			app.exit(0);
+		}
+	});
+
+	ipcMain.handle('download-image', (event, param) => {
+		try {
+			let url;
+			if (path.isAbsolute(param)) url = pathToFileURL(param).toString();
+			else url = param;
+			const downloadPath = downloadImage(url, path.join(app.getPath('userData'), 'images'), nanoid());
+			return downloadPath;
+		} catch {
+			return undefined;
+		}
+	});
+
+	ipcMain.on('delete-temp-image', (event, image) => {
+		fs.unlink(path.join(app.getPath('userData'), 'images', path.basename(image)));
 	});
 
 	win.maximize();

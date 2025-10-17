@@ -101,14 +101,27 @@ class OpenSearchPage extends SearchPage {
 			this._imageGrid.showImages(images);
 		});
 
-		this._imageGrid.addEventListener('select', (selection) => {
+		this._imageGrid.addEventListener('select', async (selection) => {
+			const { showConfirmation } = await window.app.getSettings();
+
+			if (showConfirmation && this.#editor.hasUnsavedChanges) {
+				const choice = await window.app.showWarning('Warning', 'Are you sure you want to discard the changes?', ['Cancel', 'Yes, discard'], 0);
+
+				if (choice === 0) {
+					this._imageGrid.stopSelect();
+					return;
+				}
+			}
+
 			this.#editor.show(selection);
 		});
 
 		this._imageGrid.addEventListener('deselect', async (deselected) => {
 			const selection = this._imageGrid.selectedImages;
 
-			if (this.#editor.hasUnsavedChanges) {
+			const { showConfirmation } = await window.app.getSettings();
+
+			if (showConfirmation && this.#editor.hasUnsavedChanges) {
 				const choice = await window.app.showWarning('Warning', 'Are you sure you want to discard the changes?', ['Cancel', 'Yes, discard'], 0);
 
 				if (choice === 0) {
@@ -117,17 +130,20 @@ class OpenSearchPage extends SearchPage {
 				}
 			}
 
-			if (selection.length === 1) {
+			if (selection.length - deselected.length <= 0) {
 				this.#editor.hide();
-			} else if (selection.length > 1) {
-				this.#editor.show(selection.filter((image) => image.element !== deselected.element));
+			} else if (selection.length - deselected.length > 0) {
+				const newSelection = selection.filter(
+					(selectedImage) => !deselected.some((deselectedImage) => selectedImage.element === deselectedImage.element),
+				);
+				this.#editor.show(newSelection);
 			}
 		});
 
 		pageFragment.querySelector('.search-view').addEventListener('click', (event) => {
 			if (
 				!this._imageGrid.images.some((image) => event.composedPath().includes(image.element)) &&
-				!event.composedPath().includes(this.#searchBar.body)
+				!event.composedPath().includes(document.querySelector('header'))
 			) {
 				this._imageGrid.deselect(this._imageGrid.images);
 			}
@@ -229,6 +245,13 @@ class OpenSearchPage extends SearchPage {
 			eventCallbacks.findIndex((func) => func === callback),
 			1,
 		);
+	}
+
+	/**
+	 * Return true if the page has some unsaved changes.
+	 */
+	get hasUnsavedChanges() {
+		return this.#editor.hasUnsavedChanges;
 	}
 }
 

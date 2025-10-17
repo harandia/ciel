@@ -20,6 +20,13 @@ class Submenu {
 	hide() {
 		if (this.element !== null) this.element.classList.add('submenu-hidden');
 	}
+
+	/**
+	 * Returns true if the submenu is hidden.
+	 */
+	get isHidden() {
+		return this.element.classList.contains('submenu-hidden');
+	}
 }
 
 export default Submenu;
