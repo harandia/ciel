@@ -64,6 +64,7 @@ window.addEventListener('beforeunload', async (event) => {
 		} else {
 			window.app.tryClose();
 		}
+		return;
 	}
 });
 

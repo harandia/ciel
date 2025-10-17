@@ -5,6 +5,7 @@ const url = require('node:url');
 const mimeType = require('stream-mime-type');
 
 const { FileTypeError, RequestError, InvalidURLError } = require('./errors');
+const { Readable } = require('node:stream');
 
 const fileExtensions = {
 	webp: 'webp',
@@ -24,30 +25,35 @@ const fileExtensions = {
  * Given a https (or http) or file:// URL if source is a string, or a Blob.
  * It copies the contents of the source in the indicated file path in a file
  * with the name fileName (the file extension will be added by the method itself, DON'T WRITE IT). Returns the path of the new file.
- * @param {string} sourceURL
+ * @param {string | Buffer} source
  * @param {string} destPath
  * @param {string} fileName
  * @returns {Promise<string>}
  */
-const downloadImage = async function (sourceURL, destPath, fileName) {
+const downloadImage = async function (source, destPath, fileName) {
 	let sourceFile;
 	let sourceResponse;
 	let sourceStream;
 
 	let destFile;
 	try {
-		if (sourceURL.startsWith('file://')) {
-			sourceFile = await fs.open(url.fileURLToPath(sourceURL));
-			sourceStream = sourceFile.readableWebStream();
-		} else if (sourceURL.startsWith('https://') || sourceURL.startsWith('http://')) {
-			sourceResponse = await fetch(sourceURL);
-			if (!sourceResponse.ok || sourceResponse.body === null) {
-				throw new RequestError();
+		if (typeof source === 'string') {
+			if (source.startsWith('file://')) {
+				sourceFile = await fs.open(url.fileURLToPath(source));
+				sourceStream = sourceFile.readableWebStream();
+			} else if (source.startsWith('https://') || source.startsWith('http://')) {
+				sourceResponse = await fetch(source);
+				if (!sourceResponse.ok || sourceResponse.body === null) {
+					throw new RequestError();
+				}
+				sourceStream = sourceResponse.body;
+			} else {
+				throw new InvalidURLError();
 			}
-			sourceStream = sourceResponse.body;
 		} else {
-			throw new InvalidURLError();
+			sourceStream = Readable.toWeb(Readable.from(source));
 		}
+
 		const { stream, mime } = await mimeType.getMimeType(sourceStream);
 		if (!mime.startsWith('image/') || !fileExtensions[mime.split('/')[1]]) {
 			throw new FileTypeError();

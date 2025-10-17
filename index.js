@@ -1,4 +1,4 @@
-const { BrowserWindow, app, ipcMain, dialog, shell } = require('electron');
+const { BrowserWindow, app, ipcMain, dialog, shell, clipboard } = require('electron');
 const path = require('node:path');
 const fs = require('node:fs/promises');
 
@@ -10,6 +10,8 @@ const Database = require('./scripts/main/general/db.js');
 const downloadImage = require('./scripts/main/general/download.js');
 const { nanoid } = require('nanoid');
 const { pathToFileURL } = require('node:url');
+
+const jsonIO = require('./scripts/main/general/jsonIO.js');
 
 function createWindow() {
 	return new BrowserWindow({
@@ -161,9 +163,12 @@ app.whenReady().then(() => {
 	ipcMain.handle('download-image', (event, param) => {
 		try {
 			let url;
+
 			if (path.isAbsolute(param)) url = pathToFileURL(param).toString();
 			else url = param;
+
 			const downloadPath = downloadImage(url, path.join(app.getPath('userData'), 'images'), nanoid());
+
 			return downloadPath;
 		} catch {
 			return undefined;
@@ -172,6 +177,29 @@ app.whenReady().then(() => {
 
 	ipcMain.on('delete-temp-image', (event, image) => {
 		fs.unlink(path.join(app.getPath('userData'), 'images', path.basename(image)));
+	});
+
+	ipcMain.handle('download-copied-image', () => {
+		const img = clipboard.readImage('selection') || clipboard.readImage();
+
+		downloadPath = downloadImage(img.toPNG(), path.join(app.getPath('userData'), 'images'), nanoid());
+
+		return downloadPath;
+	});
+
+	ipcMain.handle('open-file-dialog', async () => {
+		const preferedPath = (await jsonIO.read(path.join(app.getPath('userData'), 'prefered-path.json'))) || app.getPath('pictures');
+		console.log(preferedPath);
+
+		const selection = dialog.showOpenDialogSync(win, {
+			title: 'Select an image',
+			defaultPath: preferedPath,
+			filters: [{ name: 'Image', extensions: ['webp', 'gif', 'ico', 'svg', 'apng', 'avif', 'bmp', 'jpeg', 'jpg', 'png'] }],
+			properties: ['openFile', 'multiSelections'],
+		});
+		if (selection) jsonIO.write(path.dirname(selection[0]), path.join(app.getPath('userData'), 'prefered-path.json'));
+
+		return selection;
 	});
 
 	win.maximize();

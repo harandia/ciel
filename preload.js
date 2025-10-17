@@ -123,8 +123,8 @@ contextBridge.exposeInMainWorld('app', {
 	/**
 	 * Downloads the given image and returns the path of the image on success or undefined if the download fails.
 	 * If param is a string, it should be either a http, https, blob or file URL pointing to an image.
-	 * @param {string | Uint8Array} param
-	 * @return {Promise<string | undefined>}
+	 * @param {string} param
+	 * @return {Promise<string | Promise<undefined>}
 	 */
 	downloadImage: (param) => {
 		return ipcRenderer.invoke('download-image', param);
@@ -136,5 +136,21 @@ contextBridge.exposeInMainWorld('app', {
 	 */
 	deleteTempImage: (image) => {
 		ipcRenderer.send('delete-temp-image', image);
+	},
+
+	/**
+	 * Downloads the image stored in the clipboard and returns the path of the image on success or undefined if the download fails.
+	 * @returns {Promise<string> | Promise<undefined>}
+	 */
+	downloadCopiedImage: () => {
+		return ipcRenderer.invoke('download-copied-image');
+	},
+
+	/**
+	 * Opens a file selection window and returns the paths of the selected files, or undefined if no file was selected.
+	 * @returns {Promise<string[] | undefined>}
+	 */
+	openFileDialog: () => {
+		return ipcRenderer.invoke('open-file-dialog');
 	},
 });

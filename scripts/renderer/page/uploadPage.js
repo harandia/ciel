@@ -28,7 +28,57 @@ class UploadPage {
 		this.#addButton = pageFragment.querySelector('.upload-add-button');
 		// this.#editor = new Editor(pageFragment.querySelector('.editor'));
 
+		this.#addButton.addEventListener('click', async (event) => {
+			const files = await window.app.openFileDialog();
+
+			if (files) {
+				const downloads = [];
+				for (const file of files) {
+					const download = await window.app.downloadImage(file);
+					this.#uploads.push({ image: download, tags: [] });
+					this.#imageGrid.addImages(download);
+				}
+			}
+		});
+
 		for (const element of this.#elements) {
+			/**
+			 * Adds the images stored in the dataTransfer. If no image is given or other types of data are given, it won't do anything.
+			 * @param {DataTransfer} dataTransfer
+			 */
+			const dataTransferHandle = async (dataTransfer) => {
+				const downloads = [];
+
+				const files = dataTransfer.files;
+				if (files.length !== 0) {
+					for (let i = 0; i < files.length; i++) {
+						const path = await window.app.getFilePath(files[i]);
+						let download;
+						if (path) {
+							download = await window.app.downloadImage(path);
+						} else {
+							download = await window.app.downloadCopiedImage();
+						}
+
+						this.#uploads.push({ image: download, tags: [] });
+						this.#imageGrid.addImages(download);
+					}
+				} else if (dataTransfer.types.includes('text/uri-list')) {
+					const uriString = dataTransfer.getData('text/uri-list');
+					const urls = uriString.split('\r\n').filter((url) => !url.startsWith('#'));
+					for (const url of urls) {
+						const download = await window.app.downloadImage(url);
+						this.#uploads.push({ image: download, tags: [] });
+						this.#imageGrid.addImages(download);
+					}
+				} else if (dataTransfer.types.includes('text/plain')) {
+					const str = dataTransfer.getData('text/plain');
+					const download = await window.app.downloadImage(str);
+					this.#uploads.push({ image: download, tags: [] });
+					this.#imageGrid.addImages(download);
+				}
+			};
+
 			element.addEventListener('dragover', (event) => {
 				event.preventDefault();
 			});
@@ -36,24 +86,13 @@ class UploadPage {
 			element.addEventListener('drop', async (event) => {
 				event.preventDefault();
 
-				const downloads = [];
+				dataTransferHandle(event.dataTransfer);
+			});
 
-				const files = event.dataTransfer.files;
-				if (files.length !== 0) {
-					for (let i = 0; i < files.length; i++) {
-						const download = await window.app.downloadImage(await window.app.getFilePath(files[i]));
-						this.#uploads.push({ image: download, tags: [] });
-						this.#imageGrid.addImages(download);
-					}
-				} else if (event.dataTransfer.types.includes('text/uri-list')) {
-					const uriString = event.dataTransfer.getData('text/uri-list');
-					const urls = uriString.split('\r\n').filter((url) => !url.startsWith('#'));
-					for (const url of urls) {
-						const download = await window.app.downloadImage(url);
-						this.#uploads.push({ image: download, tags: [] });
-						this.#imageGrid.addImages(download);
-					}
-				}
+			element.addEventListener('paste', (event) => {
+				event.preventDefault();
+
+				dataTransferHandle(event.clipboardData);
 			});
 		}
 

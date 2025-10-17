@@ -5,6 +5,9 @@ class ImageGridImage {
 	/**@type {HTMLImageElement} */
 	#image;
 
+	/**@type {HTMLElement} */
+	#closeButton;
+
 	/**
 	 * Returns if the given element has the structure of an ImageGridImage element.
 	 * @param {Element} element
@@ -13,11 +16,14 @@ class ImageGridImage {
 	static isImageGridImage(element) {
 		return (
 			element.matches('li') &&
-			element.children.length === 2 &&
-			element.children[0].matches('img') &&
-			element.children[0].classList.contains('image-grid-image') &&
-			element.children[1].matches('button') &&
-			element.children[1].classList.contains('image-delete-button')
+			element.children.length === 1 &&
+			element.children[0].matches('div') &&
+			element.children[0].classList.contains('image-grid-container-image') &&
+			element.children[0].children.length === 2 &&
+			element.children[0].children[0].matches('img') &&
+			element.children[0].children[0].classList.contains('image-grid-image') &&
+			element.children[0].children[1].matches('button') &&
+			element.children[0].children[1].classList.contains('image-delete-button')
 		);
 	}
 
@@ -34,6 +40,8 @@ class ImageGridImage {
 
 			this.#image = this.#element.querySelector('.image-grid-image');
 			this.#image.src = param;
+
+			this.#closeButton = this.#element.querySelector('.image-delete-button');
 
 			this.#element.addEventListener('mousedown', (event) => {
 				event.preventDefault();
@@ -64,6 +72,14 @@ class ImageGridImage {
 	 */
 	get element() {
 		return this.#element;
+	}
+
+	/**
+	 * Returns this image's close button.
+	 * @returns {Element}
+	 */
+	get closeButton() {
+		return this.#closeButton;
 	}
 
 	/**

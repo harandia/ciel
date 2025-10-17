@@ -30,7 +30,7 @@
 	padding: 0;
 
 	aspect-ratio: 1;
-	width: calc(var(--image-size) * 1px);
+	width: calc(var(--image-size) * 0.65px);
 
 	border: none;
 	border-radius: 20px;

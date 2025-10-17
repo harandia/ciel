@@ -21,18 +21,29 @@
 	user-select: none;
 
 	position: relative;
+
+	display: flex;
+	flex-direction: row;
+
+	justify-content: center;
 }
 
 .image-grid-image {
 	cursor: pointer;
 
-	width: calc(var(--image-size) * 1px);
+	max-width: calc(var(--image-size) * 1px);
+
+	max-height: calc(var(--image-size) * 1px);
 
 	border-radius: 10px;
 
 	box-shadow: 5px 5px 10px rgba(0, 0, 0, 0.192);
 
 	transition: all 200ms;
+}
+
+.image-grid-image-container {
+	position: relative;
 }
 
 .image-grid li:hover .image-grid-image {

@@ -168,6 +168,19 @@ class ImageGrid {
 			clickTimer = undefined;
 		});
 
+		image.closeButton.addEventListener('click', async (event) => {
+			event.stopPropagation();
+
+			const deleted = await window.app.deleteImage(image.path);
+
+			if (deleted) {
+				if (image.isSelected) {
+					this.deselect(image);
+				}
+				this.removeImage(image);
+			}
+		});
+
 		this.#element.prepend(image.element);
 
 		return image;

@@ -12,12 +12,16 @@ const jsonIO = {
 	},
 
 	/**
-	 * Returns the object parsed in the JSON file of the specified path.
+	 * Returns the object parsed in the JSON file of the specified path, if returns undefined on error.
 	 * @param {string} path
 	 * @returns {Promise<Object>}
 	 */
 	read: async function (path) {
-		return JSON.parse(await fs.readFile(path, { encoding: 'utf-8' }));
+		try {
+			return JSON.parse(await fs.readFile(path, { encoding: 'utf-8' }));
+		} catch {
+			return undefined;
+		}
 	},
 };
 
