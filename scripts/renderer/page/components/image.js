@@ -8,6 +8,9 @@ class ImageGridImage {
 	/**@type {HTMLElement} */
 	#closeButton;
 
+	/**@type {HTMLElement} */
+	#newIcon;
+
 	/**
 	 * Returns if the given element has the structure of an ImageGridImage element.
 	 * @param {Element} element
@@ -18,12 +21,14 @@ class ImageGridImage {
 			element.matches('li') &&
 			element.children.length === 1 &&
 			element.children[0].matches('div') &&
-			element.children[0].classList.contains('image-grid-container-image') &&
-			element.children[0].children.length === 2 &&
+			element.children[0].classList.contains('image-grid-image-container') &&
+			element.children[0].children.length === 3 &&
 			element.children[0].children[0].matches('img') &&
 			element.children[0].children[0].classList.contains('image-grid-image') &&
 			element.children[0].children[1].matches('button') &&
-			element.children[0].children[1].classList.contains('image-delete-button')
+			element.children[0].children[1].classList.contains('image-delete-button') &&
+			element.children[0].children[2].matches('div') &&
+			element.children[0].children[2].classList.contains('image-new-container')
 		);
 	}
 
@@ -42,6 +47,8 @@ class ImageGridImage {
 			this.#image.src = param;
 
 			this.#closeButton = this.#element.querySelector('.image-delete-button');
+
+			this.#newIcon = this.#element.querySelector('.image-new-container');
 
 			this.#element.addEventListener('mousedown', (event) => {
 				event.preventDefault();
@@ -64,6 +71,20 @@ class ImageGridImage {
 	 */
 	deselect() {
 		this.#image.classList.remove('image-grid-selected-image');
+	}
+
+	/**
+	 * Shows the new icon.
+	 */
+	showNewIcon() {
+		this.#newIcon.classList.remove('image-new-container-hidden');
+	}
+
+	/**
+	 * Hides new icon.
+	 */
+	hideNewIcon() {
+		this.#newIcon.classList.add('image-new-container-hidden');
 	}
 
 	/**
@@ -91,7 +112,7 @@ class ImageGridImage {
 	}
 
 	/**
-	 * Returns the image's route.
+	 * Returns the image's route (with file:// protocol)
 	 * @returns {string}
 	 */
 	get path() {

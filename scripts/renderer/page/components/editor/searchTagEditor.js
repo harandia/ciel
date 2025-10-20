@@ -1,8 +1,8 @@
-import Tag from '../../tag.js';
-import { Autocompleter } from './autocompleter.js';
-import TagInput from './tagInput.js';
+import Tag from '../../../tag.js';
+import { Autocompleter } from '../autocompleter.js';
+import TagInput from '../tagInput.js';
 
-class TagEditor extends TagInput {
+class SearchTagEditor extends TagInput {
 	_autocompleterOffsetX = -10;
 	_autocompleterOffsetY = 20;
 
@@ -11,7 +11,7 @@ class TagEditor extends TagInput {
 	#warning;
 
 	/**
-	 * The element has the follow the scheme of a searchbar-container.
+	 * The element has the follow the scheme of an editor, the editor this input will be associated to.
 	 * @param {HTMLElement} editor
 	 * @param {Autocompleter} autocompleter
 	 */
@@ -188,4 +188,4 @@ class TagEditor extends TagInput {
 	}
 }
 
-export default TagEditor;
+export default SearchTagEditor;

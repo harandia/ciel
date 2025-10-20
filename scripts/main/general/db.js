@@ -229,7 +229,7 @@ class Database {
 			if (typeof searchTags === 'string') searchTags = [searchTags];
 			if (typeof excludedTags === 'string') excludedTags = [excludedTags];
 
-			if (excludedTags && excludedTags.length === 0) {
+			if (!excludedTags || excludedTags.length === 0) {
 				const stmtString = `
 				SELECT image
 				FROM image_tag it

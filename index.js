@@ -1,6 +1,7 @@
 const { BrowserWindow, app, ipcMain, dialog, shell, clipboard } = require('electron');
 const path = require('node:path');
 const fs = require('node:fs/promises');
+const url = require('node:url');
 
 const startTestDatabase = require('./test/dbTest.js');
 const settings = require('./scripts/main/settings.js');
@@ -70,29 +71,31 @@ app.whenReady().then(() => {
 		return db.getAllImageTags(imageId);
 	});
 
-	ipcMain.handle('delete-image', async (event, imagePath) => {
+	ipcMain.handle('delete-image', async (event, imagePath, force) => {
 		if (typeof imagePath === 'string') imagePath = [imagePath];
 
 		const imageIds = imagePath.map((imagePath) => path.basename(imagePath));
 
-		let message = 'Are you sure you want to delete this image?';
-		if (imageIds.length > 1) message = 'Are you sure you want to delete this selection of images?';
+		let choice;
+		if (!force) {
+			let message = 'Are you sure you want to delete this image?';
+			if (imageIds.length > 1) message = 'Are you sure you want to delete this selection of images?';
 
-		const choice = dialog.showMessageBoxSync(win, { title: 'Warning', message, type: 'warning', buttons: ['Cancel', 'Yes'], defaultId: 0 });
-
-		switch (choice) {
-			case 0:
-				return false;
-			case 1:
-				for (const image of imageIds) {
-					if (await fs.unlink(path.join(app.getPath('userData'), 'images', image))) {
-						dialog.showErrorBox('Error', 'Image could not be deleted.');
-						return;
-					}
-					db.deleteImage(image);
-				}
-				return true;
+			choice = dialog.showMessageBoxSync(win, { title: 'Warning', message, type: 'warning', buttons: ['Cancel', 'Yes'], defaultId: 0 });
 		}
+
+		if (force || (!force && choice === 1)) {
+			for (const image of imageIds) {
+				if (await fs.unlink(path.join(app.getPath('userData'), 'images', image))) {
+					dialog.showErrorBox('Error', 'Image could not be deleted.');
+					return;
+				}
+				if (db.existImage(image)) db.deleteImage(image);
+			}
+			return true;
+		}
+
+		return false;
 	});
 
 	ipcMain.on('open-image', async (event, imagePath) => {
@@ -105,7 +108,7 @@ app.whenReady().then(() => {
 		}
 	});
 
-	ipcMain.on('update-image', (event, imagePath, changes) => {
+	ipcMain.on('update-image', async (event, imagePath, changes) => {
 		const imageId = path.basename(imagePath);
 
 		const { addedTags, deletedTags } = changes;
@@ -120,7 +123,9 @@ app.whenReady().then(() => {
 		}
 
 		for (const tag of deletedTags) {
-			if (!db.getAllTaggedImages(tag)) db.deleteTag(tag);
+			if (db.getAllTaggedImages(tag).length === 0) {
+				db.deleteTag(tag);
+			}
 		}
 	});
 
@@ -189,7 +194,6 @@ app.whenReady().then(() => {
 
 	ipcMain.handle('open-file-dialog', async () => {
 		const preferedPath = (await jsonIO.read(path.join(app.getPath('userData'), 'prefered-path.json'))) || app.getPath('pictures');
-		console.log(preferedPath);
 
 		const selection = dialog.showOpenDialogSync(win, {
 			title: 'Select an image',
@@ -200,6 +204,19 @@ app.whenReady().then(() => {
 		if (selection) jsonIO.write(path.dirname(selection[0]), path.join(app.getPath('userData'), 'prefered-path.json'));
 
 		return selection;
+	});
+
+	ipcMain.handle('file-url-to-path', (event, urlStr) => {
+		return url.fileURLToPath(urlStr);
+	});
+
+	ipcMain.on('register-image', (event, imagePath, tags) => {
+		const imageId = path.basename(imagePath);
+		db.addImage(imageId);
+		for (const tag of tags) {
+			if (!db.existTag(tag)) db.addTag(tag);
+			db.addImageTag(imageId, tag);
+		}
 	});
 
 	win.maximize();

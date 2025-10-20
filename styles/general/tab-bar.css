@@ -26,6 +26,8 @@
 	max-width: 200px;
 	min-width: 75px;
 	height: 35px;
+
+	transition: all 150ms;
 }
 
 .tab-body {

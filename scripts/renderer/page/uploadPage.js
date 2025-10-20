@@ -1,4 +1,5 @@
-import Editor from './components/editor.js';
+import SearchEditor from './components/editor/searchEditor.js';
+import UploadEditor from './components/editor/uploadEditor.js';
 import ImageGrid from './components/imageGrid.js';
 
 class UploadPage {
@@ -8,7 +9,13 @@ class UploadPage {
 	/** @type {Element} */
 	#addButton;
 
-	/** @type {Editor} */
+	/** @type {Element} */
+	#cancelButton;
+
+	/** @type {Element} */
+	#uploadButton;
+
+	/** @type {UploadEditor} */
 	#editor;
 
 	/** @type {HTMLElement[]} */
@@ -26,7 +33,102 @@ class UploadPage {
 		this.#imageGrid = new ImageGrid(pageFragment.querySelector('.image-grid'));
 
 		this.#addButton = pageFragment.querySelector('.upload-add-button');
-		// this.#editor = new Editor(pageFragment.querySelector('.editor'));
+
+		this.#cancelButton = pageFragment.querySelector('.upload-cancel-button');
+
+		this.#uploadButton = pageFragment.querySelector('.upload-upload-button');
+
+		this.#editor = new UploadEditor(pageFragment.querySelector('.editor'));
+
+		this.#editor.addEventListener('hide', async ({ selection, tags }) => {
+			const uploadSelection = [];
+			const imagesUpload = {};
+
+			for (const image of selection) {
+				for (const upload of this.#uploads) {
+					if ((await window.app.fileURLToPath(image.path)) === upload.image) {
+						imagesUpload[image.path] = upload;
+						uploadSelection.push(upload);
+						break;
+					}
+				}
+			}
+
+			if (uploadSelection.length !== 0) {
+				const initialTags = Array.from(uploadSelection[0].tags);
+				for (let i = 1; i < uploadSelection.length; i++) {
+					for (const tag of initialTags) {
+						if (!uploadSelection[i].tags.includes(tag)) {
+							const removeIndex = initialTags.findIndex((initialTag) => initialTag === tag);
+							initialTags.splice(removeIndex, 1);
+						}
+					}
+				}
+
+				const newTags = tags.map((tag) => tag.name);
+
+				for (const tag of initialTags) {
+					if (!newTags.includes(tag)) {
+						for (const upload of uploadSelection) {
+							const removeIndex = upload.tags.findIndex((initialTag) => initialTag === tag);
+							upload.tags.splice(removeIndex, 1);
+						}
+					}
+				}
+
+				for (const tag of newTags) {
+					if (!initialTags.includes(tag)) {
+						for (const upload of uploadSelection) {
+							upload.tags.push(tag);
+						}
+					}
+				}
+
+				for (const selected of selection) {
+					if (imagesUpload[selected.path].tags.length === 0) {
+						selected.showNewIcon();
+					} else {
+						selected.hideNewIcon();
+					}
+				}
+			}
+		});
+
+		this.#imageGrid.addEventListener('select', async (selection) => {
+			const tags = [];
+			for (const upload of this.#uploads) {
+				for (const image of selection) {
+					if ((await window.app.fileURLToPath(image.path)) === upload.image) {
+						tags.push(new Set(upload.tags));
+					}
+				}
+			}
+
+			this.#editor.show(selection, tags);
+		});
+
+		this.#imageGrid.addEventListener('deselect', async (deselected) => {
+			const selection = this.#imageGrid.selectedImages;
+
+			if (selection.length - deselected.length <= 0) {
+				this.#editor.hide();
+			} else if (selection.length - deselected.length > 0) {
+				const newSelection = selection.filter(
+					(selectedImage) => !deselected.some((deselectedImage) => selectedImage.element === deselectedImage.element),
+				);
+
+				const tags = [];
+				for (const upload of this.#uploads) {
+					for (const image of selection) {
+						if ((await window.app.fileURLToPath(image.path)) === upload.image) {
+							tags.push(new Set(upload.tags));
+						}
+					}
+				}
+
+				this.#editor.show(newSelection, tags);
+			}
+		});
 
 		this.#addButton.addEventListener('click', async (event) => {
 			const files = await window.app.openFileDialog();
@@ -36,7 +138,8 @@ class UploadPage {
 				for (const file of files) {
 					const download = await window.app.downloadImage(file);
 					this.#uploads.push({ image: download, tags: [] });
-					this.#imageGrid.addImages(download);
+					const image = this.#imageGrid.addImages(download);
+					image.showNewIcon();
 				}
 			}
 		});
@@ -61,7 +164,8 @@ class UploadPage {
 						}
 
 						this.#uploads.push({ image: download, tags: [] });
-						this.#imageGrid.addImages(download);
+						const image = this.#imageGrid.addImages(download);
+						image.showNewIcon();
 					}
 				} else if (dataTransfer.types.includes('text/uri-list')) {
 					const uriString = dataTransfer.getData('text/uri-list');
@@ -69,13 +173,15 @@ class UploadPage {
 					for (const url of urls) {
 						const download = await window.app.downloadImage(url);
 						this.#uploads.push({ image: download, tags: [] });
-						this.#imageGrid.addImages(download);
+						const image = this.#imageGrid.addImages(download);
+						image.showNewIcon();
 					}
 				} else if (dataTransfer.types.includes('text/plain')) {
 					const str = dataTransfer.getData('text/plain');
 					const download = await window.app.downloadImage(str);
 					this.#uploads.push({ image: download, tags: [] });
-					this.#imageGrid.addImages(download);
+					const image = this.#imageGrid.addImages(download);
+					image.showNewIcon();
 				}
 			};
 
@@ -103,6 +209,65 @@ class UploadPage {
 				!event.composedPath().includes(document.querySelector('footer'))
 			) {
 				this.#imageGrid.deselect(this.#imageGrid.images);
+			}
+		});
+
+		this.#editor.addEventListener('delete', async (deleted) => {
+			for (const image of deleted) {
+				await this.#imageGrid.removeImage(image);
+			}
+
+			const selection = this.#imageGrid.selectedImages;
+
+			if (selection.length <= 0) {
+				this.#editor.hide();
+			}
+		});
+
+		this.#imageGrid.addEventListener('delete', async (deleted) => {
+			let uploadIndex;
+			for (let i = 0; i < this.#uploads.length; i++) {
+				if (this.#uploads[i].image === (await window.app.fileURLToPath(deleted.path))) {
+					uploadIndex = i;
+					break;
+				}
+			}
+			if (uploadIndex !== undefined) this.#uploads.splice(uploadIndex, 1);
+		});
+
+		this.#cancelButton.addEventListener('click', async () => {
+			const { showConfirmation } = await window.app.getSettings();
+
+			let choice;
+
+			if (showConfirmation) {
+				choice = await window.app.showWarning('Warning', 'Are you sure you want to discard the uploaded images?', ['Cancel', 'Yes, discard'], 0);
+			}
+
+			if (!showConfirmation || (showConfirmation && choice === 1)) {
+				for (const image of this.#imageGrid.images) {
+					await this.#imageGrid.removeImage(image);
+					await window.app.deleteImage(image.path, true);
+				}
+			}
+		});
+
+		this.#uploadButton.addEventListener('click', async () => {
+			let choice;
+
+			if (this.#uploads.some((upload) => upload.tags.length === 0)) {
+				choice = await window.app.showWarning('Warning', 'There are some images with no tags. Do you want to continue?', ['No, cancel', 'Yes'], 0);
+			}
+
+			if (choice === undefined || choice === 1) {
+				for (const { image, tags } of this.#uploads) {
+					window.app.registerImage(image, tags);
+				}
+
+				this.#uploads = [];
+				for (const image of this.#imageGrid.images) {
+					this.#imageGrid.removeImage(image);
+				}
 			}
 		});
 	}

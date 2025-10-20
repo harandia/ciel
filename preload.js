@@ -67,11 +67,13 @@ contextBridge.exposeInMainWorld('app', {
 
 	/**
 	 * Returns true if the image is successfully removed (file and database). The image needs to be located in the app's data folder.
+	 * If force is true, no warning will be prompt.
 	 * @param {string | string[]} imagePaths
+	 * @param {boolean} [force]
 	 * @return {Promise<boolean>}
 	 */
-	deleteImage: (imagePaths) => {
-		return ipcRenderer.invoke('delete-image', imagePaths);
+	deleteImage: (imagePaths, force) => {
+		return ipcRenderer.invoke('delete-image', imagePaths, force);
 	},
 
 	/**
@@ -134,7 +136,7 @@ contextBridge.exposeInMainWorld('app', {
 	 * Deletes the given image, the image should only be located in the app's images folder.
 	 * @param {string} image
 	 */
-	deleteTempImage: (image) => {
+	deleteTempImage: (image, force) => {
 		ipcRenderer.send('delete-temp-image', image);
 	},
 
@@ -152,5 +154,23 @@ contextBridge.exposeInMainWorld('app', {
 	 */
 	openFileDialog: () => {
 		return ipcRenderer.invoke('open-file-dialog');
+	},
+
+	/**
+	 * Returns the path route of the given file URL.
+	 * @param {string} url
+	 * @returns {Promise<string>}
+	 */
+	fileURLToPath: (url) => {
+		return ipcRenderer.invoke('file-url-to-path', url);
+	},
+
+	/**
+	 * Registers an image in the database and associates it with the given tags. The image should be located in the app's images folder.
+	 * @param {string} imagePath
+	 * @param {string[]} tags
+	 */
+	registerImage: (imagePath, tags) => {
+		ipcRenderer.send('register-image', imagePath, tags);
 	},
 });

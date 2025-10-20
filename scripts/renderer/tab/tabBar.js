@@ -80,6 +80,9 @@ const addTab = async function (page, forceNewTab = false) {
 	if (openInNewTab || forceNewTab || tabs.length === 0) {
 		const tab = new Tab(page);
 
+		tab.element.style.minWidth = 0;
+		tab.element.style.maxWidth = 0;
+
 		tabBar.insertBefore(tab.element, tabBar.lastElementChild);
 
 		tab.closeButton.addEventListener('click', async (event) => {
@@ -204,6 +207,11 @@ const addTab = async function (page, forceNewTab = false) {
 		selectTab(tab);
 
 		tabs.push(tab);
+
+		setTimeout(() => {
+			tab.element.style.minWidth = 75 + 'px';
+			tab.element.style.maxWidth = 200 + 'px';
+		}, 25);
 	} else {
 		selectedTab.loadPage(page);
 	}

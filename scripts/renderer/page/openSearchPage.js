@@ -1,7 +1,7 @@
 import ClosedAllImagesSearchPage from './closedAllImagesSearchPage.js';
 import ClosedSearchPage from './closedSearchPage.js';
 import TagAutocompleter from './components/autocompleter.js';
-import Editor from './components/editor.js';
+import SearchEditor from './components/editor/searchEditor.js';
 import ImageGrid from './components/imageGrid.js';
 import SearchBar from './components/searchbar.js';
 import SearchPage from './searchPage.js';
@@ -15,7 +15,7 @@ class OpenSearchPage extends SearchPage {
 	#searchBar;
 	/** @type {ImageGrid} */
 	_imageGrid;
-	/** @type {Editor} */
+	/** @type {SearchEditor} */
 	#editor;
 	/** @type {HTMLElement[]} */
 	#elements;
@@ -61,7 +61,7 @@ class OpenSearchPage extends SearchPage {
 
 		this.#searchBar = new SearchBar(pageFragment.querySelector('header'), autocompleter);
 		this._imageGrid = new ImageGrid(pageFragment.querySelector('.image-grid'));
-		this.#editor = new Editor(pageFragment.querySelector('.editor'));
+		this.#editor = new SearchEditor(pageFragment.querySelector('.editor'));
 
 		for (const tag of this.searchTags) {
 			this.#searchBar.addTag(tag);
@@ -113,7 +113,7 @@ class OpenSearchPage extends SearchPage {
 				}
 			}
 
-			this.#editor.show(selection);
+			this.#editor.show(selection, await Promise.all(selection.map(async (image) => new Set(await window.app.getImageTags(image.path)))));
 		});
 
 		this._imageGrid.addEventListener('deselect', async (deselected) => {
@@ -129,14 +129,13 @@ class OpenSearchPage extends SearchPage {
 					return;
 				}
 			}
-
 			if (selection.length - deselected.length <= 0) {
 				this.#editor.hide();
 			} else if (selection.length - deselected.length > 0) {
 				const newSelection = selection.filter(
 					(selectedImage) => !deselected.some((deselectedImage) => selectedImage.element === deselectedImage.element),
 				);
-				this.#editor.show(newSelection);
+				this.#editor.show(newSelection, await Promise.all(newSelection.map(async (image) => new Set(await window.app.getImageTags(image.path)))));
 			}
 		});
 
@@ -151,8 +150,13 @@ class OpenSearchPage extends SearchPage {
 
 		this.#editor.addEventListener('delete', (deleted) => {
 			for (const image of deleted) {
-				this._imageGrid.deselect(image);
 				this._imageGrid.removeImage(image);
+			}
+
+			const selection = this._imageGrid.selectedImages;
+
+			if (selection.length <= 0) {
+				this.#editor.hide();
 			}
 		});
 	}

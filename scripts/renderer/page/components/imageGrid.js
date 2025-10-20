@@ -13,6 +13,9 @@ class ImageGrid {
 	/**@type {Function[]} */
 	#ondeselect = [];
 
+	/**@type {Function[]} */
+	#ondelete = [];
+
 	/** @type {boolean} */
 	#preventDeselect;
 
@@ -52,7 +55,8 @@ class ImageGrid {
 	 * show is triggered after the showImages method, and the functions are given the displayed images.
 	 * select is triggered when an image is selected or deselected, the functions are given the selected images.
 	 * deselect is triggered before an image is deselected, the functions are given the image that is going to be deselected.
-	 * @param {'show' | 'select' | 'deselect'} eventType
+	 * delete is triggered after an image is deleted, the functions are given the deleted ImageGridImage.
+	 * @param {'show' | 'select' | 'deselect' | 'delete'} eventType
 	 * @param {Function} callback
 	 */
 	addEventListener(eventType, callback) {
@@ -65,6 +69,9 @@ class ImageGrid {
 				break;
 			case 'deselect':
 				this.#ondeselect.push(callback);
+				break;
+			case 'delete':
+				this.#ondelete.push(callback);
 				break;
 		}
 	}
@@ -152,7 +159,7 @@ class ImageGrid {
 						if (!image.isSelected) this.select(image);
 						else await this.deselect(image);
 					} else {
-						await this.deselect(this.images.filter((otherImage) => otherImage.element !== image.element));
+						await this.deselect(this.images);
 						await this.select(image);
 					}
 
@@ -191,18 +198,22 @@ class ImageGrid {
 	 * If param is number, it will delete the specified index starting from 0.
 	 * If param is an ImageGridImage, it will delete the given image.
 	 * @param {ImageGridImage | number} param
-	 * @returns {boolean}
+	 * @returns {Promise<boolean>}
 	 */
-	removeImage(param) {
+	async removeImage(param) {
 		let removed;
+		let removedImage;
 		const children = this.#element.children;
 		if (typeof param === 'number') {
 			if (children[param]) {
+				removedImage = new ImageGridImage(children[param]);
 				this.#element.removeChild(children[param]);
 				removed = true;
 			}
 			removed = false;
 		} else {
+			removedImage = param;
+
 			removed = false;
 			for (const child of Array.from(children)) {
 				if (child === param.element) {
@@ -211,6 +222,9 @@ class ImageGrid {
 					break;
 				}
 			}
+		}
+		if (removed) {
+			for (const func of this.#ondelete) await func(removedImage);
 		}
 		return removed;
 	}

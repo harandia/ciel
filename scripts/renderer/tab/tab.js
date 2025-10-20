@@ -81,6 +81,12 @@ class Tab {
 			const choice = await window.app.showWarning('Warning', 'Are you sure you want to discard the changes?', ['Cancel', 'Yes, discard'], 0);
 
 			if (choice === 0) return;
+
+			if (choice === 1 && this.#page instanceof UploadPage) {
+				for (const taggedImage of this.#page.uploads) {
+					window.app.deleteTempImage(taggedImage.image);
+				}
+			}
 		}
 
 		this.#page = page;
