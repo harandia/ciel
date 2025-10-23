@@ -205,7 +205,7 @@ class Database {
 	}
 
 	/**
-	 * Returns all the image's associated tags.
+	 * Returns all the image's associated tags or an empty array.
 	 * @param {string} image
 	 * @returns {string[]}
 	 */

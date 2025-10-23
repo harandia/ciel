@@ -22,13 +22,21 @@
 	column-gap: 5px;
 
 	border: none;
-	border-radius: 5px;
+	border-radius: 10px;
 
-	background-color: rgb(234, 246, 250);
+	background-color: rgb(247, 253, 255);
+
+	box-shadow: 0 5px 10px rgba(0, 0, 0, 0.05);
+
+	transition: all 100ms;
 }
 
 .submenu-tab:hover {
-	background-color: rgb(229, 249, 255);
+	transform: translateY(-3px);
+}
+
+.submenu-tab .search-tag:hover {
+	text-decoration: none;
 }
 
 .submenu-tab-tag-list {

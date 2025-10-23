@@ -9,6 +9,8 @@ body {
 	background-color: rgb(251, 250, 253);
 
 	font-family: Arial, Helvetica, sans-serif;
+
+	transition: opacity 200ms;
 }
 
 ::-webkit-scrollbar {

@@ -20,7 +20,17 @@ class SearchPage {
 	}
 
 	/**
-	 * Returns the search tags used in this page.
+	 * Returns a serializable object with the search tags of the page in an array.
+	 * @returns {{searchTags: string[]}}
+	 */
+	toJSON() {
+		return {
+			searchTags: this.searchTags,
+		};
+	}
+
+	/**
+	 * Returns the search tags used in this page. The tags that are excluded of the search are marked with a '!' at the beginning;
 	 * @returns {string[]}
 	 */
 	get searchTags() {
@@ -33,7 +43,7 @@ class SearchPage {
 	 */
 	equals(otherPage) {
 		// @ts-ignore
-		return this._searchTags.isSupersetOf(otherPage) && this._searchTags.isSubsetOf(otherPage);
+		return this._searchTags.isSupersetOf(otherPage._searchTags) && this._searchTags.isSubsetOf(otherPage._searchTags);
 	}
 }
 

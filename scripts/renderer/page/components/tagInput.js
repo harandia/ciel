@@ -48,18 +48,26 @@ class TagInput {
 			const containerParentRect = autocompleter.parent.getBoundingClientRect();
 			const completerRect = autocompleter.element.getBoundingClientRect();
 
-			const positionx = caretRect.x - containerParentRect.x + this._autocompleterOffsetX;
-			const positiony = caretRect.y - containerParentRect.y + this._autocompleterOffsetY;
+			let positionx;
+			let positiony;
+
+			if (caretRect.x && caretRect.y) {
+				positionx = caretRect.x - containerParentRect.x + this._autocompleterOffsetX;
+				positiony = caretRect.y - containerParentRect.y + this._autocompleterOffsetY;
+			} else {
+				const inputRect = this._input.getBoundingClientRect();
+
+				positionx = inputRect.x - containerParentRect.x + this._autocompleterOffsetX;
+				positiony = inputRect.y - containerParentRect.y + this._autocompleterOffsetY;
+			}
 
 			const autcompleterOverflows = containerParentRect.x + containerParentRect.width - caretRect.x <= completerRect.width - 10;
 
 			if (!autcompleterOverflows) {
-				if (caretRect.x && caretRect.y) {
-					autocompleter.show(positionx, positiony);
+				autocompleter.show(positionx, positiony);
 
-					this.#autocompleterX = positionx;
-					this.#autocompleterY = positiony;
-				}
+				this.#autocompleterX = positionx;
+				this.#autocompleterY = positiony;
 			} else {
 				const overflowx = completerRect.width - 20 - (containerParentRect.x + containerParentRect.width - caretRect.x);
 
@@ -96,12 +104,15 @@ class TagInput {
 				}
 			} else if (event.key === 'Backspace') {
 				if (caretElement.previousElementSibling) {
-					const removingElemente = caretElement.previousElementSibling;
-					this.container.insertBefore(caretElement, removingElemente);
+					const removingElement = caretElement.previousElementSibling;
 					// @ts-ignore
-					this.removeTag(Tag.fromElement(removingElemente));
+					const removingTag = Tag.fromElement(removingElement);
+					this.removeTag(removingTag);
+					if (this.tags.some((tag) => tag.type === 'deleted' && tag.name === removingTag.name)) {
+						this.container.insertBefore(caretElement, removingElement);
+					}
 				}
-			} else {
+			} else if (event.key !== 'ArrowUp' && event.key !== 'ArrowDown') {
 				this._input.focus();
 			}
 		};
@@ -272,6 +283,7 @@ class TagInput {
 			// @ts-ignore
 			if (event.composedPath().some((element) => Array.from(autocompleter.element.children).includes(element))) {
 				autocomplete();
+				autocompleter.hide();
 			}
 		});
 
@@ -280,8 +292,6 @@ class TagInput {
 			if (event.composedPath().some((element) => Array.from(autocompleter.element.children).includes(element))) {
 				updateAutocompleter();
 			}
-
-			if (this._input.textContent.trim().length === 0) autocompleter.hide();
 		});
 	}
 

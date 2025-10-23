@@ -28,7 +28,8 @@
 	},
 	"dependencies": {
 		"better-sqlite3": "12.2.0",
-		"nanoid": "^5.1.6",
+		"dayjs": "1.11.18",
+		"nanoid": "5.1.6",
 		"stream-mime-type": "2.0.0"
 	}
 }

@@ -97,6 +97,10 @@
 			rel="stylesheet"
 			href="styles/general/tag-input-caret.css"
 		/>
+		<link
+			rel="stylesheet"
+			href="./styles/general/context-menu.css"
+		/>
 		<script
 			src="scripts/renderer/menu/menu.js"
 			type="module"
@@ -156,7 +160,6 @@
 			class="scrollable submenu-hidden submenu"
 		>
 			<h1>Favourites</h1>
-			<ul class="submenu-tab-list"></ul>
 		</nav>
 
 		<nav
@@ -452,6 +455,10 @@
 
 		<template id="autocompleter">
 			<ol class="scrollable autocompleter-hidden autocompleter"></ol>
+		</template>
+
+		<template id="context-menu">
+			<ul class="context-menu"></ul>
 		</template>
 	</body>
 </html>

@@ -45,6 +45,11 @@ class SearchEditor extends Editor {
 
 			for (const image of this._selectedImages) {
 				window.app.updateImage(image.path, changes);
+				if ((await window.app.getImageTags(image.path)).length === 0) {
+					image.showNewIcon();
+				} else {
+					image.hideNewIcon();
+				}
 			}
 
 			this.show(

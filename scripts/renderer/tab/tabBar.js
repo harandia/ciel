@@ -3,6 +3,9 @@ import OpenSearchPage from '../page/openSearchPage.js';
 import UploadPage from '../page/uploadPage.js';
 import Tab from './tab.js';
 import { AbsoluteTooltip, StickyTooltip } from '../tooltip.js';
+import ContextMenu from '../contextMenu.js';
+import favouritesMenu from '../menu/favouritesMenu.js';
+import SearchPage from '../page/searchPage.js';
 
 /**
  * @type {(Tab)[]}
@@ -48,6 +51,26 @@ tabBar.addEventListener('wheel', (event) => {
 	tabBar.scrollLeft = tabBar.scrollLeft - event.deltaY;
 });
 
+tabBar.addEventListener('contextmenu', (event) => {
+	if (event.target !== tabBar) return;
+
+	ContextMenu.show(event.clientX, event.clientY, [
+		{
+			item: 'New tab',
+			click: () => addTab(new OpenSearchPage(), true),
+		},
+		'separator',
+		{
+			item: 'Close all',
+			click: () => {
+				for (const tab of tabs) {
+					closeTab(tab);
+				}
+			},
+		},
+	]);
+});
+
 window.addEventListener('beforeunload', async (event) => {
 	if (tabs.some((tab) => tab.page.hasUnsavedChanges)) {
 		event.preventDefault();
@@ -85,44 +108,8 @@ const addTab = async function (page, forceNewTab = false) {
 
 		tabBar.insertBefore(tab.element, tabBar.lastElementChild);
 
-		tab.closeButton.addEventListener('click', async (event) => {
-			event.stopPropagation();
-
-			const { showConfirmation } = await window.app.getSettings();
-
-			if (showConfirmation && tab.page.hasUnsavedChanges) {
-				const choice = await window.app.showWarning('Warning', 'Are you sure you want to discard the changes?', ['Cancel', 'Yes, discard'], 0);
-
-				if (choice === 0) return;
-
-				if (choice === 1 && tab.page instanceof UploadPage) {
-					for (const taggedImage of tab.page.uploads) {
-						window.app.deleteTempImage(taggedImage.image);
-					}
-				}
-			}
-
-			const tabIndex = tabs.indexOf(tab);
-
-			if (tabs.length > 1 && tab === selectedTab) {
-				const newIndex = tabIndex - 1 < 0 ? 1 : tabIndex - 1;
-				selectTab(tabs[newIndex]);
-			} else if (tabs.length === 1) {
-				selectedTab = undefined;
-			}
-
-			tabBar.removeChild(tab.element);
-
-			tabs.splice(tabIndex, 1);
-
-			tabTooltip.hide();
-
-			tab.derender();
-			updatePrevNext();
-		});
-
-		tab.closeButton.addEventListener('mousedown', (event) => {
-			event.stopPropagation();
+		tab.closeButton.addEventListener('click', async () => {
+			await closeTab(tab);
 		});
 
 		tab.element.addEventListener('click', () => {
@@ -204,6 +191,37 @@ const addTab = async function (page, forceNewTab = false) {
 			document.addEventListener('mouseup', cancelTimeout, { once: true });
 		});
 
+		tab.element.addEventListener('contextmenu', (event) => {
+			const menuOptions = [];
+
+			const prevItem = { item: 'Previous page', click: () => tab.loadPrevPage() };
+			if (tab.prevPages.length === 0) prevItem.disabled = true;
+
+			menuOptions.push(prevItem);
+
+			const nextItem = { item: 'Next page', click: () => tab.loadNextPage() };
+			if (tab.nextPages.length === 0) nextItem.disabled = true;
+
+			menuOptions.push(nextItem);
+
+			menuOptions.push('separator');
+
+			if (tab.page instanceof SearchPage) {
+				if (favouritesMenu.isFavourite(tab.page)) {
+					menuOptions.push({ item: 'Remove page from favourites', click: () => favouritesMenu.removeFav(tab.page) });
+				} else {
+					const item = { item: 'Add page to favourites', click: () => favouritesMenu.addFav(tab.page) };
+					if (tab.page.searchTags.length === 0) item.disabled = true;
+					menuOptions.push(item);
+				}
+			}
+
+			menuOptions.push('separator');
+
+			menuOptions.push({ item: 'Close tab', click: () => closeTab(tab) });
+			ContextMenu.show(event.clientX, event.clientY, menuOptions);
+		});
+
 		selectTab(tab);
 
 		tabs.push(tab);
@@ -238,6 +256,49 @@ const selectTab = function (tab) {
 	tab.render();
 	updatePrevNext();
 	selectedTab.addEventListener('loadpage', onload);
+};
+
+/**
+ * Tries to close the given tab.
+ * @param {Tab} tab
+ */
+const closeTab = async (tab) => {
+	const { showConfirmation } = await window.app.getSettings();
+
+	if (showConfirmation && tab.page.hasUnsavedChanges) {
+		const choice = await window.app.showWarning('Warning', 'Are you sure you want to discard the changes?', ['Cancel', 'Yes, discard'], 0);
+
+		if (choice === 0) return;
+
+		if (choice === 1 && tab.page instanceof UploadPage) {
+			for (const taggedImage of tab.page.uploads) {
+				window.app.deleteTempImage(taggedImage.image);
+			}
+		}
+	}
+
+	tab.element.style.minWidth = 0;
+	tab.element.style.maxWidth = 0;
+
+	setTimeout(() => {
+		const tabIndex = tabs.indexOf(tab);
+
+		if (tabs.length > 1 && tab === selectedTab) {
+			const newIndex = tabIndex - 1 < 0 ? 1 : tabIndex - 1;
+			selectTab(tabs[newIndex]);
+		} else if (tabs.length === 1) {
+			selectedTab = undefined;
+		}
+
+		tabBar.removeChild(tab.element);
+
+		tabs.splice(tabIndex, 1);
+
+		tabTooltip.hide();
+
+		tab.derender();
+		updatePrevNext();
+	}, 25);
 };
 
 /**

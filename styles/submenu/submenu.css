@@ -36,6 +36,8 @@
 }
 
 .submenu h1 {
+	user-select: none;
+
 	margin: 0;
 
 	font-size: 29px;
@@ -43,6 +45,8 @@
 }
 
 .submenu h2 {
+	user-select: none;
+
 	margin: 0;
 	margin-top: 5px;
 

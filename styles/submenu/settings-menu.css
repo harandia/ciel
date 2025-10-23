@@ -25,6 +25,8 @@
 }
 
 #settings-menu label p {
+	user-select: none;
+
 	margin: 0;
 
 	font-size: 14px;

@@ -14,6 +14,9 @@ const { pathToFileURL } = require('node:url');
 
 const jsonIO = require('./scripts/main/general/jsonIO.js');
 
+const dayjs = require('dayjs');
+const { equal } = require('node:assert');
+
 function createWindow() {
 	return new BrowserWindow({
 		title: 'ciel',
@@ -44,6 +47,14 @@ app.whenReady().then(() => {
 
 	ipcMain.on('update-settings', (event, config) => {
 		Object.assign(settings, config);
+	});
+
+	ipcMain.handle('get-favs', async () => {
+		return (await jsonIO.read(path.join(app.getPath('userData'), 'favs.json'))) || [];
+	});
+
+	ipcMain.on('update-favs', (event, favs) => {
+		jsonIO.write(favs, path.join(app.getPath('userData'), 'favs.json'));
 	});
 
 	ipcMain.handle('exist-tag', async (event, tag) => {
@@ -90,7 +101,12 @@ app.whenReady().then(() => {
 					dialog.showErrorBox('Error', 'Image could not be deleted.');
 					return;
 				}
+				const imageTags = db.getAllTags(image);
+
 				if (db.existImage(image)) db.deleteImage(image);
+				for (const tag of imageTags) {
+					if (db.getAllTaggedImages(tag).length === 0) db.deleteTag(tag);
+				}
 			}
 			return true;
 		}
@@ -217,6 +233,20 @@ app.whenReady().then(() => {
 			if (!db.existTag(tag)) db.addTag(tag);
 			db.addImageTag(imageId, tag);
 		}
+	});
+
+	ipcMain.handle('date', () => {
+		return dayjs().format('dddd D, MMMM');
+	});
+
+	ipcMain.handle('compare-date', (event, date1, date2) => {
+		const d1 = dayjs(date1, 'dddd D, MMMM');
+		const d2 = dayjs(date2, 'dddd D, MMMM');
+		return {
+			equal: d1.isSame(d2, 'day'),
+			after: d1.isAfter(d2, 'day'),
+			before: d1.isBefore(d2, 'day'),
+		};
 	});
 
 	win.maximize();

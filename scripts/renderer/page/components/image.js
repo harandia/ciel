@@ -55,7 +55,12 @@ class ImageGridImage {
 			});
 		} else {
 			this.#element = param;
+
 			this.#image = this.#element.querySelector('.image-grid-image');
+
+			this.#closeButton = this.#element.querySelector('.image-delete-button');
+
+			this.#newIcon = this.#element.querySelector('.image-new-container');
 		}
 	}
 

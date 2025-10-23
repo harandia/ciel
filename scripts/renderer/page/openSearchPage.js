@@ -1,3 +1,4 @@
+import ContextMenu from '../contextMenu.js';
 import ClosedAllImagesSearchPage from './closedAllImagesSearchPage.js';
 import ClosedSearchPage from './closedSearchPage.js';
 import TagAutocompleter from './components/autocompleter.js';
@@ -93,6 +94,14 @@ class OpenSearchPage extends SearchPage {
 					this.search();
 				}
 			}, 1);
+		});
+
+		this._imageGrid.addEventListener('show', async (added) => {
+			for (const image of added) {
+				if ((await window.app.getImageTags(image.path)).length === 0) {
+					image.showNewIcon();
+				}
+			}
 		});
 
 		const searchTags = this.searchTags.filter((tag) => !tag.startsWith('!'));

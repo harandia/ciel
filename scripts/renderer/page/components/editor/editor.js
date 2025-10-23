@@ -1,5 +1,4 @@
 import Tag from '../../../tag.js';
-import TagAutocompleter from '../autocompleter.js';
 import ImageGridImage from '../image.js';
 import SearchTagEditor from './searchTagEditor.js';
 import UploadTagEditor from './uploadTagEditor.js';

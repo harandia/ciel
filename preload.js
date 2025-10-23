@@ -16,6 +16,20 @@ contextBridge.exposeInMainWorld('app', {
 		ipcRenderer.send('update-settings', config);
 	},
 	/**
+	 * Returns the app's settings.
+	 * @returns {Promise<{page: {searchTags: string[]}, date: string}>}
+	 */
+	getFavs: () => {
+		return ipcRenderer.invoke('get-favs');
+	},
+	/**
+	 * Updates the app's settings.
+	 * @param {{page: {searchTags: string[]}, date: string}[]} favs
+	 */
+	updateFavs: (favs) => {
+		ipcRenderer.send('update-favs', favs);
+	},
+	/**
 	 * Sets the application zoom given the zoom percentage.
 	 * @param {number} zoom
 	 */
@@ -57,9 +71,9 @@ contextBridge.exposeInMainWorld('app', {
 	},
 
 	/**
-	 * Returns all the tags associated with an image path (absolute path). The image needs to be located in the app's data folder.
+	 * Returns all the tags associated with an image path (absolute path) or an empty array. The image needs to be located in the app's data folder.
 	 * @param {string} image
-	 * @returns {Promise<string>}
+	 * @returns {Promise<string[]>}
 	 */
 	getImageTags: (imagePath) => {
 		return ipcRenderer.invoke('image-tags', imagePath);
@@ -172,5 +186,27 @@ contextBridge.exposeInMainWorld('app', {
 	 */
 	registerImage: (imagePath, tags) => {
 		ipcRenderer.send('register-image', imagePath, tags);
+	},
+
+	/**
+	 * Returns a string representing today's date formated like dddd D, MMMM
+	 * @param {string} dateStr
+	 * @returns {Promise<string>}
+	 */
+	date: (dateStr) => {
+		return ipcRenderer.invoke('date');
+	},
+
+	/**
+	 * Compares date1 and date2 and returns an object with three properties:
+	 * equals (true if date1 and date2 are the same).
+	 * greater (true if date1 is ahead of date2).
+	 * less (true if date1 is before date2).
+	 * @param {string} date1
+	 * @param {string} date2
+	 * @returns {Promise<{equals: boolean, after: boolean, before: boolean}>}
+	 */
+	compareDate: (date1, date2) => {
+		return ipcRenderer.invoke('compare-date', date1, date2);
 	},
 });

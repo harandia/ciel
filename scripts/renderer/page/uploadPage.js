@@ -203,11 +203,7 @@ class UploadPage {
 		}
 
 		pageFragment.querySelector('.upload-view').addEventListener('click', (event) => {
-			if (
-				!this.#imageGrid.images.some((image) => event.composedPath().includes(image.element)) &&
-				!event.composedPath().includes(document.querySelector('.upload-add-button')) &&
-				!event.composedPath().includes(document.querySelector('footer'))
-			) {
+			if (!this.#imageGrid.images.some((image) => event.composedPath().includes(image.element))) {
 				this.#imageGrid.deselect(this.#imageGrid.images);
 			}
 		});
@@ -253,22 +249,24 @@ class UploadPage {
 		});
 
 		this.#uploadButton.addEventListener('click', async () => {
-			let choice;
+			setTimeout(async () => {
+				let choice;
 
-			if (this.#uploads.some((upload) => upload.tags.length === 0)) {
-				choice = await window.app.showWarning('Warning', 'There are some images with no tags. Do you want to continue?', ['No, cancel', 'Yes'], 0);
-			}
-
-			if (choice === undefined || choice === 1) {
-				for (const { image, tags } of this.#uploads) {
-					window.app.registerImage(image, tags);
+				if (this.#uploads.some((upload) => upload.tags.length === 0)) {
+					choice = await window.app.showWarning('Warning', 'There are some images with no tags. Do you want to continue?', ['No, cancel', 'Yes'], 0);
 				}
 
-				this.#uploads = [];
-				for (const image of this.#imageGrid.images) {
-					this.#imageGrid.removeImage(image);
+				if (choice === undefined || choice === 1) {
+					for (const { image, tags } of this.#uploads) {
+						window.app.registerImage(image, tags);
+					}
+
+					this.#uploads = [];
+					for (const image of this.#imageGrid.images) {
+						this.#imageGrid.removeImage(image);
+					}
 				}
-			}
+			}, 10);
 		});
 	}
 

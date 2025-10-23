@@ -114,15 +114,7 @@ class UploadTagEditor extends TagInput {
 			for (let i = 0; i < this.tagCount; i++) {
 				// @ts-ignore
 				if (param.equals(Tag.fromElement(children[i]))) {
-					// @ts-ignore
-					const tag = Tag.fromElement(children[i]);
-					if (tag.type === 'normal') {
-						tag.type = 'deleted';
-					} else if (tag.type === 'deleted') {
-						tag.type = 'normal';
-					} else {
-						this.container.removeChild(children[i]);
-					}
+					this.container.removeChild(children[i]);
 
 					isRemoved = true;
 					break;
