@@ -46,7 +46,7 @@ class FavouritesMenu {
 		this.#favList.push(tab);
 
 		tab.deleteButton.addEventListener('click', () => {
-			this.#removeFavTab(tab);
+			this.#removeTab(tab);
 		});
 
 		tab.element.addEventListener('click', async (event) => {
@@ -127,7 +127,7 @@ class FavouritesMenu {
 	 * Removes a submenuTab from the list.
 	 * @param {SubmenuTab} tab
 	 */
-	#removeFavTab(tab) {
+	#removeTab(tab) {
 		const tabIndex = this.#favList.indexOf(tab);
 		this.#favList.splice(tabIndex, 1);
 		this.#element.removeChild(tab.element);
@@ -146,7 +146,7 @@ class FavouritesMenu {
 	removeFav(favPage) {
 		for (const tab of this.#favList) {
 			if (tab.page.equals(favPage)) {
-				this.#removeFavTab(tab);
+				this.#removeTab(tab);
 			}
 		}
 	}

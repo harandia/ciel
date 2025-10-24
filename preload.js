@@ -30,6 +30,20 @@ contextBridge.exposeInMainWorld('app', {
 		ipcRenderer.send('update-favs', favs);
 	},
 	/**
+	 * Returns the app's search history.
+	 * @returns {Promise<{page: {searchTags: string[]}, date: string}>}
+	 */
+	getHistory: () => {
+		return ipcRenderer.invoke('get-history');
+	},
+	/**
+	 * Updates the app's search history.
+	 * @param {{page: {searchTags: string[]}, date: string}[]} history
+	 */
+	updateHistory: (history) => {
+		ipcRenderer.send('update-history', history);
+	},
+	/**
 	 * Sets the application zoom given the zoom percentage.
 	 * @param {number} zoom
 	 */

@@ -45,6 +45,20 @@ class SubmenuTab {
 	}
 
 	/**
+	 * Returns true if the element is a SubmenuTab.
+	 * @param {Element} element
+	 * @returns {boolean}
+	 */
+	static isSubmenuTab(element) {
+		return (
+			element.classList.contains('submenu-tab') &&
+			element.children.length === 2 &&
+			element.children[0].classList.contains('submenu-tab-tag-list') &&
+			element.children[1].classList.contains('submenu-tab-delete-button')
+		);
+	}
+
+	/**
 	 * Returns a new SubmenuTab built from a serialized object like the ones returned by the toJSON() method.
 	 * @param {{page: {searchTags: string[]}, date: string}} json
 	 * @returns {SubmenuTab}
@@ -84,6 +98,13 @@ class SubmenuTab {
 	 */
 	get page() {
 		return this.#page;
+	}
+
+	/**
+	 * Returns this tab's date of creation, in 'dddd, DD MMMM YYYY' format.
+	 */
+	get date() {
+		return this.#date;
 	}
 }
 

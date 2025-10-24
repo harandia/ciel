@@ -57,6 +57,14 @@ app.whenReady().then(() => {
 		jsonIO.write(favs, path.join(app.getPath('userData'), 'favs.json'));
 	});
 
+	ipcMain.handle('get-history', async () => {
+		return (await jsonIO.read(path.join(app.getPath('userData'), 'history.json'))) || [];
+	});
+
+	ipcMain.on('update-history', (event, history) => {
+		jsonIO.write(history, path.join(app.getPath('userData'), 'history.json'));
+	});
+
 	ipcMain.handle('exist-tag', async (event, tag) => {
 		return db.existTag(tag);
 	});
@@ -236,12 +244,12 @@ app.whenReady().then(() => {
 	});
 
 	ipcMain.handle('date', () => {
-		return dayjs().format('dddd D, MMMM');
+		return dayjs().format('dddd, D MMMM YYYY');
 	});
 
 	ipcMain.handle('compare-date', (event, date1, date2) => {
-		const d1 = dayjs(date1, 'dddd D, MMMM');
-		const d2 = dayjs(date2, 'dddd D, MMMM');
+		const d1 = dayjs(date1, 'dddd, D MMMM YYYY');
+		const d2 = dayjs(date2, 'dddd, D MMMM YYYY');
 		return {
 			equal: d1.isSame(d2, 'day'),
 			after: d1.isAfter(d2, 'day'),

@@ -6,6 +6,7 @@ import { AbsoluteTooltip, StickyTooltip } from '../tooltip.js';
 import ContextMenu from '../contextMenu.js';
 import favouritesMenu from '../menu/favouritesMenu.js';
 import SearchPage from '../page/searchPage.js';
+import historyMenu from '../menu/historyMenu.js';
 
 /**
  * @type {(Tab)[]}
@@ -233,6 +234,10 @@ const addTab = async function (page, forceNewTab = false) {
 	} else {
 		selectedTab.loadPage(page);
 	}
+
+	if (page instanceof SearchPage && page.searchTags.length !== 0) {
+		historyMenu.addHistory(page);
+	}
 };
 
 /**
@@ -245,6 +250,9 @@ const selectTab = function (tab) {
 	const onload = (tab) => {
 		tab.render();
 		updatePrevNext();
+		if (tab.page instanceof SearchPage && tab.page.searchTags.length !== 0) {
+			historyMenu.addHistory(tab.page);
+		}
 	};
 
 	selectedTab?.deselect();
