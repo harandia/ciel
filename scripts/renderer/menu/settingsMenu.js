@@ -1,5 +1,6 @@
 // @ts-nocheck
 import { submenus } from './menu.js';
+import keysDown from '../general.js';
 
 const settingsMenu = submenus.settings;
 
@@ -68,7 +69,7 @@ settingsInput.sldeZoom.addEventListener('change', (event) => {
 	window.app.setZoom(value);
 });
 
-//Shortcuts
+//Shortcuts listener
 settingsMenu.addEventListener('click', (event) => {
 	if (event.target instanceof HTMLElement && !event.target.classList.contains('shortcut-change-button')) return;
 
@@ -110,6 +111,41 @@ settingsMenu.addEventListener('click', (event) => {
 	};
 	document.addEventListener('click', stopListening);
 	document.addEventListener('keyup', stopListening);
+});
+
+//Zoom in/out shortcut
+document.addEventListener('keydown', async (event) => {
+	const { zoomInShcut } = await window.app.getSettings();
+
+	if (keysDown.size !== zoomInShcut.length) return;
+
+	for (const key of keysDown) {
+		if (!zoomInShcut.includes(key)) {
+			return;
+		}
+	}
+
+	const { zoom } = await window.app.getSettings();
+	window.app.setZoom(zoom + 15);
+	window.app.updateSettings({ zoom: zoom + 15 });
+	updateMenu({ zoom: zoom + 15 });
+});
+
+document.addEventListener('keydown', async (event) => {
+	const { zoomOutShcut } = await window.app.getSettings();
+
+	if (keysDown.size !== zoomOutShcut.length) return;
+
+	for (const key of keysDown) {
+		if (!zoomOutShcut.includes(key)) {
+			return;
+		}
+	}
+
+	const { zoom } = await window.app.getSettings();
+	window.app.setZoom(zoom - 15);
+	window.app.updateSettings({ zoom: zoom - 15 });
+	updateMenu({ zoom: zoom - 15 });
 });
 
 /**

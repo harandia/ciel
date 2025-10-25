@@ -212,15 +212,9 @@ contextBridge.exposeInMainWorld('app', {
 	},
 
 	/**
-	 * Compares date1 and date2 and returns an object with three properties:
-	 * equals (true if date1 and date2 are the same).
-	 * greater (true if date1 is ahead of date2).
-	 * less (true if date1 is before date2).
-	 * @param {string} date1
-	 * @param {string} date2
-	 * @returns {Promise<{equals: boolean, after: boolean, before: boolean}>}
+	 * Open the help section of the project's repository.
 	 */
-	compareDate: (date1, date2) => {
-		return ipcRenderer.invoke('compare-date', date1, date2);
+	openHelp: () => {
+		ipcRenderer.send('open-help');
 	},
 });

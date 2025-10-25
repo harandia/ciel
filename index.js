@@ -1,4 +1,4 @@
-const { BrowserWindow, app, ipcMain, dialog, shell, clipboard } = require('electron');
+const { BrowserWindow, app, ipcMain, dialog, shell, clipboard, Menu } = require('electron');
 const path = require('node:path');
 const fs = require('node:fs/promises');
 const url = require('node:url');
@@ -37,9 +37,13 @@ function createWindow() {
 
 app.whenReady().then(() => {
 	const db = new Database(path.join(app.getPath('userData'), 'data.db'));
-	startTestDatabase(db);
 
 	const win = createWindow();
+
+	const template = [{ label: 'View', submenu: [{ role: 'toggleDevTools' }] }];
+	win.setMenu(Menu.buildFromTemplate(template));
+
+	// win.setMenu(null);
 
 	ipcMain.handle('get-settings', async () => {
 		return (await settings.init()).properties;
@@ -247,14 +251,8 @@ app.whenReady().then(() => {
 		return dayjs().format('dddd, D MMMM YYYY');
 	});
 
-	ipcMain.handle('compare-date', (event, date1, date2) => {
-		const d1 = dayjs(date1, 'dddd, D MMMM YYYY');
-		const d2 = dayjs(date2, 'dddd, D MMMM YYYY');
-		return {
-			equal: d1.isSame(d2, 'day'),
-			after: d1.isAfter(d2, 'day'),
-			before: d1.isBefore(d2, 'day'),
-		};
+	ipcMain.on('open-help', () => {
+		shell.openExternal('https://github.com/harandia/ciel#readme');
 	});
 
 	win.maximize();

@@ -9,6 +9,8 @@ document.documentElement.style.setProperty('--tooltip-fade-duration', fadeDurati
  * @abstract
  */
 class Tooltip {
+	#timeout;
+
 	/** @type {HTMLElement} */
 	_tooltipElement;
 
@@ -24,11 +26,13 @@ class Tooltip {
 			document.body.appendChild(this._tooltipElement);
 		}
 
-		this._tooltipElement.textContent = message;
 		this._tooltipElement.style.setProperty('--tooltip-delay', delay + 'ms');
-		setTimeout(() => {
+
+		this.#timeout = setTimeout(() => {
+			this._tooltipElement.textContent = message;
+
 			this._tooltipElement.classList.replace('tooltip-hidden', 'tooltip-visible');
-		}, 0);
+		}, fadeDuration);
 	}
 
 	/**
@@ -37,9 +41,13 @@ class Tooltip {
 	hide() {
 		if (!this._tooltipElement) return;
 
-		setTimeout(() => {
-			this._tooltipElement.classList.replace('tooltip-visible', 'tooltip-hidden');
-		}, 0);
+		clearTimeout(this.#timeout);
+
+		this._tooltipElement.classList.replace('tooltip-visible', 'tooltip-hidden');
+	}
+
+	get isHidden() {
+		return !this._tooltipElement || this._tooltipElement.classList.contains('tooltip-hidden');
 	}
 
 	/**
@@ -89,10 +97,12 @@ class AbsoluteTooltip extends Tooltip {
 	}
 
 	set x(x) {
-		this.#x = x;
-		if (this._tooltipElement) {
-			this._tooltipElement.style.left = this.#x + 'px';
-		}
+		setTimeout(() => {
+			this.#x = x;
+			if (this._tooltipElement) {
+				this._tooltipElement.style.left = this.#x + 'px';
+			}
+		}, fadeDuration);
 	}
 
 	get y() {
@@ -100,10 +110,12 @@ class AbsoluteTooltip extends Tooltip {
 	}
 
 	set y(y) {
-		this.#y = y;
-		if (this._tooltipElement) {
-			this._tooltipElement.style.top = this.#y + 'px';
-		}
+		setTimeout(() => {
+			this.#y = y;
+			if (this._tooltipElement) {
+				this._tooltipElement.style.top = this.#y + 'px';
+			}
+		}, fadeDuration);
 	}
 }
 

@@ -1,3 +1,5 @@
+import ContextMenu from '../../contextMenu.js';
+import keysDown from '../../general.js';
 import ImageGridImage from './image.js';
 
 class ImageGrid {
@@ -31,6 +33,28 @@ class ImageGrid {
 		this.#element.addEventListener('mousedown', (event) => {
 			event.preventDefault();
 		});
+
+		const shortcutHandler = async () => {
+			if (!document.contains(this.#element)) {
+				document.removeEventListener('keydown', shortcutHandler);
+				return;
+			}
+
+			if (this.imageCount > 0) {
+				const { selectAllShcut } = await window.app.getSettings();
+
+				if (selectAllShcut.length !== keysDown.size) return;
+
+				for (const key of keysDown) {
+					if (!selectAllShcut.includes(key)) return;
+				}
+
+				this.select(this.images);
+			}
+		};
+		setTimeout(() => {
+			document.addEventListener('keydown', shortcutHandler);
+		}, 100);
 	}
 
 	/**
@@ -81,29 +105,62 @@ class ImageGrid {
 	 * If param is an ImageGridImage, it will select the specific element.
 	 * If param is a number, it will select the specified index, starting from 0.
 	 * If param is a string, it will select the first image in the grid with the given path.
-	 * @param {ImageGridImage | number | string} param
+	 * @param {ImageGridImage[] | ImageGridImage | number | string} param
 	 */
 	async select(param) {
-		let image;
+		let images;
 		if (typeof param === 'number') {
-			image = new ImageGridImage(this.#element.children[param]);
+			images = [new ImageGridImage(this.#element.children[param])];
 		} else if (typeof param === 'string') {
-			image = this.images.find((image) => image.path === param);
+			images = [this.images.find((image) => image.path === param)];
+		} else if (param instanceof ImageGridImage) {
+			images = [param];
 		} else {
-			image = param;
+			images = param;
 		}
 
 		const currentSelection = this.selectedImages;
-		currentSelection.push(image);
+
+		for (const image of images) {
+			if (!image.isSelected) currentSelection.push(image);
+		}
+
 		for (const func of this.#onselect) await func(currentSelection);
 
-		if (!this.#preventSelect) image.select();
+		if (!this.#preventSelect) {
+			for (const image of images) {
+				if (!image.isSelected) {
+					image.select();
+				}
+			}
+		}
 
 		this.#preventSelect = false;
 	}
 
+	/**
+	 * Stops the current selection from happening.
+	 */
 	stopSelect() {
 		this.#preventSelect = true;
+	}
+
+	/**
+	 * Selects all the images of the grid.
+	 */
+	selectAll() {
+		console.log(1);
+		let i = 0;
+
+		const interval = setInterval(() => {
+			if (i >= this.imageCount) {
+				clearInterval(interval);
+				return;
+			}
+
+			if (!this.images[i].isSelected) this.select(i);
+			i++;
+		}, 10);
 	}
 
 	/**
@@ -152,19 +209,21 @@ class ImageGrid {
 		let clickTimer;
 
 		image.element.addEventListener('click', (event) => {
-			if (!clickTimer) {
-				clickTimer = setTimeout(async () => {
-					// @ts-ignore
-					if (event.ctrlKey) {
-						if (!image.isSelected) this.select(image);
-						else await this.deselect(image);
-					} else {
-						await this.deselect(this.images);
-						await this.select(image);
-					}
+			if (!event.composedPath().includes(image.closeButton)) {
+				if (!clickTimer) {
+					clickTimer = setTimeout(async () => {
+						// @ts-ignore
+						if (event.ctrlKey) {
+							if (!image.isSelected) this.select(image);
+							else await this.deselect(image);
+						} else {
+							await this.deselect(this.images);
+							await this.select(image);
+						}
 
-					clickTimer = undefined;
-				}, 225);
+						clickTimer = undefined;
+					}, 225);
+				}
 			}
 		});
 
@@ -175,9 +234,7 @@ class ImageGrid {
 			clickTimer = undefined;
 		});
 
-		image.closeButton.addEventListener('click', async (event) => {
-			event.stopPropagation();
-
+		const deleteImage = async () => {
 			const deleted = await window.app.deleteImage(image.path);
 
 			if (deleted) {
@@ -186,6 +243,36 @@ class ImageGrid {
 				}
 				this.removeImage(image);
 			}
+		};
+
+		image.closeButton.addEventListener('click', async (event) => {
+			deleteImage();
+		});
+
+		image.element.addEventListener('contextmenu', (event) => {
+			const menuOptions = [];
+			menuOptions.push({
+				item: 'Open image',
+				click: () => {
+					window.app.openImage(image.path);
+				},
+			});
+			if (!image.isSelected) {
+				menuOptions.push({ item: 'Select image', click: () => this.select(image) });
+			} else {
+				menuOptions.push({ item: 'Deselect image', click: () => this.deselect(image) });
+			}
+
+			menuOptions.push('separator');
+			menuOptions.push({
+				item: 'Delete image',
+				click: () => {
+					deleteImage();
+				},
+			});
+
+			// @ts-ignore
+			ContextMenu.show(event.clientX, event.clientY, menuOptions);
 		});
 
 		this.#element.prepend(image.element);
@@ -230,7 +317,7 @@ class ImageGrid {
 	}
 
 	get imageCount() {
-		return this.#element.children.length;
+		return this.images.length;
 	}
 
 	/**

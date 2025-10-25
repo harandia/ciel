@@ -78,3 +78,8 @@
 .menu-search-icon {
 	mask-image: url('../../icon/search-svgrepo-com.svg');
 }
+
+.menu-help-icon {
+	mask-image: url('../../icon/help.svg');
+	mask-size: 75%;
+}

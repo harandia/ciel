@@ -1,5 +1,8 @@
+import ContextMenu from '../contextMenu.js';
+import favouritesMenu from '../menu/favouritesMenu.js';
 import ClosedSearchPage from '../page/closedSearchPage.js';
 import OpenSearchPage from '../page/openSearchPage.js';
+import SearchPage from '../page/searchPage.js';
 import UploadPage from '../page/uploadPage.js';
 
 class Tab {
@@ -28,10 +31,11 @@ class Tab {
 	 */
 	constructor(page) {
 		this.#page = page;
-
-		this.#page.addEventListener('search', (newPage) => {
-			this.loadPage(newPage);
-		});
+		if (this.#page instanceof OpenSearchPage) {
+			this.#page.addEventListener('search', (newPage) => {
+				this.loadPage(newPage);
+			});
+		}
 
 		// @ts-ignore
 		this.#element = document.getElementById('tab').content.cloneNode(true).querySelector('.tab');
@@ -43,6 +47,42 @@ class Tab {
 		this.#onSelect = [];
 		this.#onPageLoad = [];
 		this.#onDeselect = [];
+
+		this.#loadPageMenu();
+	}
+
+	#loadPageMenu(event) {
+		// @ts-ignore
+		const menuOptions = [];
+
+		menuOptions.push('separator');
+
+		const prevItem = { item: 'Previous page', click: () => this.loadPrevPage() };
+		if (this.prevPages.length === 0) prevItem.disabled = true;
+
+		menuOptions.push(prevItem);
+
+		const nextItem = { item: 'Next page', click: () => this.loadNextPage() };
+		if (this.nextPages.length === 0) nextItem.disabled = true;
+
+		menuOptions.push(nextItem);
+
+		menuOptions.push('separator');
+
+		if (this.page instanceof SearchPage) {
+			if (favouritesMenu.isFavourite(this.page)) {
+				// @ts-ignore
+				menuOptions.push({ item: 'Remove page from favourites', click: () => favouritesMenu.removeFav(this.page) });
+			} else {
+				// @ts-ignore
+				const item = { item: 'Add page to favourites', click: () => favouritesMenu.addFav(this.page) };
+				if (this.page.searchTags.length === 0) item.disabled = true;
+				menuOptions.push(item);
+			}
+		}
+
+		// @ts-ignore
+		this.page.addPageMenuOptions(menuOptions);
 	}
 
 	/**
@@ -92,11 +132,13 @@ class Tab {
 		this.#page = page;
 		this.#updateTitle();
 
-		if (page instanceof OpenSearchPage) {
+		if (this.#page instanceof OpenSearchPage) {
 			this.#page.addEventListener('search', (newPage) => {
 				this.loadPage(newPage);
 			});
 		}
+
+		this.#loadPageMenu();
 
 		for (const func of this.#onPageLoad) func(this);
 	}

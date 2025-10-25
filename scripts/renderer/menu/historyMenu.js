@@ -60,9 +60,6 @@ class HistoryMenu {
 			event.preventDefault();
 		});
 
-		console.log(tab.date);
-		console.log(this.#tabList[0].date);
-
 		if (!this.#tabList[1] || tab.date !== this.#tabList[1].date) {
 			const h2 = document.createElement('h2');
 			h2.textContent = this.#tabList[0].date;

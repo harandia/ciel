@@ -7,6 +7,7 @@ import ContextMenu from '../contextMenu.js';
 import favouritesMenu from '../menu/favouritesMenu.js';
 import SearchPage from '../page/searchPage.js';
 import historyMenu from '../menu/historyMenu.js';
+import keysDown from '../general.js';
 
 /**
  * @type {(Tab)[]}
@@ -34,6 +35,19 @@ const addButton = tabBar.querySelector('.tab-add-button');
 
 addButton.addEventListener('click', () => {
 	addTab(new OpenSearchPage(), true);
+});
+
+addButton.addEventListener('mouseenter', () => {
+	const tabPosition = addButton.getBoundingClientRect();
+	const position = [tabPosition.left + 5, tabPosition.top + 40];
+
+	tabTooltip.x = position[0];
+	tabTooltip.y = position[1];
+	tabTooltip.show('Add tab', 300);
+});
+
+addButton.addEventListener('mouseleave', () => {
+	tabTooltip.hide();
 });
 
 const prevButton = document.querySelector('.prev-button');
@@ -70,6 +84,30 @@ tabBar.addEventListener('contextmenu', (event) => {
 			},
 		},
 	]);
+});
+
+document.addEventListener('keydown', async (event) => {
+	const { openTabShcut } = await window.app.getSettings();
+
+	if (openTabShcut.length !== keysDown.size) return;
+
+	for (const key of keysDown) {
+		if (!openTabShcut.includes(key)) return;
+	}
+
+	addTab(new OpenSearchPage(), true);
+});
+
+document.addEventListener('keydown', async (event) => {
+	const { closeTabShcut } = await window.app.getSettings();
+
+	if (closeTabShcut.length !== keysDown.size) return;
+
+	for (const key of keysDown) {
+		if (!closeTabShcut.includes(key)) return;
+	}
+
+	if (selectedTab) closeTab(selectedTab);
 });
 
 window.addEventListener('beforeunload', async (event) => {
@@ -123,7 +161,7 @@ const addTab = async function (page, forceNewTab = false) {
 
 			tabTooltip.x = position[0];
 			tabTooltip.y = position[1];
-			tabTooltip.show(tab.title, 200);
+			tabTooltip.show(tab.title, 300);
 		});
 
 		tab.element.addEventListener('mouseleave', () => {

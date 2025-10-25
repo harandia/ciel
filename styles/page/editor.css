@@ -179,6 +179,8 @@
 }
 
 .editor-selection-counter {
+	user-select: none;
+
 	max-height: 20.6667px;
 	overflow: hidden;
 
@@ -253,6 +255,8 @@
 }
 
 .tag-editor-warning {
+	user-select: none;
+
 	overflow: hidden;
 
 	margin: 0;

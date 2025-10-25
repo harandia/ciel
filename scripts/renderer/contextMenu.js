@@ -12,11 +12,6 @@ class ContextMenu {
 
 		const menu = menuFragment.querySelector('.context-menu');
 
-		// @ts-ignore
-		menu.style.left = x + 'px';
-		// @ts-ignore
-		menu.style.top = y + 'px';
-
 		for (const option of options) {
 			const li = document.createElement('li');
 			if (typeof option !== 'string') {
@@ -45,6 +40,23 @@ class ContextMenu {
 		});
 
 		document.body.appendChild(menu);
+
+		const menuRect = menu.getBoundingClientRect();
+		if (x + menuRect.width > window.innerWidth) {
+			// @ts-ignore
+			menu.style.right = window.innerWidth - x + 'px';
+		} else {
+			// @ts-ignore
+			menu.style.left = x + 'px';
+		}
+
+		if (y + menuRect.height > window.innerHeight) {
+			// @ts-ignore
+			menu.style.bottom = window.innerHeight - y + 'px';
+		} else {
+			// @ts-ignore
+			menu.style.top = y + 'px';
+		}
 	}
 }
 

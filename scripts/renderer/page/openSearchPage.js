@@ -26,6 +26,9 @@ class OpenSearchPage extends SearchPage {
 	/** @type {Function[]} */
 	#onSearch;
 
+	/**@type {({item: string, click: ()=>any, disabled?: boolean} | 'separator')[]} */
+	#contextMenu;
+
 	/**
 	 * Returns the open version of the given closed page.
 	 * @param {ClosedSearchPage} closedPage
@@ -168,6 +171,34 @@ class OpenSearchPage extends SearchPage {
 				this.#editor.hide();
 			}
 		});
+
+		this.#contextMenu = [];
+		this.#contextMenu.push({ item: 'placeholder', click: () => undefined });
+
+		this.mainPage.addEventListener('contextmenu', (event) => {
+			// @ts-ignore
+			if (event.target === this.mainPage || this.mainPageElements.includes(event.target)) {
+				const firstItem = {};
+				if (this._imageGrid.selectedImages.length === this._imageGrid.imageCount && this._imageGrid.selectedImages.length !== 0) {
+					firstItem.item = 'Deselect all';
+					firstItem.click = () => this._imageGrid.deselect(this._imageGrid.images);
+				} else {
+					firstItem.item = 'Select all';
+					firstItem.click = () => this._imageGrid.select(this._imageGrid.images);
+
+					if (this._imageGrid.imageCount === 0) {
+						firstItem.disabled = true;
+					} else {
+						firstItem.disabled = false;
+					}
+				}
+
+				// @ts-ignore
+				this.#contextMenu.splice(0, 1, firstItem);
+
+				ContextMenu.show(event.clientX, event.clientY, this.#contextMenu);
+			}
+		});
 	}
 
 	/**
@@ -261,10 +292,32 @@ class OpenSearchPage extends SearchPage {
 	}
 
 	/**
+	 * Adds the given options to the default page's context menu. (The default menu only contains the option 'Select All').
+	 * @param {({item: string, click: () => any} | 'separator')[]} options
+	 */
+	addPageMenuOptions(options) {
+		this.#contextMenu.push(...options);
+	}
+
+	/**
 	 * Return true if the page has some unsaved changes.
 	 */
 	get hasUnsavedChanges() {
 		return this.#editor.hasUnsavedChanges;
+	}
+
+	/**
+	 * Returns this page's main page element (it represents the whole page except the editor).
+	 */
+	get mainPage() {
+		return this.#elements.find((element) => element.classList.contains('search-view'));
+	}
+
+	/**
+	 * Returns this page's maing page elements: the header, which contains the searchbar; and the image grid element.
+	 */
+	get mainPageElements() {
+		return Array.from(this.mainPage.children);
 	}
 }
 

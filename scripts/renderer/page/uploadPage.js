@@ -1,3 +1,4 @@
+import ContextMenu from '../contextMenu.js';
 import SearchEditor from './components/editor/searchEditor.js';
 import UploadEditor from './components/editor/uploadEditor.js';
 import ImageGrid from './components/imageGrid.js';
@@ -23,6 +24,9 @@ class UploadPage {
 
 	/**@type {{image: string, tags: string[]}[]} */
 	#uploads = [];
+
+	/**@type {({item: string, click: ()=>any, disabled?: boolean} | 'separator')[]} */
+	#contextMenu;
 
 	constructor() {
 		//@ts-ignore
@@ -268,6 +272,36 @@ class UploadPage {
 				}
 			}, 10);
 		});
+
+		this.#contextMenu = [];
+		this.#contextMenu.push({ item: 'placeholder', click: () => undefined });
+
+		this.mainPage.addEventListener('contextmenu', (event) => {
+			// @ts-ignore
+			if (event.target === this.mainPage || this.mainPageElements.includes(event.target)) {
+				const firstItem = {};
+				console.log(this.#imageGrid.imageCount);
+				if (this.#imageGrid.selectedImages.length === this.#imageGrid.imageCount && this.#imageGrid.selectedImages.length !== 0) {
+					firstItem.item = 'Deselect all';
+					firstItem.click = () => this.#imageGrid.deselect(this.#imageGrid.images);
+				} else {
+					firstItem.item = 'Select all';
+					firstItem.click = () => this.#imageGrid.select(this.#imageGrid.images);
+
+					if (this.#imageGrid.imageCount === 0) {
+						firstItem.disabled = true;
+					} else {
+						firstItem.disabled = false;
+					}
+				}
+
+				// @ts-ignore
+				this.#contextMenu.splice(0, 1, firstItem);
+
+				// @ts-ignore
+				ContextMenu.show(event.clientX, event.clientY, this.#contextMenu);
+			}
+		});
 	}
 
 	/**
@@ -291,9 +325,13 @@ class UploadPage {
 		}
 	}
 
-	addEventListener(eventType, callback) {}
-
-	removeEventListener(eventType, callback) {}
+	/**
+	 * Adds the given options to the page's context menu.
+	 * @param {({item: string, click: ()=>any, disabled?: boolean} | 'separator')[]} options
+	 */
+	addPageMenuOptions(options) {
+		this.#contextMenu.push(...options);
+	}
 
 	/**
 	 * Return true if the page has some unsaved changes.
@@ -307,6 +345,14 @@ class UploadPage {
 	 */
 	get uploads() {
 		return this.#uploads;
+	}
+
+	get mainPage() {
+		return this.#elements.find((element) => element.classList.contains('upload-view')).children[0];
+	}
+
+	get mainPageElements() {
+		return Array.from(this.mainPage.children);
 	}
 }
 

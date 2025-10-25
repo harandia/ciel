@@ -1,3 +1,4 @@
+import ContextMenu from '../../contextMenu.js';
 import Tag from '../../tag.js';
 import { Autocompleter } from './autocompleter.js';
 import TagInput from './tagInput.js';
@@ -33,6 +34,10 @@ class SearchBar extends TagInput {
 		this.#body.addEventListener('wheel', (event) => {
 			// @ts-ignore
 			this.#body.scrollLeft = this.#body.scrollLeft - event.deltaY;
+		});
+
+		this.#searchButton.addEventListener('dragstart', (event) => {
+			event.preventDefault();
 		});
 	}
 
@@ -99,6 +104,19 @@ class SearchBar extends TagInput {
 			this.removeTag(newTag);
 		});
 
+		newTag.element.addEventListener('contextmenu', (event) => {
+			if (newTag.type !== 'wrong') {
+				const menuOptions = [];
+				if (newTag.type !== 'excluded') {
+					menuOptions.push({ item: 'Exclude tag from search', click: () => (newTag.type = 'excluded') });
+				} else {
+					menuOptions.push({ item: 'Include tag in search', click: () => (newTag.type = 'normal') });
+				}
+				// @ts-ignore
+				ContextMenu.show(event.clientX, event.clientY, menuOptions);
+			}
+		});
+
 		this._addTag(newTag);
 		this.#updateWrongWarning();
 		this.#updateSearchButton();
@@ -118,11 +136,13 @@ class SearchBar extends TagInput {
 		if (typeof param === 'number') {
 			if (param >= 0) {
 				if (children[param]) {
+					// @ts-ignore
 					const removed = this.container.removeChild(children[param]);
 					isRemoved = true;
 				} else isRemoved = false;
 			} else {
 				if (children[children.length - 1 + param]) {
+					// @ts-ignore
 					const removed = this.container.removeChild(children[children.length - 1 + param]);
 					isRemoved = true;
 				} else isRemoved = false;
@@ -133,6 +153,7 @@ class SearchBar extends TagInput {
 			for (let i = 0; i < this.tagCount; i++) {
 				// @ts-ignore
 				if (param.equals(Tag.fromElement(children[i]))) {
+					// @ts-ignore
 					const removed = this.container.removeChild(children[i]);
 					isRemoved = true;
 					break;
