@@ -3,7 +3,6 @@ const path = require('node:path');
 const fs = require('node:fs/promises');
 const url = require('node:url');
 
-const startTestDatabase = require('./test/dbTest.js');
 const settings = require('./scripts/main/settings.js');
 
 const Database = require('./scripts/main/general/db.js');
@@ -40,7 +39,7 @@ app.whenReady().then(() => {
 
 	const win = createWindow();
 
-	// win.setMenu(null);
+	fs.mkdir(path.join(app.getPath('userData'), 'images'), { recursive: true });
 
 	ipcMain.handle('get-settings', async () => {
 		return (await settings.init()).properties;

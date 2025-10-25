@@ -4,8 +4,13 @@
 	"description": "Ciel is an image tagging application.",
 	"main": "index.js",
 	"scripts": {
-		"test": "echo \"Error: no test specified\" && exit 1",
-		"start": "electron ."
+		"test": "electron .",
+		"start": "electron-forge start",
+		"build-linux": "electron-builder --linux",
+		"build-win": "electron-builder --win",
+		"postinstall": "electron-builder install-app-deps",
+		"package": "electron-forge package",
+		"make": "electron-forge make"
 	},
 	"repository": {
 		"type": "git",
@@ -17,18 +22,29 @@
 		"tag"
 	],
 	"author": "Hugo Arandia",
-	"license": "ISC",
+	"license": "MIT",
 	"bugs": {
 		"url": "https://github.com/harandia/ciel/issues"
 	},
 	"homepage": "https://github.com/harandia/ciel#readme",
 	"devDependencies": {
+		"@arcsin1/electron-icon-builder": "1.0.1",
+		"@electron-forge/cli": "^7.10.2",
+		"@electron-forge/maker-deb": "^7.10.2",
+		"@electron-forge/maker-rpm": "^7.10.2",
+		"@electron-forge/maker-squirrel": "^7.10.2",
+		"@electron-forge/maker-zip": "^7.10.2",
+		"@electron-forge/plugin-auto-unpack-natives": "^7.10.2",
+		"@electron-forge/plugin-fuses": "^7.10.2",
+		"@electron/fuses": "^1.8.0",
 		"electron": "38.1.0",
+		"electron-packager": "17.1.2",
 		"electron-rebuild": "3.2.9"
 	},
 	"dependencies": {
 		"better-sqlite3": "12.2.0",
 		"dayjs": "1.11.18",
+		"electron-squirrel-startup": "^1.0.1",
 		"nanoid": "5.1.6",
 		"stream-mime-type": "2.0.0"
 	}

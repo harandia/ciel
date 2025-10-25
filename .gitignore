@@ -3,3 +3,5 @@ jsconfig.json
 test/
 testDB.db
 global.d.ts
+build/
+out/
