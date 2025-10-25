@@ -40,9 +40,6 @@ app.whenReady().then(() => {
 
 	const win = createWindow();
 
-	const template = [{ label: 'View', submenu: [{ role: 'toggleDevTools' }] }];
-	win.setMenu(Menu.buildFromTemplate(template));
-
 	// win.setMenu(null);
 
 	ipcMain.handle('get-settings', async () => {
@@ -254,6 +251,8 @@ app.whenReady().then(() => {
 	ipcMain.on('open-help', () => {
 		shell.openExternal('https://github.com/harandia/ciel#readme');
 	});
+
+	win.setMenu(null);
 
 	win.maximize();
 
