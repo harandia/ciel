@@ -17,5 +17,5 @@ Inside an upload page you can upload any number of images you want. You can do i
 
 ![Uploading local file](resources/help/file-open.gif)
 
-The image doesn't even need to be previosly downloaded in your computer, just drop or paste it and Ciel will do download it for you! (Be sure you are trying to upload a proper image and not the link of a page)
+The image doesn't even need to be previosly downloaded in your computer, just drop or paste it and Ciel will download it for you! (Be sure you are trying to upload a proper image and not the link of a page)
 
