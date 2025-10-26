@@ -56,10 +56,12 @@ You can exclude a tag from the search by right clicking it and select the "Exlud
 
 ![Excluding tag from search](resources/help/search-excluded.gif)
 
+### Favourites
 If you find yourself doind the same search once and again, you can even set a search page as a favourite so you can always keep it around you.
 
 ![Setting page as favourite](resources/help/favourite.gif)
 
+### Gallery
 Also, if you just want to see all the images like in a gallery, you can just press the search button with no tags specified.
 
 ![Listing all images](resources/help/search-all.gif)
