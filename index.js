@@ -16,6 +16,8 @@ const dayjs = require('dayjs');
 
 const session = { sessionPages: [] };
 
+if (require('electron-squirrel-startup')) return;
+
 function createWindow() {
 	return new BrowserWindow({
 		title: 'ciel',

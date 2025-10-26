@@ -1,11 +1,14 @@
 const { FusesPlugin } = require('@electron-forge/plugin-fuses');
 const { FuseV1Options, FuseVersion } = require('@electron/fuses');
 
+const path = require('node:path');
+
 module.exports = {
 	packagerConfig: {
 		asar: true,
-		icon: './icon/app-logo',
+		icon: path.join(__dirname, 'resources', 'app-logo', 'app-logo.ico'),
 		win32metadata: {
+			icon: path.join(__dirname, 'resources', 'app-logo', 'app-logo.ico'),
 			AppUserModelId: 'com.harandia.ciel',
 		},
 	},
@@ -13,7 +16,11 @@ module.exports = {
 	makers: [
 		{
 			name: '@electron-forge/maker-squirrel',
-			config: {},
+			config: {
+				name: 'ciel',
+				setupIcon: path.join(__dirname, 'resources', 'app-logo', 'app-logo.ico'),
+				shortcutName: 'ciel',
+			},
 		},
 		{
 			name: '@electron-forge/maker-zip',
@@ -23,7 +30,7 @@ module.exports = {
 			name: '@electron-forge/maker-deb',
 			config: {
 				maintainer: 'Hugo Arandia<hugo.arandia.t@gmail.com>',
-				icon: './icon/app-logo/1024x1024.png',
+				icon: path.join(__dirname, 'resources', 'app-logo', '1024x1024.png'),
 			},
 		},
 	],
