@@ -11,11 +11,11 @@ First, click the *Upload* icon:
 
 Inside an upload page you can upload any number of images you want. You can do it by either clicking the *Add* button, dropping the images or pasting them.
 
-![Dropping an image](resources/help/drop.GIF)
+![Dropping an image](resources/help/drop.gif)
 
-![Pasting an image](resources/help/paste.GIF)
+![Pasting an image](resources/help/paste.gif)
 
-![Uploading local file](resources/help/file-open.GIF)
+![Uploading local file](resources/help/file-open.gif)
 
-The image doesn't even need to be previosly downloaded in your computer, just drop or paste it and Ciel will do download it for you! (Be sure you are trying to upload a proper image and not the link of a page)
+The image doesn't even need to be previosly downloaded in your computer, just drop or paste it and Ciel will download it for you! (Be sure you are trying to upload a proper image and not the link of a page)
 
