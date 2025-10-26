@@ -8,6 +8,7 @@ import favouritesMenu from '../menu/favouritesMenu.js';
 import SearchPage from '../page/searchPage.js';
 import historyMenu from '../menu/historyMenu.js';
 import keysDown from '../general.js';
+import ClosedSearchPage from '../page/closedSearchPage.js';
 
 /**
  * @type {(Tab)[]}
@@ -110,9 +111,16 @@ document.addEventListener('keydown', async (event) => {
 	if (selectedTab) closeTab(selectedTab);
 });
 
-window.addEventListener('beforeunload', async (event) => {
+window.addEventListener('beforeunload', (event) => {
+	const session = [];
+	for (const tab of tabs) {
+		if (tab.page instanceof SearchPage) session.push(tab.page.toJSON());
+	}
+	window.app.updateSession(session);
+
 	if (tabs.some((tab) => tab.page.hasUnsavedChanges)) {
 		event.preventDefault();
+		event.returnValue = false;
 
 		const uploadingImages = [];
 		for (const tab of tabs) {
@@ -368,5 +376,16 @@ const updatePrevNext = function () {
 		}
 	}
 };
+
+setTimeout(async () => {
+	const { openPrevTabs } = await window.app.getSettings();
+	if (openPrevTabs) {
+		const lastSession = await window.app.getLastSession();
+		for (const page of lastSession) {
+			const newTab = await OpenSearchPage.open(ClosedSearchPage.fromJSON(page));
+			addTab(newTab, true);
+		}
+	}
+});
 
 export { addTab };

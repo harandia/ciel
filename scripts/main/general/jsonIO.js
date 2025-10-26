@@ -12,7 +12,7 @@ const jsonIO = {
 	},
 
 	/**
-	 * Returns the object parsed in the JSON file of the specified path, if returns undefined on error.
+	 * Returns the object parsed in the JSON file of the specified path, it returns undefined on error.
 	 * @param {string} path
 	 * @returns {Promise<Object>}
 	 */

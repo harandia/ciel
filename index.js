@@ -4,7 +4,6 @@ const fs = require('node:fs/promises');
 const url = require('node:url');
 
 const settings = require('./scripts/main/settings.js');
-
 const Database = require('./scripts/main/general/db.js');
 
 const downloadImage = require('./scripts/main/general/download.js');
@@ -14,7 +13,8 @@ const { pathToFileURL } = require('node:url');
 const jsonIO = require('./scripts/main/general/jsonIO.js');
 
 const dayjs = require('dayjs');
-const { equal } = require('node:assert');
+
+const session = { sessionPages: [] };
 
 function createWindow() {
 	return new BrowserWindow({
@@ -166,27 +166,29 @@ app.whenReady().then(() => {
 	});
 
 	ipcMain.on('try-close', (event, uploadingImages) => {
-		if (settings.showConfirmation) {
-			const choice = dialog.showMessageBoxSync(win, {
-				title: 'Warning',
-				message: 'Are you sure you want to discard the changes?',
-				type: 'warning',
-				buttons: ['Cancel', 'Yes, discard'],
-				defaultId: 0,
-			});
+		setTimeout(() => {
+			if (settings.showConfirmation) {
+				const choice = dialog.showMessageBoxSync(win, {
+					title: 'Warning',
+					message: 'Are you sure you want to discard the changes?',
+					type: 'warning',
+					buttons: ['Cancel', 'Yes, discard'],
+					defaultId: 0,
+				});
 
-			if (choice === 1) {
+				if (choice === 1) {
+					if (uploadingImages) {
+						for (const image of uploadingImages) fs.unlink(path.join(app.getPath('userData'), 'images', path.basename(image)));
+					}
+					win.destroy();
+				}
+			} else {
 				if (uploadingImages) {
 					for (const image of uploadingImages) fs.unlink(path.join(app.getPath('userData'), 'images', path.basename(image)));
 				}
-				win.close();
+				app.exit(0);
 			}
-		} else {
-			if (uploadingImages) {
-				for (const image of uploadingImages) fs.unlink(path.join(app.getPath('userData'), 'images', path.basename(image)));
-			}
-			app.exit(0);
-		}
+		}, 10);
 	});
 
 	ipcMain.handle('download-image', (event, param) => {
@@ -251,6 +253,15 @@ app.whenReady().then(() => {
 		shell.openExternal('https://github.com/harandia/ciel#readme');
 	});
 
+	ipcMain.handle('get-last-session', async () => {
+		const lastSession = (await jsonIO.read(path.join(app.getPath('userData'), 'last-session.json'))) || session;
+		return lastSession.sessionPages;
+	});
+
+	ipcMain.on('update-session', (event, updatedPages) => {
+		session.sessionPages = updatedPages;
+	});
+
 	win.setMenu(null);
 
 	win.maximize();
@@ -264,4 +275,5 @@ app.whenReady().then(() => {
 
 app.addListener('quit', () => {
 	settings.writeConfig();
+	jsonIO.write(session, path.join(app.getPath('userData'), 'last-session.json'));
 });

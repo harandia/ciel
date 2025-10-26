@@ -39,7 +39,6 @@ document.getElementById('menu-upload-button').addEventListener('click', (event) 
 
 const menuButtons = Array.from(document.getElementById('menu').children);
 for (const button of menuButtons) {
-	console.log(menuButtons);
 	button.addEventListener('mouseenter', () => {
 		const buttonRect = button.getBoundingClientRect();
 		const position = [buttonRect.left + 47, buttonRect.top + 5];

@@ -217,4 +217,20 @@ contextBridge.exposeInMainWorld('app', {
 	openHelp: () => {
 		ipcRenderer.send('open-help');
 	},
+
+	/**
+	 * Returns the last session's search pages.
+	 * @returns {Promise<{searchTags: string[]}[]>}
+	 */
+	getLastSession: () => {
+		return ipcRenderer.invoke('get-last-session');
+	},
+
+	/**
+	 * Writes the given last session's pages.
+	 * @param {{searchTags: string[]}[]} session
+	 */
+	updateSession: (session) => {
+		ipcRenderer.send('update-session', session);
+	},
 });
