@@ -123,7 +123,7 @@ class UploadPage {
 
 				const tags = [];
 				for (const upload of this.#uploads) {
-					for (const image of selection) {
+					for (const image of newSelection) {
 						if ((await window.app.fileURLToPath(image.path)) === upload.image) {
 							tags.push(new Set(upload.tags));
 						}

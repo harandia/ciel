@@ -100,12 +100,16 @@
 }
 
 .upload-cancel-button {
+	user-select: none;
+
 	color: white;
 
 	background-color: rgb(255, 110, 154);
 }
 
 .upload-upload-button {
+	user-select: none;
+
 	color: white;
 
 	background-color: rgb(158, 234, 255);

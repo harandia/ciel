@@ -15,7 +15,9 @@
 
 		box-shadow: 10px -3px 10px rgba(0, 0, 0, 0.03);
 
-		transition: min-height 400ms, max-height 400ms;
+		transition:
+			min-height 400ms,
+			max-height 400ms;
 	}
 
 	.editor-hidden {
@@ -122,6 +124,8 @@
 }
 
 .editor-open-button {
+	user-select: none;
+
 	flex: 1;
 
 	color: rgb(72, 97, 107);
@@ -293,7 +297,9 @@
 
 	column-gap: 10px;
 
-	transition: max-height 400ms, min-height 400ms;
+	transition:
+		max-height 400ms,
+		min-height 400ms;
 }
 
 .editor-body:has(.new-tag, .deleted-tag) + .editor-confirm-container {
