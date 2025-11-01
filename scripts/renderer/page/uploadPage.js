@@ -301,21 +301,16 @@ class UploadPage {
 		const downloads = [];
 
 		const files = dataTransfer.files;
-		if (files.length !== 0) {
-			for (let i = 0; i < files.length; i++) {
-				const path = await window.app.getFilePath(files[i]);
-				let download;
-				if (path) {
-					download = await window.app.downloadImage(path);
-				} else {
-					download = await window.app.downloadCopiedImage();
-				}
+		const items = dataTransfer.items;
 
-				this.#uploads.push({ image: download, tags: [] });
-				const image = this.#imageGrid.addImages(download);
-				image.showNewIcon();
-			}
-		} else if (dataTransfer.types.includes('text/uri-list')) {
+		const types = Array.from(dataTransfer.types);
+
+		console.log(files);
+		console.log(dataTransfer.getData('text/html'));
+		console.log(dataTransfer.getData('text/uri-list'));
+		console.log(dataTransfer.getData('text/plain'));
+
+		if (dataTransfer.types.includes('text/uri-list')) {
 			const uriString = dataTransfer.getData('text/uri-list');
 			const urls = uriString.split('\r\n').filter((url) => !url.startsWith('#'));
 			for (const url of urls) {
@@ -330,6 +325,34 @@ class UploadPage {
 			this.#uploads.push({ image: download, tags: [] });
 			const image = this.#imageGrid.addImages(download);
 			image.showNewIcon();
+		} else if (types.includes('text/html')) {
+			const html = dataTransfer.getData('text/html');
+			const imgMatch = html.match(/<img[^>]+src=["'](.+?)["']/i);
+
+			if (!imgMatch) return;
+
+			for (let i = 1; i < imgMatch.length; i++) {
+				const download = await window.app.downloadImage(imgMatch[i]);
+
+				this.#uploads.push({ image: download, tags: [] });
+				const image = this.#imageGrid.addImages(download);
+				image.showNewIcon();
+			}
+		} else if (files.length !== 0) {
+			for (let i = 0; i < files.length; i++) {
+				const path = await window.app.getFilePath(files[i]);
+
+				let download;
+				if (path) {
+					download = await window.app.downloadImage(path);
+				} else {
+					download = await window.app.downloadCopiedImage();
+				}
+
+				this.#uploads.push({ image: download, tags: [] });
+				const image = this.#imageGrid.addImages(download);
+				image.showNewIcon();
+			}
 		}
 	};
 

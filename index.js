@@ -214,7 +214,6 @@ app.whenReady().then(() => {
 
 	ipcMain.handle('download-copied-image', () => {
 		const img = clipboard.readImage('selection') || clipboard.readImage();
-
 		downloadPath = downloadImage(img.toPNG(), path.join(app.getPath('userData'), 'images'), nanoid());
 
 		return downloadPath;
@@ -264,7 +263,7 @@ app.whenReady().then(() => {
 		session.sessionPages = updatedPages;
 	});
 
-	// win.setMenu(null);
+	win.setMenu(null);
 
 	win.maximize();
 
