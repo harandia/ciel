@@ -264,7 +264,7 @@ app.whenReady().then(() => {
 		session.sessionPages = updatedPages;
 	});
 
-	win.setMenu(null);
+	// win.setMenu(null);
 
 	win.maximize();
 

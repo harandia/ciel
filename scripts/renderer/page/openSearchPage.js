@@ -1,4 +1,5 @@
 import ContextMenu from '../contextMenu.js';
+import keysDown from '../general.js';
 import ClosedAllImagesSearchPage from './closedAllImagesSearchPage.js';
 import ClosedSearchPage from './closedSearchPage.js';
 import TagAutocompleter from './components/autocompleter.js';
@@ -248,6 +249,7 @@ class OpenSearchPage extends SearchPage {
 		for (const element of this.#elements) {
 			document.querySelector('main').appendChild(element);
 		}
+		document.addEventListener('keydown', this.#selectAllHandle);
 	}
 
 	/**
@@ -259,6 +261,7 @@ class OpenSearchPage extends SearchPage {
 			// @ts-ignore
 			if (this.#elements.includes(child)) main.removeChild(child);
 		}
+		document.removeEventListener('keydown', this.#selectAllHandle);
 	}
 
 	/**
@@ -298,6 +301,20 @@ class OpenSearchPage extends SearchPage {
 	addPageMenuOptions(options) {
 		this.#contextMenu.push(...options);
 	}
+
+	#selectAllHandle = async () => {
+		if (this._imageGrid.imageCount > 0) {
+			const { selectAllShcut } = await window.app.getSettings();
+
+			if (selectAllShcut.length !== keysDown.size) return;
+
+			for (const key of keysDown) {
+				if (!selectAllShcut.includes(key)) return;
+			}
+
+			this._imageGrid.select(this._imageGrid.images);
+		}
+	};
 
 	/**
 	 * Return true if the page has some unsaved changes.

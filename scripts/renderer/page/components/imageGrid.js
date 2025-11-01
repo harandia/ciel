@@ -33,28 +33,6 @@ class ImageGrid {
 		this.#element.addEventListener('mousedown', (event) => {
 			event.preventDefault();
 		});
-
-		const shortcutHandler = async () => {
-			if (!document.contains(this.#element)) {
-				document.removeEventListener('keydown', shortcutHandler);
-				return;
-			}
-
-			if (this.imageCount > 0) {
-				const { selectAllShcut } = await window.app.getSettings();
-
-				if (selectAllShcut.length !== keysDown.size) return;
-
-				for (const key of keysDown) {
-					if (!selectAllShcut.includes(key)) return;
-				}
-
-				this.select(this.images);
-			}
-		};
-		setTimeout(() => {
-			document.addEventListener('keydown', shortcutHandler);
-		}, 100);
 	}
 
 	/**
@@ -143,24 +121,6 @@ class ImageGrid {
 	 */
 	stopSelect() {
 		this.#preventSelect = true;
-	}
-
-	/**
-	 * Selects all the images of the grid.
-	 */
-	selectAll() {
-		console.log(1);
-		let i = 0;
-
-		const interval = setInterval(() => {
-			if (i >= this.imageCount) {
-				clearInterval(interval);
-				return;
-			}
-
-			if (!this.images[i].isSelected) this.select(i);
-			i++;
-		}, 10);
 	}
 
 	/**
