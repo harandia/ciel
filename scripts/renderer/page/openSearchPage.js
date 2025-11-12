@@ -143,7 +143,7 @@ class OpenSearchPage extends SearchPage {
 				}
 			}
 			if (selection.length - deselected.length <= 0) {
-				this.#editor.hide();
+				await this.#editor.hide();
 			} else if (selection.length - deselected.length > 0) {
 				const newSelection = selection.filter(
 					(selectedImage) => !deselected.some((deselectedImage) => selectedImage.element === deselectedImage.element),

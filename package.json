@@ -1,5 +1,6 @@
 {
 	"name": "ciel",
+	"productName": "Ciel",
 	"version": "1.0.0",
 	"description": "Ciel is an image tagging application.",
 	"main": "index.js",

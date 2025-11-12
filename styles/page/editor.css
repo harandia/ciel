@@ -310,6 +310,8 @@
 .editor-confirm-container button {
 	cursor: pointer;
 
+	user-select: none;
+
 	flex: 1;
 
 	border-style: none;

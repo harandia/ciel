@@ -5,6 +5,8 @@ const path = require('node:path');
 
 module.exports = {
 	packagerConfig: {
+		name: 'Ciel',
+		executableName: 'ciel',
 		asar: true,
 		icon: path.join(__dirname, 'resources', 'app-logo', 'app-logo.ico'),
 		win32metadata: {
@@ -17,9 +19,9 @@ module.exports = {
 		{
 			name: '@electron-forge/maker-squirrel',
 			config: {
-				name: 'ciel',
+				name: 'Ciel',
 				setupIcon: path.join(__dirname, 'resources', 'app-logo', 'app-logo.ico'),
-				shortcutName: 'ciel',
+				shortcutName: 'Ciel',
 			},
 		},
 		{

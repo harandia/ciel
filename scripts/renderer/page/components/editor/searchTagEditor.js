@@ -178,6 +178,7 @@ class SearchTagEditor extends TagInput {
 		for (const tag of this.tags) {
 			this.container.removeChild(tag.element);
 		}
+		this.#updateFirstTimeWarning();
 	}
 
 	/**

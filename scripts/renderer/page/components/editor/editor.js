@@ -119,9 +119,9 @@ class Editor {
 	/**
 	 * Hides the editor.
 	 */
-	hide() {
+	async hide() {
 		if (!this.isHidden) {
-			for (const func of this.#onhide) func({ selection: this._selectedImages, tags: this._tagEditor.tags });
+			for (const func of this.#onhide) await func({ selection: this._selectedImages, tags: this._tagEditor.tags });
 
 			this._tagEditor.clearTags();
 			this._tagEditor.clearInput();

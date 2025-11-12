@@ -116,7 +116,7 @@ class UploadPage {
 			const selection = this.#imageGrid.selectedImages;
 
 			if (selection.length - deselected.length <= 0) {
-				this.#editor.hide();
+				await this.#editor.hide();
 			} else if (selection.length - deselected.length > 0) {
 				const newSelection = selection.filter(
 					(selectedImage) => !deselected.some((deselectedImage) => selectedImage.element === deselectedImage.element),
@@ -175,7 +175,7 @@ class UploadPage {
 			const selection = this.#imageGrid.selectedImages;
 
 			if (selection.length <= 0) {
-				this.#editor.hide();
+				await this.#editor.hide();
 			}
 		});
 
@@ -209,22 +209,30 @@ class UploadPage {
 
 		this.#uploadButton.addEventListener('click', async () => {
 			setTimeout(async () => {
+				const { showConfirmation } = await window.app.getSettings();
+
 				let choice;
 
-				if (this.#uploads.some((upload) => upload.tags.length === 0)) {
-					choice = await window.app.showWarning('Warning', 'There are some images with no tags. Do you want to continue?', ['No, cancel', 'Yes'], 0);
-				}
+				const interval = setInterval(async () => {
+					if (this.#editor.isHidden) {
+						clearInterval(interval);
 
-				if (choice === undefined || choice === 1) {
-					for (const { image, tags } of this.#uploads) {
-						window.app.registerImage(image, tags);
-					}
+						if (showConfirmation && this.#uploads.some((upload) => upload.tags.length === 0)) {
+							choice = await window.app.showWarning('Warning', 'There some images with no tags. Do you want to continue?', ['No', 'Yes'], 0);
+						}
 
-					this.#uploads = [];
-					for (const image of this.#imageGrid.images) {
-						this.#imageGrid.removeImage(image);
+						if (choice === undefined || !showConfirmation || (showConfirmation && choice === 1)) {
+							for (const { image, tags } of this.#uploads) {
+								window.app.registerImage(image, tags);
+							}
+
+							this.#uploads = [];
+							for (const image of this.#imageGrid.images) {
+								this.#imageGrid.removeImage(image);
+							}
+						}
 					}
-				}
+				}, 100);
 			}, 10);
 		});
 

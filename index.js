@@ -20,7 +20,7 @@ if (require('electron-squirrel-startup')) return;
 
 function createWindow() {
 	return new BrowserWindow({
-		title: 'ciel',
+		title: app.getName(),
 		icon: path.join(__dirname, 'icon', 'ciel-logo.png'),
 		width: 1000,
 		height: 500,
