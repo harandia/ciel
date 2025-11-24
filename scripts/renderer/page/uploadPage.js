@@ -45,9 +45,13 @@ class UploadPage {
 
 		this.#editor = new UploadEditor(pageFragment.querySelector('.editor'));
 
-		this.#editor.addEventListener('hide', async ({ selection, tags }) => {
+		this.#editor.addEventListener('tags-changed', async (tags) => {
 			const uploadSelection = [];
 			const imagesUpload = {};
+
+			const selection = this.#imageGrid.selectedImages;
+
+			console.log(selection);
 
 			for (const image of selection) {
 				for (const upload of this.#uploads) {
@@ -69,7 +73,6 @@ class UploadPage {
 						}
 					}
 				}
-
 				const newTags = tags.map((tag) => tag.name);
 
 				for (const tag of initialTags) {

@@ -14,6 +14,8 @@ main header {
 }
 
 .searchbar {
+	user-select: none;
+
 	flex: 1;
 
 	position: relative;
@@ -37,6 +39,8 @@ main header {
 }
 
 .searchbar-body {
+	user-select: none;
+
 	cursor: text;
 
 	contain: inline-size;
@@ -66,6 +70,8 @@ main header {
 }
 
 .searchbar-input {
+	user-select: none;
+
 	position: relative;
 
 	white-space: nowrap;

@@ -21,6 +21,8 @@
 }
 
 .menu-button {
+	user-select: none;
+
 	cursor: pointer;
 
 	aspect-ratio: 1;

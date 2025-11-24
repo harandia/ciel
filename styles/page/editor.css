@@ -141,6 +141,8 @@
 }
 
 .editor-preview {
+	user-select: none;
+
 	display: flex;
 
 	align-items: stretch;

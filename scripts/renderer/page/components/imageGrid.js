@@ -7,6 +7,9 @@ class ImageGrid {
 	#element;
 
 	/**@type {Function[]} */
+	#onpreselect = [];
+
+	/**@type {Function[]} */
 	#onselect = [];
 
 	/**@type {Function[]} */
@@ -23,6 +26,12 @@ class ImageGrid {
 
 	/** @type {boolean} */
 	#preventSelect;
+
+	/** @type {boolean} */
+	#deselectPrevented = false;
+
+	/** @type {boolean} */
+	#selectPrevented = false;
 
 	/**
 	 * @param {Element} element
@@ -55,10 +64,11 @@ class ImageGrid {
 	/**
 	 * Sets the callback to be executed when the specified event is triggered.
 	 * show is triggered after the showImages method, and the functions are given the displayed images.
-	 * select is triggered when an image is selected or deselected, the functions are given the selected images.
+	 * preselect is triggered when an image is going to be selected, the functions are given the selection that is going to become effective.
+	 * select is triggered when an image is selected, the functions are given the selected images.
 	 * deselect is triggered before an image is deselected, the functions are given the image that is going to be deselected.
 	 * delete is triggered after an image is deleted, the functions are given the deleted ImageGridImage.
-	 * @param {'show' | 'select' | 'deselect' | 'delete'} eventType
+	 * @param {'show' | 'select' | 'deselect' | 'delete' | 'preselect'} eventType
 	 * @param {Function} callback
 	 */
 	addEventListener(eventType, callback) {
@@ -68,6 +78,9 @@ class ImageGrid {
 				break;
 			case 'select':
 				this.#onselect.push(callback);
+				break;
+			case 'preselect':
+				this.#onpreselect.push(callback);
 				break;
 			case 'deselect':
 				this.#ondeselect.push(callback);
@@ -103,17 +116,30 @@ class ImageGrid {
 			if (!image.isSelected) currentSelection.push(image);
 		}
 
+		for (const func of this.#onpreselect) await func(currentSelection);
+
+		if (this.#preventSelect) {
+			this.#preventSelect = false;
+			this.#selectPrevented = true;
+			return;
+		}
+
 		for (const func of this.#onselect) await func(currentSelection);
 
-		if (!this.#preventSelect) {
-			for (const image of images) {
-				if (!image.isSelected) {
-					image.select();
-				}
+		if (this.#preventSelect) {
+			this.#preventSelect = false;
+			this.#selectPrevented = true;
+			return;
+		}
+
+		for (const image of images) {
+			if (!image.isSelected) {
+				image.select();
 			}
 		}
 
 		this.#preventSelect = false;
+		this.#selectPrevented = false;
 	}
 
 	/**
@@ -145,10 +171,16 @@ class ImageGrid {
 
 		for (const func of this.#ondeselect) await func(images);
 
-		if (!this.#preventDeselect) {
-			for (const image of images) image.deselect();
+		if (this.#preventDeselect) {
+			this.#preventDeselect = false;
+			this.#deselectPrevented = true;
+			return;
 		}
+
+		for (const image of images) image.deselect();
+
 		this.#preventDeselect = false;
+		this.#deselectPrevented = false;
 	}
 
 	/**
@@ -315,6 +347,22 @@ class ImageGrid {
 	 */
 	get element() {
 		return this.#element;
+	}
+
+	/**
+	 * Returns true if the last deselect operation was stopped.
+	 * @returns {boolean}
+	 */
+	get deselectStopped() {
+		return this.#deselectPrevented;
+	}
+
+	/**
+	 * Returns true if the last select operation was stopped.
+	 * @returns {boolean}
+	 */
+	get selectStopped() {
+		return this.#selectPrevented;
 	}
 }
 

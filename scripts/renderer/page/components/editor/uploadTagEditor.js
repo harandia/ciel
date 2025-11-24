@@ -6,6 +6,13 @@ class UploadTagEditor extends TagInput {
 	_autocompleterOffsetX = -10;
 	_autocompleterOffsetY = 20;
 
+	/**@type {function[]} */
+	#ontagAdded = [];
+	/**@type {function[]} */
+	#ontagDeleted = [];
+	/**@type {function[]} */
+	#ontagsChanged = [];
+
 	#body;
 
 	#warning;
@@ -58,6 +65,27 @@ class UploadTagEditor extends TagInput {
 	}
 
 	/**
+	 * Sets the given callback to be executed when the specified event is triggered.
+	 * If eventType is 'tag-added', the functions will be given the added tags.
+	 * If eventType is 'tag-deleted', the function will be given the deleted tags.
+	 * If eventType is 'tags-changed', the functions will be given the new tags.
+	 * @param {'tag-added' | 'tag-deleted' | 'tags-changed'} eventType
+	 * @param {*} callback
+	 */
+	addEventListener(eventType, callback) {
+		switch (eventType) {
+			case 'tag-added':
+				this.#ontagAdded.push(callback);
+				break;
+			case 'tag-deleted':
+				this.#ontagDeleted.push(callback);
+				break;
+			case 'tags-changed':
+				this.#ontagsChanged.push(callback);
+		}
+	}
+
+	/**
 	 * Adds the given tag to the TagInput.
 	 * @param {string} tag
 	 */
@@ -79,6 +107,10 @@ class UploadTagEditor extends TagInput {
 		});
 
 		this._addTag(newTag);
+
+		for (const func of this.#ontagAdded) func(newTag);
+		for (const func of this.#ontagsChanged) func(this.tags);
+
 		this.#updateFirstTimeWarning();
 	}
 
@@ -98,12 +130,14 @@ class UploadTagEditor extends TagInput {
 			if (param >= 0) {
 				if (children[param]) {
 					this.container.removeChild(children[param]);
+					for (const func of this.#ontagDeleted) func(new Tag(children[param]));
 
 					isRemoved = true;
 				} else isRemoved = false;
 			} else {
 				if (children[children.length - 1 + param]) {
 					this.container.removeChild(children[children.length - 1 + param]);
+					for (const func of this.#ontagDeleted) func(new Tag(children[children.length - 1 + param]));
 
 					isRemoved = true;
 				} else isRemoved = false;
@@ -115,12 +149,15 @@ class UploadTagEditor extends TagInput {
 				// @ts-ignore
 				if (param.equals(Tag.fromElement(children[i]))) {
 					this.container.removeChild(children[i]);
+					for (const func of this.#ontagDeleted) func(param);
 
 					isRemoved = true;
 					break;
 				}
 			}
 		}
+
+		if (isRemoved) for (const func of this.#ontagsChanged) func(this.tags);
 
 		this.#updateFirstTimeWarning();
 

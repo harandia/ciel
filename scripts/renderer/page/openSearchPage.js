@@ -114,9 +114,13 @@ class OpenSearchPage extends SearchPage {
 			this._imageGrid.showImages(images);
 		});
 
-		this._imageGrid.addEventListener('select', async (selection) => {
-			const { showConfirmation } = await window.app.getSettings();
+		this._imageGrid.addEventListener('preselect', async (selection) => {
+			if (this._imageGrid.deselectStopped) {
+				this._imageGrid.stopSelect();
+				return;
+			}
 
+			const { showConfirmation } = await window.app.getSettings();
 			if (showConfirmation && this.#editor.hasUnsavedChanges) {
 				const choice = await window.app.showWarning('Warning', 'Are you sure you want to discard the changes?', ['Cancel', 'Yes, discard'], 0);
 
@@ -125,7 +129,9 @@ class OpenSearchPage extends SearchPage {
 					return;
 				}
 			}
+		});
 
+		this._imageGrid.addEventListener('select', async (selection) => {
 			this.#editor.show(selection, await Promise.all(selection.map(async (image) => new Set(await window.app.getImageTags(image.path)))));
 		});
 
@@ -311,8 +317,8 @@ class OpenSearchPage extends SearchPage {
 			for (const key of keysDown) {
 				if (!selectAllShcut.includes(key)) return;
 			}
-
-			this._imageGrid.select(this._imageGrid.images);
+			await this._imageGrid.deselect(this._imageGrid.images);
+			await this._imageGrid.select(this._imageGrid.images);
 		}
 	};
 

@@ -3,12 +3,6 @@ import Editor from './editor.js';
 import UploadTagEditor from './uploadTagEditor.js';
 
 class UploadEditor extends Editor {
-	/**@type {Function[]} */
-	#ontagAdded;
-
-	/**@type {Function[]} */
-	#ontagDeleted;
-
 	constructor(element) {
 		super(element);
 
@@ -27,16 +21,19 @@ class UploadEditor extends Editor {
 	 * If eventType is 'show', the function will be given an object {selection: ImageGridImage[], tags: Tag[]} with the images
 	 * and tags that are going to be displayed.
 	 * If eventType is 'hide' no parameters will be given.
-	 * @param {'delete' | 'show' | 'hide' | 'tag-added' | 'tag-deleted'} eventType
+	 * @param {'delete' | 'show' | 'hide' | 'tag-added' | 'tag-deleted' | 'tags-changed'} eventType
 	 * @param {Function} callback
 	 */
 	addEventListener(eventType, callback) {
 		switch (eventType) {
 			case 'tag-added':
-				this.#ontagAdded.push(callback);
+				this._tagEditor.addEventListener('tag-added', callback);
 				break;
 			case 'tag-deleted':
-				this.#ontagDeleted.push(callback);
+				this._tagEditor.addEventListener('tag-deleted', callback);
+				break;
+			case 'tags-changed':
+				this._tagEditor.addEventListener('tags-changed', callback);
 				break;
 			default:
 				super.addEventListener(eventType, callback);
