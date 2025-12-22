@@ -76,6 +76,7 @@
 }
 
 .upload-view:not(:has(.image-grid-image)) footer {
+	visibility: hidden;
 	padding: 0;
 	max-height: 0;
 }

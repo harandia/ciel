@@ -98,10 +98,12 @@ class FavouritesMenu {
 							this.#favList.splice(oldIndex, 1);
 							this.#favList.splice(0, 0, tab);
 						} else if (insertAfterElement.nextElementSibling) {
+							const oldIndex = this.#favList.indexOf(tab);
 							this.#element.insertBefore(tab.element, insertAfterElement.nextElementSibling);
 
-							const oldIndex = this.#favList.indexOf(tab);
-							const newIndex = this.#favList.findIndex((tab) => tab.element === insertAfterElement.nextElementSibling);
+							let newIndex = Array.from(this.#element.children)
+								.slice(1)
+								.findIndex((tabElement) => tabElement === tab.element);
 
 							this.#favList.splice(oldIndex, 1);
 							this.#favList.splice(newIndex, 0, tab);
@@ -112,7 +114,6 @@ class FavouritesMenu {
 							this.#favList.splice(oldIndex, 1);
 							this.#favList.push(tab);
 						}
-
 						window.app.updateFavs(this.#favList.map((tab) => tab.toJSON()));
 					},
 					{ once: true },
