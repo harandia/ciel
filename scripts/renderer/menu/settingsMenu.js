@@ -163,6 +163,7 @@ const updateMenu = function (settings) {
 		} else if (property === 'imageSize') {
 			settingsInput.sldeImageSize.value = value;
 			updateSlider(settingsInput.sldeImageSize);
+			window.dispatchEvent(new Event('resize'));
 		} else if (property === 'zoom') {
 			settingsInput.sldeZoom.value = value;
 			window.app.setZoom(value);

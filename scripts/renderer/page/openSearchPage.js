@@ -4,6 +4,7 @@ import ClosedAllImagesSearchPage from './closedAllImagesSearchPage.js';
 import ClosedSearchPage from './closedSearchPage.js';
 import TagAutocompleter from './components/autocompleter.js';
 import SearchEditor from './components/editor/searchEditor.js';
+import ImageGridImage from './components/image.js';
 import ImageGrid from './components/imageGrid.js';
 import SearchBar from './components/searchbar.js';
 import SearchPage from './searchPage.js';
@@ -29,6 +30,9 @@ class OpenSearchPage extends SearchPage {
 
 	/**@type {({item: string, click: ()=>any, disabled?: boolean} | 'separator')[]} */
 	#contextMenu;
+
+	/** @type {ImageGridImage[]} */
+	#lastSelection = [];
 
 	/**
 	 * Returns the open version of the given closed page.
@@ -133,6 +137,13 @@ class OpenSearchPage extends SearchPage {
 
 		this._imageGrid.addEventListener('select', async (selection) => {
 			this.#editor.show(selection, await Promise.all(selection.map(async (image) => new Set(await window.app.getImageTags(image.path)))));
+
+			// const newSelection = selection.filter((img) => !this.#lastSelection.includes(img));
+			// newSelection[0].element.scrollIntoView({ behaviour: 'smooth', block: 'nearest', inline: 'nearest' });
+
+			// this.#lastSelection = selection;
+
+			// this._imageGrid.updateLayout(this.mainPage.scrollTop);
 		});
 
 		this._imageGrid.addEventListener('deselect', async (deselected) => {
@@ -167,10 +178,14 @@ class OpenSearchPage extends SearchPage {
 			}
 		});
 
-		this.#editor.addEventListener('delete', (deleted) => {
+		this.#editor.addEventListener('delete', async (deleted) => {
 			for (const image of deleted) {
-				this._imageGrid.removeImage(image);
+				await this._imageGrid.removeImage(image, true);
 			}
+
+			setTimeout(() => {
+				this._imageGrid.updateLayout();
+			}, 100);
 
 			const selection = this._imageGrid.selectedImages;
 
@@ -205,6 +220,14 @@ class OpenSearchPage extends SearchPage {
 
 				ContextMenu.show(event.clientX, event.clientY, this.#contextMenu);
 			}
+		});
+
+		this.mainPage.addEventListener('scroll', (event) => {
+			this._imageGrid.updateLayout(this.mainPage.scrollTop);
+		});
+
+		this.mainPage.addEventListener('resize', (event) => {
+			this._imageGrid.updateLayout();
 		});
 	}
 
@@ -256,6 +279,7 @@ class OpenSearchPage extends SearchPage {
 			document.querySelector('main').appendChild(element);
 		}
 		document.addEventListener('keydown', this.#selectAllHandle);
+		this._imageGrid.updateLayout();
 	}
 
 	/**

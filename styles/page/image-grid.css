@@ -18,6 +18,10 @@
 }
 
 .image-grid li {
+	aspect-ratio: 1;
+
+	cursor: pointer;
+
 	user-select: none;
 
 	position: relative;
@@ -26,6 +30,10 @@
 	flex-direction: row;
 
 	justify-content: center;
+
+	align-items: center;
+
+	align-self: stretch;
 }
 
 .image-grid-image {
@@ -145,6 +153,11 @@
 	opacity: 1;
 }
 
-.image-grid:has(.image-grid-selected-image) .image-grid-image:not(.image-grid-selected-image) {
+.image-grid:has(.image-grid-selected-image) .image-grid-image:not(.image-grid-selected-image),
+.image-grid-non-selected-image {
 	opacity: 0.5;
+}
+
+.image-grid-no-selection .image-grid-non-selected-image {
+	opacity: 1;
 }

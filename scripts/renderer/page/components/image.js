@@ -1,4 +1,7 @@
 class ImageGridImage {
+	/**@type {string} */
+	#path;
+
 	/**@type {Element} */
 	#element;
 
@@ -39,12 +42,24 @@ class ImageGridImage {
 	 * @param {string | Element} param
 	 */
 	constructor(param) {
-		if (typeof param === 'string') {
+		if (param instanceof Element) {
+			this.#element = param;
+
+			this.#image = this.#element.querySelector('.image-grid-image');
+
+			this.#path = this.#image.src;
+
+			this.#closeButton = this.#element.querySelector('.image-delete-button');
+
+			this.#newIcon = this.#element.querySelector('.image-new-container');
+		} else {
 			//@ts-ignore
 			this.#element = document.getElementById('image-grid-image').content.cloneNode(true).querySelector('li');
 
 			this.#image = this.#element.querySelector('.image-grid-image');
-			this.#image.src = param;
+			// this.#image.src = param;
+
+			this.#path = param;
 
 			this.#closeButton = this.#element.querySelector('.image-delete-button');
 
@@ -53,14 +68,6 @@ class ImageGridImage {
 			this.#element.addEventListener('mousedown', (event) => {
 				event.preventDefault();
 			});
-		} else {
-			this.#element = param;
-
-			this.#image = this.#element.querySelector('.image-grid-image');
-
-			this.#closeButton = this.#element.querySelector('.image-delete-button');
-
-			this.#newIcon = this.#element.querySelector('.image-new-container');
 		}
 	}
 
@@ -68,6 +75,7 @@ class ImageGridImage {
 	 * Selectes the image.
 	 */
 	select() {
+		this.#image.classList.remove('image-grid-non-selected-image');
 		this.#image.classList.add('image-grid-selected-image');
 	}
 
@@ -76,6 +84,7 @@ class ImageGridImage {
 	 */
 	deselect() {
 		this.#image.classList.remove('image-grid-selected-image');
+		this.#image.classList.add('image-grid-non-selected-image');
 	}
 
 	/**
@@ -90,6 +99,20 @@ class ImageGridImage {
 	 */
 	hideNewIcon() {
 		this.#newIcon.classList.add('image-new-container-hidden');
+	}
+
+	/**
+	 * Loads the element's image.
+	 */
+	load() {
+		this.#image.src = this.#path;
+	}
+
+	/**
+	 * Unloads the element's image.
+	 */
+	unload() {
+		this.#image.src = '';
 	}
 
 	/**
@@ -117,11 +140,11 @@ class ImageGridImage {
 	}
 
 	/**
-	 * Returns the image's route (with file:// protocol)
+	 * Returns the image's file path.
 	 * @returns {string}
 	 */
 	get path() {
-		return this.#image.src;
+		return this.#path;
 	}
 }
 

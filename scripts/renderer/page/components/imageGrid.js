@@ -1,8 +1,17 @@
 import ContextMenu from '../../contextMenu.js';
 import keysDown from '../../general.js';
+import UploadEditor from './editor/uploadEditor.js';
 import ImageGridImage from './image.js';
 
 class ImageGrid {
+	/**@type {(ImageGridImage | Element)[]} */
+	#images = [];
+
+	/**@type {number} */
+	#row0;
+	/**@type {number} */
+	#rowend;
+
 	/** @type {Element} */
 	#element;
 
@@ -42,23 +51,27 @@ class ImageGrid {
 		this.#element.addEventListener('mousedown', (event) => {
 			event.preventDefault();
 		});
+
+		if (this.#element.children.length) this.#images.push(this.#element.firstElementChild);
 	}
 
 	/**
 	 * Shows the images in the given source paths. Each path should be a valid path and the path of an actual image.
 	 * @param {string[]} paths
 	 */
-	showImages(paths) {
-		const children = this.#element.children;
+	async showImages(paths) {
+		const children = this.images;
 		for (let i = 0; i < children.length; i++) {
 			this.removeImage(i);
 		}
 
 		for (const path of paths) {
-			this.addImages(path);
+			await this.addImages(path);
 		}
 
 		for (const func of this.#onshow) func(this.images);
+
+		this.updateLayout();
 	}
 
 	/**
@@ -101,7 +114,7 @@ class ImageGrid {
 	async select(param) {
 		let images;
 		if (typeof param === 'number') {
-			images = [new ImageGridImage(this.#element.children[param])];
+			images = [this.images[param]];
 		} else if (typeof param === 'string') {
 			images = [this.images.find((image) => image.path === param)];
 		} else if (param instanceof ImageGridImage) {
@@ -137,6 +150,8 @@ class ImageGrid {
 				image.select();
 			}
 		}
+
+		if (this.selectedImages.length) this.#element.classList.remove('image-grid-no-selection');
 
 		this.#preventSelect = false;
 		this.#selectPrevented = false;
@@ -179,6 +194,8 @@ class ImageGrid {
 
 		for (const image of images) image.deselect();
 
+		if (this.selectedImages.length === 0) this.#element.classList.add('image-grid-no-selection');
+
 		this.#preventDeselect = false;
 		this.#deselectPrevented = false;
 	}
@@ -191,11 +208,13 @@ class ImageGrid {
 	}
 
 	/**
-	 * Adds an image to the grid with the specified path to the source image.
+	 * Adds an image to the grid with the specified path to the source image. If update is true, it will update the
+	 * layout of the grid.
 	 * @param {string} imagePath
-	 * @returns {ImageGridImage}
+	 * @param {boolean} update
+	 * @returns {Promise<ImageGridImage>}
 	 */
-	addImages(imagePath) {
+	async addImages(imagePath, update = false) {
 		const image = new ImageGridImage(imagePath);
 
 		let clickTimer;
@@ -233,7 +252,7 @@ class ImageGrid {
 				if (image.isSelected) {
 					this.deselect(image);
 				}
-				this.removeImage(image);
+				this.removeImage(image, true);
 			}
 		};
 
@@ -267,7 +286,11 @@ class ImageGrid {
 			ContextMenu.show(event.clientX, event.clientY, menuOptions);
 		});
 
-		this.#element.prepend(image.element);
+		this.#images.splice(0, 0, image);
+
+		if (update) await this.updateLayout();
+		// image.load();
+		// this.element.prepend(image.element);
 
 		return image;
 	}
@@ -276,17 +299,19 @@ class ImageGrid {
 	 * Returns true if the specified element was successfully deleted.
 	 * If param is number, it will delete the specified index starting from 0.
 	 * If param is an ImageGridImage, it will delete the given image.
+	 * If update is true, it will update the layout of the grid after removing the image.
 	 * @param {ImageGridImage | number} param
+	 * @param {boolean} [update]
 	 * @returns {Promise<boolean>}
 	 */
-	async removeImage(param) {
+	async removeImage(param, update = false) {
 		let removed;
 		let removedImage;
-		const children = this.#element.children;
 		if (typeof param === 'number') {
-			if (children[param]) {
-				removedImage = new ImageGridImage(children[param]);
-				this.#element.removeChild(children[param]);
+			if (this.images[param]) {
+				removedImage = this.images[param];
+				this.#images.splice(param, 1);
+				// this.#element.removeChild(children[param]);
 				removed = true;
 			}
 			removed = false;
@@ -294,9 +319,11 @@ class ImageGrid {
 			removedImage = param;
 
 			removed = false;
-			for (const child of Array.from(children)) {
-				if (child === param.element) {
-					this.#element.removeChild(child);
+			for (let i = 0; i < this.images.length; i++) {
+				const child = this.images[i];
+				if (child === param) {
+					this.#images.splice(i, 1);
+					// this.#element.removeChild(child);
 					removed = true;
 					break;
 				}
@@ -304,8 +331,105 @@ class ImageGrid {
 		}
 		if (removed) {
 			for (const func of this.#ondelete) await func(removedImage);
+			if (update) await this.updateLayout();
 		}
 		return removed;
+	}
+
+	/**
+	 * Updates the layout of the grid. If no scroll is given, the function will take the scroll
+	 * it was last registered when calling this function (it will take 0 if it is the first time the
+	 * function is called and no scroll is given).
+	 * @param {number} [scroll]
+	 */
+	async updateLayout(scroll) {
+		const rowgap = Number.parseFloat(window.getComputedStyle(this.#element).getPropertyValue('row-gap'));
+
+		const ncol = await this.#ncol();
+		const nrow = await this.#nrow();
+
+		const { imageSize } = await window.app.getSettings();
+
+		this.#element.replaceChildren();
+
+		if (scroll !== undefined || !this.#row0 || !this.#rowend) {
+			if (scroll !== undefined) {
+				const row1 = Math.floor(scroll / (imageSize + rowgap));
+				if (row1 >= 3) this.#row0 = row1 - 3;
+				else if (row1 === 1) this.#row0 = row1 - 1;
+				else this.#row0 = 0;
+			} else if (!this.#row0) {
+				this.#row0 = 0;
+			}
+			const imgStartOnwards = this.#images.length - this.#row0 * ncol;
+			if (imgStartOnwards <= 0) {
+				this.#rowend = this.#row0 + 1;
+			} else {
+				const totalRowsLeft = Math.ceil(imgStartOnwards / ncol);
+				if (totalRowsLeft > nrow + 3) this.#rowend = this.#row0 + nrow + 3;
+				else if (totalRowsLeft > nrow + 1) this.#rowend = this.#row0 + nrow + 1;
+				else this.#rowend = this.#row0 + totalRowsLeft;
+			}
+		}
+
+		this.#rowend += 10;
+		const totalrows = Math.ceil(this.#images.length / ncol);
+		if (this.#rowend > totalrows) this.#rowend = totalrows;
+
+		// @ts-ignore
+		this.#element.style.paddingTop = this.#row0 * (imageSize + rowgap) + 'px';
+
+		const paddingBottom = totalrows - 1 - this.#rowend;
+		// @ts-ignore
+		this.#element.style.paddingBottom = (paddingBottom > 0 ? paddingBottom : 0) * (imageSize + rowgap) + 'px';
+
+		for (const image of this.#images.slice(this.#row0 * ncol, this.#rowend * ncol)) {
+			if (image instanceof ImageGridImage) {
+				image.load();
+				this.#element.appendChild(image.element);
+			} else {
+				this.#element.appendChild(image);
+			}
+		}
+
+		console.log(this.#element.children.length);
+	}
+
+	/**
+	 * Returns the number of columns of the grid.
+	 * @returns {Promise<number>}
+	 */
+	async #ncol() {
+		if (!this.#images.length) return 0;
+
+		const { imageSize } = await window.app.getSettings();
+		const columngap = Number.parseFloat(window.getComputedStyle(this.#element).getPropertyValue('column-gap'));
+		return Math.floor(this.#element.getBoundingClientRect().width / (imageSize + columngap));
+	}
+
+	/**
+	 * Returns the number of visible rows.
+	 * @returns {Promise<number>}
+	 */
+	async #nrow() {
+		if (!this.#images.length) return 0;
+
+		const { imageSize } = await window.app.getSettings();
+		const rowgap = Number.parseFloat(window.getComputedStyle(this.#element).getPropertyValue('row-gap'));
+		return Math.ceil(this.#visibleHeight() / (imageSize + rowgap));
+	}
+
+	/**
+	 * Returns the visible height of the grid.
+	 * @returns {number}
+	 */
+	#visibleHeight() {
+		const rect = this.#element.getBoundingClientRect();
+		const viewportHeight = window.innerHeight;
+
+		const visibleTop = Math.max(rect.top, 0);
+
+		return Math.max(0, viewportHeight - visibleTop);
 	}
 
 	get imageCount() {
@@ -316,14 +440,7 @@ class ImageGrid {
 	 * Returns all the images displayed on the grid.
 	 */
 	get images() {
-		const images = [];
-		for (const child of Array.from(this.#element.children)) {
-			if (ImageGridImage.isImageGridImage(child)) {
-				const image = new ImageGridImage(child);
-				images.push(image);
-			}
-		}
-		return images;
+		return this.#images.filter((image) => image instanceof ImageGridImage);
 	}
 
 	/**
@@ -332,11 +449,8 @@ class ImageGrid {
 	 */
 	get selectedImages() {
 		const selection = [];
-		for (const child of Array.from(this.#element.children)) {
-			if (ImageGridImage.isImageGridImage(child)) {
-				const image = new ImageGridImage(child);
-				if (image.isSelected) selection.push(image);
-			}
+		for (const img of this.images) {
+			if (img.isSelected) selection.push(img);
 		}
 		return selection;
 	}

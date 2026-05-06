@@ -125,7 +125,8 @@ window.addEventListener('beforeunload', (event) => {
 		const uploadingImages = [];
 		for (const tab of tabs) {
 			if (tab.page instanceof UploadPage && tab.page.hasUnsavedChanges) {
-				uploadingImages.push(...tab.page.uploads.map((taggedImage) => taggedImage.image));
+				uploadingImages.push(...tab.page.uploads.keys());
+				console.log(uploadingImages);
 			}
 		}
 
@@ -326,7 +327,7 @@ const closeTab = async (tab) => {
 
 		if (choice === 1 && tab.page instanceof UploadPage) {
 			for (const taggedImage of tab.page.uploads) {
-				window.app.deleteTempImage(taggedImage.image);
+				window.app.deleteTempImage(taggedImage[0]);
 			}
 		}
 	}

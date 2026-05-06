@@ -51,17 +51,22 @@ class TagInput {
 			let positionx;
 			let positiony;
 
+			let posx;
+
 			if (caretRect.x && caretRect.y) {
 				positionx = caretRect.x - containerParentRect.x + this._autocompleterOffsetX;
 				positiony = caretRect.y - containerParentRect.y + this._autocompleterOffsetY;
+
+				posx = caretRect.x;
 			} else {
 				const inputRect = this._input.getBoundingClientRect();
 
 				positionx = inputRect.x - containerParentRect.x + this._autocompleterOffsetX;
 				positiony = inputRect.y - containerParentRect.y + this._autocompleterOffsetY;
-			}
 
-			const autcompleterOverflows = containerParentRect.x + containerParentRect.width - caretRect.x <= completerRect.width - 10;
+				posx = inputRect.x + 20;
+			}
+			const autcompleterOverflows = containerParentRect.x + containerParentRect.width - posx <= completerRect.width - 10;
 
 			if (!autcompleterOverflows) {
 				autocompleter.show(positionx, positiony);
@@ -69,7 +74,7 @@ class TagInput {
 				this.#autocompleterX = positionx;
 				this.#autocompleterY = positiony;
 			} else {
-				const overflowx = completerRect.width - 20 - (containerParentRect.x + containerParentRect.width - caretRect.x);
+				const overflowx = completerRect.width - 20 - (containerParentRect.x + containerParentRect.width - posx);
 
 				autocompleter.show(positionx - overflowx - 10, positiony);
 			}

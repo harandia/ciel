@@ -124,7 +124,7 @@ class Tab {
 
 			if (choice === 1 && this.#page instanceof UploadPage) {
 				for (const taggedImage of this.#page.uploads) {
-					window.app.deleteTempImage(taggedImage.image);
+					window.app.deleteTempImage(taggedImage[0]);
 				}
 			}
 		}
